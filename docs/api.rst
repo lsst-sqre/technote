@@ -5,3 +5,4 @@ Python API reference
 ####################
 
 .. automodapi:: technote
+   :include-all-objects:

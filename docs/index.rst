@@ -2,7 +2,7 @@
 :html_theme.sidebar_secondary.remove:
 
 ########
-technote
+Technote
 ########
 
 Rubin Observatory's framework for Sphinx-based technote documents.
