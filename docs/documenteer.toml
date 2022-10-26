@@ -14,3 +14,4 @@ disable_primary_sidebars = [
 
 [sphinx.intersphinx.projects]
 python = "https://docs.python.org/3/"
+sphinx = "https://www.sphinx-doc.org/en/master/"
