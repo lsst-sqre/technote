@@ -20,3 +20,34 @@ html {
    */
   font-size: 1.1rem;
 }
+
+/*
+ * Local TOC styling.
+ */
+.toc-container {
+  font-size: 0.9rem;
+  line-height: 1.3;
+  padding-left: 0;
+}
+
+.toc-container ul {
+  list-style-type: none;
+  padding-left: 0.5rem;
+}
+.toc-container > ul {
+  padding-left: 0;
+}
+.toc-container li {
+  margin-bottom: 0.5rem;
+}
+
+/* Hide the first item in the Sphinx toc; which is the H1 of the page itself. */
+.toc-container > ul > li:first-child {
+  padding-top: 0;
+}
+.toc-container > ul > li:first-child > ul {
+  padding-left: 0;
+}
+.toc-container > ul > li:first-child > a {
+  display: none;
+}
