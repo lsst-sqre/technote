@@ -72,6 +72,25 @@ h6 {
   font-weight: bold;
 }
 
+/* Handle Sphinx's built-in permalink icon. */
+h1 .headerlink,
+h2 .headerlink,
+h3 .headerlink,
+h4 .headerlink,
+h5 .headerlink,
+h6 .headerlink {
+  visibility: hidden;
+  text-decoration: none;
+}
+h1:hover .headerlink,
+h2:hover .headerlink,
+h3:hover .headerlink,
+h4:hover .headerlink,
+h5:hover .headerlink,
+h6:hover .headerlink {
+  visibility: visible;
+}
+
 /*
  * Local TOC styling.
  */
