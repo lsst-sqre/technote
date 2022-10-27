@@ -4,6 +4,9 @@ Demo technote
 
 A *technote* is a web-native single page document that enables rapid technical communication within and across teams.
 
+.. Three alphabets is a good guage for line length. We want to shoot for 2-3 alphabets.
+.. abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz
+
 Introduction
 ============
 
