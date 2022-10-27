@@ -91,6 +91,166 @@ h6:hover .headerlink {
   visibility: visible;
 }
 
+/* Highlight key containers for debugging. */
+.sb-article {
+  border: 1px solid red;
+}
+.sb-sidebar-secondary {
+  border: 1px solid blue;
+}
+.sb-sidebar-primary {
+  border: 1px solid green;
+}
+
+/*
+ * Content container width.
+ * Goal is to have a content width <= 80 characters. These override
+ * breakpoint settings from sphinx-basic-ng's skeleton.css
+ */
+.sb-article-container,
+.sb-footer-content__inner,
+.drop-secondary-sidebar-for-full-width-content .sb-article,
+.drop-secondary-sidebar-for-full-width-content .match-content-width {
+  /* reset skeleton.css. Using 100vw means we get horizontal scrollbars. */
+  width: auto;
+}
+@media (min-width: 42rem) {
+  .sb-footer-content__inner,
+  .drop-secondary-sidebar-for-full-width-content .sb-article,
+  .drop-secondary-sidebar-for-full-width-content .match-content-width {
+    width: 38rem;
+  }
+  .sb-article,
+  .match-content-width {
+    width: 38rem;
+  }
+  h1::after {
+    content: ' 42';
+  }
+}
+@media (min-width: 46rem) {
+  .sb-footer-content__inner,
+  .drop-secondary-sidebar-for-full-width-content .sb-article,
+  .drop-secondary-sidebar-for-full-width-content .match-content-width {
+    width: 40rem;
+  }
+  .sb-article,
+  .match-content-width {
+    width: 40rem;
+  }
+  h1::after {
+    content: ' 46';
+  }
+}
+@media (min-width: 50rem) {
+  /* secondary sidebar appears, width is 17rem. */
+  .sb-footer-content__inner,
+  .drop-secondary-sidebar-for-full-width-content .sb-article,
+  .drop-secondary-sidebar-for-full-width-content .match-content-width {
+    width: 40rem;
+  }
+  .sb-article,
+  .match-content-width {
+    width: 40rem;
+  }
+  h1::after {
+    content: ' 50';
+  }
+}
+@media (min-width: 59rem) {
+  .sb-footer-content__inner,
+  .drop-secondary-sidebar-for-full-width-content .sb-article,
+  .drop-secondary-sidebar-for-full-width-content .match-content-width {
+    width: 40rem;
+  }
+  .sb-article,
+  .match-content-width {
+    width: 36rem;
+  }
+  h1::after {
+    content: ' 59';
+  }
+}
+@media (min-width: 63rem) {
+  .sb-footer-content__inner,
+  .drop-secondary-sidebar-for-full-width-content .sb-article,
+  .drop-secondary-sidebar-for-full-width-content .match-content-width {
+    width: 40rem;
+  }
+  .sb-article,
+  .match-content-width {
+    width: 36rem;
+  }
+  h1::after {
+    content: ' 63';
+  }
+}
+@media (min-width: 67rem) {
+  .sb-footer-content__inner,
+  .drop-secondary-sidebar-for-full-width-content .sb-article,
+  .drop-secondary-sidebar-for-full-width-content .match-content-width {
+    width: 40rem;
+  }
+  .sb-article,
+  .match-content-width {
+    width: 40rem;
+  }
+  h1::after {
+    content: ' 67';
+  }
+}
+@media (min-width: 76rem) {
+  /* The primary sidebar appears */
+  .sb-footer-content__inner,
+  .drop-secondary-sidebar-for-full-width-content .sb-article,
+  .drop-secondary-sidebar-for-full-width-content .match-content-width {
+    width: 40rem;
+  }
+  .sb-article,
+  .match-content-width {
+    width: 32rem;
+  }
+  h1::after {
+    content: ' 76';
+  }
+}
+@media (min-width: 80rem) {
+  .sb-article,
+  .match-content-width {
+    width: 34rem;
+  }
+  .sb-footer-content__inner,
+  .drop-secondary-sidebar-for-full-width-content .sb-article,
+  .drop-secondary-sidebar-for-full-width-content .match-content-width {
+    width: 40rem;
+  }
+  h1::after {
+    content: ' 80';
+  }
+}
+@media (min-width: 84rem) {
+  .sb-article,
+  .match-content-width {
+    width: 40rem;
+  }
+  h1::after {
+    content: ' 84';
+  }
+}
+@media (min-width: 88rem) {
+  .sb-footer-content__inner,
+  .drop-secondary-sidebar-for-full-width-content .sb-article,
+  .drop-secondary-sidebar-for-full-width-content .match-content-width {
+    width: 40rem;
+  }
+  .sb-page-width {
+    width: 86rem;
+  }
+  h1::after {
+    content: ' 88';
+  }
+}
+
 /*
  * Local TOC styling.
  */
