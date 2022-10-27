@@ -22,6 +22,57 @@ html {
 }
 
 /*
+ * Typography.
+ */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  line-height: 1.5;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  /* Put header vertically closer to its own section. */
+  margin: 1.5em 0 0.8em;
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: 3.052rem;
+  font-weight: normal;
+  margin: 0 0 1em;
+}
+
+h2 {
+  font-size: 2.441rem;
+  font-weight: normal;
+}
+
+h3 {
+  font-size: 1.563rem;
+  font-weight: bold;
+}
+
+h4 {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+h5 {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+h6 {
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+/*
  * Local TOC styling.
  */
 .toc-container {
