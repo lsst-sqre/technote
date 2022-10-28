@@ -1,0 +1,283 @@
+html {
+  box-sizing: border-box;
+}
+
+/*
+ * Inherit border-box sizing from html
+ * https://css-tricks.com/inheriting-box-sizing-probably-slightly-better-best-practice/
+ */
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+:root {
+  /*
+   * Reinforce that we're respecting the user's ability to set a default
+   * font size. The rem unit now becomes relative to this.
+   * Flexible Typesetting, Tim Brown, ch 2 and 4
+   */
+  font-size: 1.1rem;
+}
+
+/*
+ * Typography.
+ */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  line-height: 1.5;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  /* Put header vertically closer to its own section. */
+  margin: 1.5em 0 0.8em;
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: 3.052rem;
+  font-weight: normal;
+  margin: 0 0 1em;
+}
+
+h2 {
+  font-size: 2.441rem;
+  font-weight: normal;
+}
+
+h3 {
+  font-size: 1.563rem;
+  font-weight: bold;
+}
+
+h4 {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+h5 {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+h6 {
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+/* Handle Sphinx's built-in permalink icon. */
+h1 .headerlink,
+h2 .headerlink,
+h3 .headerlink,
+h4 .headerlink,
+h5 .headerlink,
+h6 .headerlink {
+  visibility: hidden;
+  text-decoration: none;
+}
+h1:hover .headerlink,
+h2:hover .headerlink,
+h3:hover .headerlink,
+h4:hover .headerlink,
+h5:hover .headerlink,
+h6:hover .headerlink {
+  visibility: visible;
+}
+
+/* Highlight key containers for debugging. */
+.sb-article {
+  border: 1px solid red;
+}
+.sb-sidebar-secondary {
+  border: 1px solid blue;
+}
+.sb-sidebar-primary {
+  border: 1px solid green;
+}
+
+/*
+ * Content container width.
+ * Goal is to have a content width <= 80 characters. These override
+ * breakpoint settings from sphinx-basic-ng's skeleton.css
+ */
+.sb-article-container,
+.sb-footer-content__inner,
+.drop-secondary-sidebar-for-full-width-content .sb-article,
+.drop-secondary-sidebar-for-full-width-content .match-content-width {
+  /* reset skeleton.css. Using 100vw means we get horizontal scrollbars. */
+  width: auto;
+}
+@media (min-width: 42rem) {
+  .sb-footer-content__inner,
+  .drop-secondary-sidebar-for-full-width-content .sb-article,
+  .drop-secondary-sidebar-for-full-width-content .match-content-width {
+    width: 38rem;
+  }
+  .sb-article,
+  .match-content-width {
+    width: 38rem;
+  }
+  h1::after {
+    content: ' 42';
+  }
+}
+@media (min-width: 46rem) {
+  .sb-footer-content__inner,
+  .drop-secondary-sidebar-for-full-width-content .sb-article,
+  .drop-secondary-sidebar-for-full-width-content .match-content-width {
+    width: 40rem;
+  }
+  .sb-article,
+  .match-content-width {
+    width: 40rem;
+  }
+  h1::after {
+    content: ' 46';
+  }
+}
+@media (min-width: 50rem) {
+  /* secondary sidebar appears, width is 17rem. */
+  .sb-footer-content__inner,
+  .drop-secondary-sidebar-for-full-width-content .sb-article,
+  .drop-secondary-sidebar-for-full-width-content .match-content-width {
+    width: 40rem;
+  }
+  .sb-article,
+  .match-content-width {
+    width: 40rem;
+  }
+  h1::after {
+    content: ' 50';
+  }
+}
+@media (min-width: 59rem) {
+  .sb-footer-content__inner,
+  .drop-secondary-sidebar-for-full-width-content .sb-article,
+  .drop-secondary-sidebar-for-full-width-content .match-content-width {
+    width: 40rem;
+  }
+  .sb-article,
+  .match-content-width {
+    width: 36rem;
+  }
+  h1::after {
+    content: ' 59';
+  }
+}
+@media (min-width: 63rem) {
+  .sb-footer-content__inner,
+  .drop-secondary-sidebar-for-full-width-content .sb-article,
+  .drop-secondary-sidebar-for-full-width-content .match-content-width {
+    width: 40rem;
+  }
+  .sb-article,
+  .match-content-width {
+    width: 36rem;
+  }
+  h1::after {
+    content: ' 63';
+  }
+}
+@media (min-width: 67rem) {
+  .sb-footer-content__inner,
+  .drop-secondary-sidebar-for-full-width-content .sb-article,
+  .drop-secondary-sidebar-for-full-width-content .match-content-width {
+    width: 40rem;
+  }
+  .sb-article,
+  .match-content-width {
+    width: 40rem;
+  }
+  h1::after {
+    content: ' 67';
+  }
+}
+@media (min-width: 76rem) {
+  /* The primary sidebar appears */
+  .sb-footer-content__inner,
+  .drop-secondary-sidebar-for-full-width-content .sb-article,
+  .drop-secondary-sidebar-for-full-width-content .match-content-width {
+    width: 40rem;
+  }
+  .sb-article,
+  .match-content-width {
+    width: 32rem;
+  }
+  h1::after {
+    content: ' 76';
+  }
+}
+@media (min-width: 80rem) {
+  .sb-article,
+  .match-content-width {
+    width: 34rem;
+  }
+  .sb-footer-content__inner,
+  .drop-secondary-sidebar-for-full-width-content .sb-article,
+  .drop-secondary-sidebar-for-full-width-content .match-content-width {
+    width: 40rem;
+  }
+  h1::after {
+    content: ' 80';
+  }
+}
+@media (min-width: 84rem) {
+  .sb-article,
+  .match-content-width {
+    width: 40rem;
+  }
+  h1::after {
+    content: ' 84';
+  }
+}
+@media (min-width: 88rem) {
+  .sb-footer-content__inner,
+  .drop-secondary-sidebar-for-full-width-content .sb-article,
+  .drop-secondary-sidebar-for-full-width-content .match-content-width {
+    width: 40rem;
+  }
+  .sb-page-width {
+    width: 86rem;
+  }
+  h1::after {
+    content: ' 88';
+  }
+}
+
+/*
+ * Local TOC styling.
+ */
+.toc-container {
+  font-size: 0.9rem;
+  line-height: 1.3;
+  padding-left: 0;
+}
+
+.toc-container ul {
+  list-style-type: none;
+  padding-left: 0.5rem;
+}
+.toc-container > ul {
+  padding-left: 0;
+}
+.toc-container li {
+  margin-bottom: 0.5rem;
+}
+
+/* Hide the first item in the Sphinx toc; which is the H1 of the page itself. */
+.toc-container > ul > li:first-child {
+  padding-top: 0;
+}
+.toc-container > ul > li:first-child > ul {
+  padding-left: 0;
+}
+.toc-container > ul > li:first-child > a {
+  display: none;
+}

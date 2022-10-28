@@ -1,0 +1,7 @@
+demo/_build
+.tox
+*.md
+**/*.md
+src/technote/theme/**/*.html
+src/technote/theme/static/styles
+src/technote/theme/static/scripts

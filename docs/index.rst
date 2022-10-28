@@ -15,6 +15,11 @@ Install technote from PyPI:
 
 technote is developed on GitHub at https://github.com/lsst-sqre/technote.
 
+.. button-link:: demo/index.html
+   :color: primary
+
+   View a demo technote page
+
 .. toctree::
    :hidden:
 
