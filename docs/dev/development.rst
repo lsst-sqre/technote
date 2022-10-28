@@ -10,16 +10,21 @@ Scope of contributions
 technote is an open source package, meaning that you can contribute to technote itself, or fork technote for your own purposes.
 
 Since technote is intended for internal use by Rubin Observatory, community contributions can only be accepted if they align with Rubin Observatory's aims.
-For that reason, it's a good idea to propose changes with a new `GitHub issue`_ before investing time in making a pull request.
+For that reason, it's a good idea to propose changes with a `new GitHub issue`_ before investing time in making a pull request.
 
 technote is developed by the Rubin Observatory SQuaRE team.
 
-.. _GitHub issue: https://github.com/lsst-sqre/safir/issues/new
+.. _new GitHub issue: https://github.com/lsst-sqre/technote/issues/new
 
 .. _dev-environment:
 
 Setting up a local development environment
 ==========================================
+
+Technote is a Python package, with Node.js involved for bundling web assets.
+
+Python set up
+-------------
 
 To develop technote, create a virtual environment with your method of choice (like virtualenvwrapper) and then clone or fork, and install:
 
@@ -35,7 +40,29 @@ This init step does three things:
 2. Installs pre-commit and tox.
 3. Installs the pre-commit hooks.
 
-You must have Docker installed and configured so that your user can start Docker containers in order to run the test suite.
+Node.js set up
+--------------
+
+The Node.js version used by this project is intended to be built with a Node.js version that's encoded in the ``.nvmrc`` file.
+To adopt this node version, we recommend `installing and using the node version manager <https://github.com/nvm-sh/nvm>`__.
+
+Then you can use the preferred node version by running ``nvm`` from the project root:
+
+.. code-block:: sh
+
+   nvm use
+
+Install the JavaScript packages:
+
+.. code-block:: sh
+
+   npm install
+
+Compile the dependencies:
+
+.. code-block:: sh
+
+   npm run build
 
 .. _pre-commit-hooks:
 
@@ -53,6 +80,9 @@ Some pre-commit hooks automatically reformat code:
 
 ``blacken-docs``
     Automatically formats Python code in reStructuredText documentation and docstrings.
+
+``prettier``
+    Formats JavaScript, CSS, and YAML.
 
 When these hooks fail, your Git commit will be aborted.
 To proceed, stage the new modifications and proceed with your Git commit.
@@ -75,18 +105,38 @@ To see a listing of test environments, run:
    tox -av
 
 To run a specific test or list of tests, you can add test file names (and any other pytest_ options) after ``--`` when executing the ``py`` tox environment.
-.. For example:
-..
-.. .. code-block:: sh
-..
-..    tox -e py -- tests/database_test.py
+
+Building the demo technote
+==========================
+
+The demo technote, located in the ``demo`` directory of the repository, is used for getting feedback on how technotes build and look.
+
+To build the demo site, use tox:
+
+.. code-block:: sh
+
+   tox -e demo
+
+The output technote site is located at :file:`./demo/_built/html/index.html`.
+
+Compiling CSS and JS
+====================
+
+The editable JS and CSS sources are located in the ``assets`` directory.
+Webpack compiles these assets into the :file:`/src/technote/theme/static` directory, which is included in the Python package (but excluded from the Git repository).
+
+To run webpack:
+
+.. code-block:: sh
+
+   npm run build
 
 .. _dev-build-docs:
 
 Building documentation
 ======================
 
-Documentation is built with Sphinx_:
+Documentation is built with Sphinx_, sourced from the :file:`docs` directory:
 
 .. _Sphinx: https://www.sphinx-doc.org/en/master/
 
