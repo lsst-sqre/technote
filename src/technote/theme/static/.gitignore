@@ -1,0 +1,5 @@
+*.map
+
+# Generated files
+scripts/technote.js
+styles/technote.css
