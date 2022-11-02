@@ -6,3 +6,6 @@ Python API reference
 
 .. automodapi:: technote
    :include-all-objects:
+
+.. automodapi:: technote.metadata.spdx
+   :include-all-objects:
