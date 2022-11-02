@@ -26,6 +26,7 @@ requires-python = ">=3.8"
 dependencies = [
     "Sphinx>=5.0.0",
     "sphinx-basic-ng>=1.0.0b1",
+    "base32-lib",
 ]
 dynamic = ["version"]
 
