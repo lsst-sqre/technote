@@ -15,3 +15,6 @@ Python API reference
 
 .. automodapi:: technote.metadata.spdx
    :include-all-objects:
+
+.. automodapi:: technote.metadata.zenodo
+   :include-all-objects:
