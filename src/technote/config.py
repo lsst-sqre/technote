@@ -101,12 +101,12 @@ class Organization(BaseModel):
 class PersonName(BaseModel):
     """A person's name."""
 
-    surname: Optional[str] = Field(
+    family_names: Optional[str] = Field(
         None,
         description="The person's family name (last name in western culture).",
     )
 
-    given: Optional[str] = Field(
+    given_names: Optional[str] = Field(
         None,
         description="The person's given name (first name in western culture).",
     )
@@ -119,7 +119,7 @@ class PersonName(BaseModel):
         ),
     )
 
-    @validator("surname", "given", "name")
+    @validator("family_names", "given_names", "name")
     def clean_whitespace(cls, v: Optional[str]) -> Optional[str]:
         if v:
             return collapse_whitespace(v)
@@ -131,23 +131,27 @@ class PersonName(BaseModel):
         """Check that either surname and given are both provided, or name
         alone is set
         """
-        if values.get("surname") and values.get("given"):
+        if values.get("family_names") and values.get("given_names"):
             if values.get("name"):
                 raise ValueError(
-                    "Do not specify name if surname and given names are "
+                    "Do not specify name if family_names and given_names are "
                     "both provided."
                 )
             return values
         if values.get("name"):
-            if values.get("surname"):
-                raise ValueError("Do not specify `surname` if using `name`.")
-            elif values.get("given"):
-                raise ValueError("Do not specify `given` if using `name`.")
+            if values.get("family_names"):
+                raise ValueError(
+                    "Do not specify `family_names` if using `name`."
+                )
+            elif values.get("given_names"):
+                raise ValueError(
+                    "Do not specify `given_names` if using `name`."
+                )
             return values
 
         raise ValueError(
-            "Name must include either surname and given fields, or a single "
-            "name field."
+            "Name must include either family_names and given_names fields, "
+            "or a single name field."
         )
 
 
