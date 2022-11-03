@@ -7,6 +7,9 @@ package = "technote"
 
 [sphinx]
 rst_epilog_file = "_rst_epilog.rst"
+extensions = [
+    "sphinxcontrib.autodoc_pydantic",
+]
 disable_primary_sidebars = [
     "index",
     "changelog",
