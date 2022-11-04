@@ -11,12 +11,13 @@ to support their technote plugins and build infrastructure.
 # export schema. Some metadata can be discovered from the content, and
 # reformatted from data in technote.toml (for example, a ORCiD can stand
 # in for an author's name, and a ROR can stand in for the name of an
-# affiliation.
+# affiliation.)
 
 from __future__ import annotations
 
 import re
 from datetime import date
+from enum import Enum
 from typing import Any, Dict, List, Optional
 
 from pydantic import (
@@ -42,6 +43,8 @@ __all__ = [
     "Contributor",
     "LicenseConfig",
     "TechnoteConfig",
+    "TechnoteStatus",
+    "TechnoteState",
 ]
 
 
@@ -214,6 +217,60 @@ class LicenseConfig(BaseModel):
         return v
 
 
+class TechnoteState(str, Enum):
+    """Standardized states for a technote."""
+
+    planning = "planning"
+    """The technote is being researched and planned, but may not have useful
+    content yet.
+    """
+
+    active = "active"
+    """The technote is being actively drafted and updated. It may not be
+    complete.
+    """
+
+    stable = "stable"
+    """The content is considered stable and intended to be complete and
+    accurate.
+    """
+
+    deprecated = "deprecated"
+    """The technote is no longer relevant and accurate, and may have been
+    replaced by other documents.
+    """
+
+    other = "other"
+    """The technote's state is not described by the controlled vocabulary.
+    Use the ``TechnoteStatus.note`` field to explain.
+    """
+
+
+class TechnoteStatus(BaseModel):
+    """A model for the technote's status.
+
+    Status is intended to describe whether a document is in planning,
+    active writing, stable, or deprecated/supersceded stages of its lifecycle.
+    It's not intended for fine-grained status, such as describing a work ticket
+    that's in progress or in review.
+    """
+
+    state: TechnoteState = Field(
+        description="The state of a document, from a controlled vocabulary."
+    )
+
+    note: Optional[str] = Field(
+        None, description="An explanation of the state."
+    )
+
+    supersceding_urls: List[HttpUrl] = Field(
+        default_factory=list,
+        description=(
+            "URLs to documents/webpages that superscede this technote."
+        ),
+    )
+
+
 class TechnoteConfig(BaseModel):
     """The root table for technote configuration, ``[technote]`` in
     technote.toml.
@@ -275,6 +332,10 @@ class TechnoteConfig(BaseModel):
 
     github_default_branch: str = Field(
         "main", description="The default branch of the GitHub repository."
+    )
+
+    status: Optional[TechnoteStatus] = Field(
+        None, description="The status of the technote."
     )
 
     license: Optional[LicenseConfig] = Field(
