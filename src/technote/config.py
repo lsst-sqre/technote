@@ -18,7 +18,7 @@ from __future__ import annotations
 import re
 from datetime import date
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
 from pydantic import (
     BaseModel,
@@ -45,6 +45,9 @@ __all__ = [
     "PersonName",
     "Person",
     "Contributor",
+    "SphinxTable",
+    "IntersphinxTable",
+    "LinkcheckTable",
 ]
 
 
@@ -54,6 +57,55 @@ WHITESPACE_PATTERN = re.compile(r"\s+")
 def collapse_whitespace(text: str) -> str:
     """Replace any whitespace character, or group, with a single space."""
     return WHITESPACE_PATTERN.sub(" ", text).strip()
+
+
+class IntersphinxTable(BaseModel):
+    """Intersphinx configuration in the ``[technote.sphinx]`` table."""
+
+    projects: Dict[str, HttpUrl] = Field(
+        description="Mapping of projects and their URLs.", default_factory=dict
+    )
+
+
+class LinkcheckTable(BaseModel):
+    """Linkcheck builder configurations in the ``[technote.sphinx]`` table."""
+
+    ignore: List[str] = Field(
+        description="Regular expressions of URLs to skip checking links",
+        default_factory=list,
+    )
+
+
+class SphinxTable(BaseModel):
+    """The ``[technote.sphinx]`` table permits Sphinx project configuration."""
+
+    nitpicky: bool = Field(
+        False, description="Escalate warnings to build errors."
+    )
+
+    nitpick_ignore: List[Tuple[str, str]] = Field(
+        description=(
+            "Errors to ignore. First item is the type (like a role or "
+            "directive) and the second is the target (like the argument to "
+            "the role)."
+        ),
+        default_factory=list,
+    )
+
+    nitpick_ignore_regex: List[Tuple[str, str]] = Field(
+        description=(
+            "Same as ``nitpick_ignore``, but both type and target are "
+            "interpreted as regular expressions."
+        ),
+        default_factory=list,
+    )
+
+    extensions: List[str] = Field(
+        default_factory=list,
+        description="Additional Sphinx extensions to use in the build.",
+    )
+
+    intersphinx: IntersphinxTable
 
 
 class Organization(BaseModel):
@@ -363,6 +415,8 @@ class TechnoteTable(BaseModel):
         description="Additional persons involved.",
         default_factory=list,
     )
+
+    sphinx: SphinxTable = Field(default_factory=lambda: SphinxTable)
 
 
 class TechnoteToml(BaseModel, extra=Extra.ignore):
