@@ -7,14 +7,35 @@ package = "technote"
 
 [sphinx]
 rst_epilog_file = "_rst_epilog.rst"
+extensions = [
+    "sphinxcontrib.autodoc_pydantic",
+]
 disable_primary_sidebars = [
     "index",
     "changelog",
+]
+nitpick_ignore = [
+    ["py:class", "pydantic.main.BaseModel"],
+    ["py:class", "pydantic.utils.Representation"],
+    ["py:class", "pydantic.networks.HttpUrl"],
+    ["py:class", "pydantic.networks.AnyHttpUrl"],
+    ["py:class", "pydantic.networks.AnyUrl"],
+    ["py:class", "pydantic.errors.UrlError"],
+    ["py:class", "pydantic.errors.PydanticValueError"],
+    ["py:class", "pydantic.errors.PydanticErrorMixin"],
+    ["py:class", "pydantic.networks.HttpUrl"],
+    ["py:class", "pydantic.networks.AnyHttpUrl"],
+    ["py:class", "pydantic.networks.AnyUrl"],
+    ["py:class", "pydantic.errors.UrlError"],
+    ["py:class", "pydantic.errors.PydanticValueError"],
+    ["py:class", "pydantic.errors.PydanticErrorMixin"],
+    ["py:class", "unicode"],
 ]
 
 [sphinx.linkcheck]
 ignore = [
     "demo/index.html",
+    "https://support.orcid.org",
 ]
 
 [sphinx.intersphinx.projects]

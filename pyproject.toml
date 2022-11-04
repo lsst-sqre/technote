@@ -26,6 +26,9 @@ requires-python = ">=3.8"
 dependencies = [
     "Sphinx>=5.0.0",
     "sphinx-basic-ng>=1.0.0b1",
+    "base32-lib",
+    "tomli; python_version < \"3.11\"",
+    "pydantic[email]",
 ]
 dynamic = ["version"]
 
@@ -39,6 +42,7 @@ dev = [
     "mypy",
     # Documentation
     "documenteer[guide]",
+    "autodoc_pydantic"
 ]
 
 [project.urls]
