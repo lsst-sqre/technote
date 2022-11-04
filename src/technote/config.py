@@ -220,7 +220,17 @@ class LicenseTable(BaseModel):
 
 
 class TechnoteState(str, Enum):
-    """Standardized states for a technote."""
+    """Standardized states for a technote.
+
+    .. mermaid::
+
+       flowchart LR
+         planning --> active
+         active --> stable
+         stable --> active
+         stable --> deprecated
+         active --> deprecated
+    """
 
     planning = "planning"
     """The technote is being researched and planned, but may not have useful
