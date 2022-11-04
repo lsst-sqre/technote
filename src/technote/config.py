@@ -37,14 +37,14 @@ from .metadata.zenodo import ZenodoRole
 
 __all__ = [
     "TechnoteToml",
+    "TechnoteTable",
+    "LicenseTable",
+    "TechnoteStatus",
+    "TechnoteState",
     "Organization",
     "PersonName",
     "Person",
     "Contributor",
-    "LicenseConfig",
-    "TechnoteConfig",
-    "TechnoteStatus",
-    "TechnoteState",
 ]
 
 
@@ -196,8 +196,10 @@ class Contributor(Person):
     )
 
 
-class LicenseConfig(BaseModel):
-    """A model for configuring a content license."""
+class LicenseTable(BaseModel):
+    """A model for ``[technote.license]`` in ``technote.toml``, which
+    describes the content's license.
+    """
 
     id: str = Field(
         ...,
@@ -271,9 +273,9 @@ class TechnoteStatus(BaseModel):
     )
 
 
-class TechnoteConfig(BaseModel):
+class TechnoteTable(BaseModel):
     """The root table for technote configuration, ``[technote]`` in
-    technote.toml.
+    ``technote.toml`` (`TechnoteToml`).
     """
 
     id: Optional[str] = Field(
@@ -338,7 +340,7 @@ class TechnoteConfig(BaseModel):
         None, description="The status of the technote."
     )
 
-    license: Optional[LicenseConfig] = Field(
+    license: Optional[LicenseTable] = Field(
         None, description="The specification of a content license."
     )
 
@@ -356,4 +358,4 @@ class TechnoteConfig(BaseModel):
 class TechnoteToml(BaseModel, extra=Extra.ignore):
     """A model of a ``technote.toml`` configuration file."""
 
-    technote: TechnoteConfig
+    technote: TechnoteTable
