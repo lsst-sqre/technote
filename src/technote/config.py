@@ -245,6 +245,15 @@ class TechnoteConfig(BaseModel):
         None, description="The current version of the technote."
     )
 
+    doi: Optional[str] = Field(
+        None,
+        description=(
+            "The most-relevant DOI that identifies this technote. "
+            "This can be a pre-registerered DOI (i.e. for Zenodo) so that the "
+            "DOI can be present in the released technote source."
+        ),
+    )
+
     title: Optional[str] = Field(
         None,
         description=(
