@@ -2,13 +2,6 @@
 
 from __future__ import annotations
 
-import sys
-
-if sys.version_info < (3, 11):
-    import tomli as tomllib
-else:
-    import tomllib
-
 from technote.config import TechnoteToml
 
 sample_toml = """
@@ -34,5 +27,5 @@ def test_toml_parsing() -> None:
     """Test TechnoteToml by parsing a sample document that should be
     well-formatted.
     """
-    technote_toml = TechnoteToml.parse_obj(tomllib.loads(sample_toml))
+    technote_toml = TechnoteToml.parse_toml(sample_toml)
     assert technote_toml.technote.id == "SQR-000"
