@@ -16,9 +16,17 @@ to support their technote plugins and build infrastructure.
 from __future__ import annotations
 
 import re
+import sys
+from dataclasses import dataclass
 from datetime import date
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from pathlib import Path
+from typing import Any, Dict, List, MutableMapping, Optional, Tuple, Union
+
+if sys.version_info < (3, 11):
+    import tomli as tomllib
+else:
+    import tomllib
 
 from pydantic import (
     BaseModel,
@@ -26,9 +34,11 @@ from pydantic import (
     Extra,
     Field,
     HttpUrl,
+    ValidationError,
     root_validator,
     validator,
 )
+from sphinx.errors import ConfigError
 
 from .metadata.orcid import Orcid
 from .metadata.ror import Ror
@@ -45,6 +55,11 @@ __all__ = [
     "PersonName",
     "Person",
     "Contributor",
+    "SphinxTable",
+    "IntersphinxTable",
+    "LinkcheckTable",
+    "TechnoteSphinxConfig",
+    "TechnoteJinjaContext",
 ]
 
 
@@ -54,6 +69,63 @@ WHITESPACE_PATTERN = re.compile(r"\s+")
 def collapse_whitespace(text: str) -> str:
     """Replace any whitespace character, or group, with a single space."""
     return WHITESPACE_PATTERN.sub(" ", text).strip()
+
+
+class IntersphinxTable(BaseModel):
+    """Intersphinx configuration in the ``[technote.sphinx]`` table."""
+
+    projects: Dict[str, HttpUrl] = Field(
+        description="Mapping of projects and their URLs.", default_factory=dict
+    )
+
+
+class LinkcheckTable(BaseModel):
+    """Linkcheck builder configurations in the ``[technote.sphinx]`` table."""
+
+    ignore: List[str] = Field(
+        description="Regular expressions of URLs to skip checking links",
+        default_factory=list,
+    )
+
+
+class SphinxTable(BaseModel):
+    """The ``[technote.sphinx]`` table permits Sphinx project configuration."""
+
+    nitpicky: bool = Field(
+        False, description="Escalate warnings to build errors."
+    )
+
+    nitpick_ignore: List[Tuple[str, str]] = Field(
+        description=(
+            "Errors to ignore. First item is the type (like a role or "
+            "directive) and the second is the target (like the argument to "
+            "the role)."
+        ),
+        default_factory=list,
+    )
+
+    nitpick_ignore_regex: List[Tuple[str, str]] = Field(
+        description=(
+            "Same as ``nitpick_ignore``, but both type and target are "
+            "interpreted as regular expressions."
+        ),
+        default_factory=list,
+    )
+
+    extensions: List[str] = Field(
+        default_factory=list,
+        description="Additional Sphinx extensions to use in the build.",
+    )
+
+    intersphinx: IntersphinxTable = Field(
+        default_factory=IntersphinxTable,
+        description="Intersphinx configurations.",
+    )
+
+    linkcheck: LinkcheckTable = Field(
+        default_factory=LinkcheckTable,
+        description="Link check builder settings.",
+    )
 
 
 class Organization(BaseModel):
@@ -121,6 +193,14 @@ class PersonName(BaseModel):
             "given names."
         ),
     )
+
+    @property
+    def plain_text_name(self) -> str:
+        """The name in plain text."""
+        if self.name is not None:
+            return self.name
+        else:
+            return f"{self.given_names} {self.family_names}"
 
     @validator("family_names", "given_names", "name")
     def clean_whitespace(cls, v: Optional[str]) -> Optional[str]:
@@ -364,8 +444,162 @@ class TechnoteTable(BaseModel):
         default_factory=list,
     )
 
+    sphinx: SphinxTable = Field(default_factory=SphinxTable)
+
 
 class TechnoteToml(BaseModel, extra=Extra.ignore):
     """A model of a ``technote.toml`` configuration file."""
 
     technote: TechnoteTable
+
+    @classmethod
+    def parse_toml(cls, content: str) -> TechnoteToml:
+        """Load a ``technote.toml`` file from the project directory.
+
+        Parameters
+        ----------
+        content
+            The string content of a ``technote.toml`` file.
+
+        Returns
+        -------
+        TechnoteToml
+            The parsed `TechnoteToml`.
+        """
+        return cls.parse_obj(tomllib.loads(content))
+
+
+@dataclass
+class TechnoteSphinxConfig:
+    """A wrapper around `TechnoteToml` that assists in setting Sphinx
+    configurations in a conf.py file (via `technote.sphinxconf`).
+    """
+
+    toml: TechnoteToml
+    """The parse ``technote.toml`` file."""
+
+    @classmethod
+    def find_and_load(cls) -> TechnoteSphinxConfig:
+        """Find the ``technote.toml`` file in the current Sphinx build and
+        load it.
+
+        Returns
+        -------
+        TechnoteSphinxConfig
+            The technote configuration, useful for configuring the Sphinx
+            project.
+        """
+        path = Path("technote.toml")
+        if not path.is_file:
+            raise ConfigError("Cannot find the technote.toml file.")
+        return cls.load(path.read_text())
+
+    @classmethod
+    def load(cls, toml_content: str) -> TechnoteSphinxConfig:
+        """Load the content of a ``technote.toml`` file.
+
+        Parameters
+        ----------
+        content
+            The string content of a ``technote.toml`` file.
+
+        Returns
+        -------
+        TechnoteSphinxConfig
+            The sphinx configuration wrapper class around `TechnoteToml`.
+        """
+        try:
+            parsed_toml = TechnoteToml.parse_toml(toml_content)
+        except ValidationError as e:
+            message = (
+                f"Syntax or validation issue in technote.toml:\n\n" f"{str(e)}"
+            )
+            raise ConfigError(message)
+
+        return cls(toml=parsed_toml)
+
+    @property
+    def title(self) -> Optional[str]:
+        """The title of the document set via technote.toml metadata, or
+        None if the document's H1 should be used.
+        """
+        return self.toml.technote.title
+
+    @property
+    def author(self) -> str:
+        """A plaintext expression of the author or authors."""
+        if self.toml.technote.authors:
+            return ", ".join(
+                a.name.plain_text_name for a in self.toml.technote.authors
+            )
+        else:
+            return ""
+
+    def append_extensions(self, extensions: List[str]) -> None:
+        """Append user-configured extensions to an existing list."""
+        for new_ext in self.toml.technote.sphinx.extensions:
+            if new_ext not in extensions:
+                extensions.append(new_ext)
+
+    def extend_intersphinx_mapping(
+        self, mapping: MutableMapping[str, Tuple[str, Union[str, None]]]
+    ) -> None:
+        """Extend the ``intersphinx_mapping`` dictionary with configured
+        projects.
+        """
+        for (
+            project,
+            url,
+        ) in self.toml.technote.sphinx.intersphinx.projects.items():
+            mapping[project] = (str(url), None)
+
+    def append_linkcheck_ignore(self, link_patterns: List[str]) -> None:
+        """Append URL patterns for sphinx.linkcheck.ignore to existing
+        patterns.
+        """
+        link_patterns.extend(self.toml.technote.sphinx.linkcheck.ignore)
+
+    def append_nitpick_ignore(
+        self, nitpick_ignore: List[Tuple[str, str]]
+    ) -> None:
+        """Append ``nitpick_ignore`` items from sphinx.nitpick_ignore."""
+        nitpick_ignore.extend(self.toml.technote.sphinx.nitpick_ignore)
+
+    def append_nitpick_ignore_regex(
+        self, nitpick_ignore_regex: List[Tuple[str, str]]
+    ) -> None:
+        """Append ``nitpick_ignore_regex`` items from sphinx.nitpick_ignore."""
+        nitpick_ignore_regex.extend(
+            self.toml.technote.sphinx.nitpick_ignore_regex
+        )
+
+    @property
+    def nitpicky(self) -> bool:
+        """The nitpicky boolean flag."""
+        return self.toml.technote.sphinx.nitpicky
+
+    @property
+    def jinja_context(self) -> TechnoteJinjaContext:
+        """The TechnoteJinjaContext that provides metadata to the HTML
+        templates.
+        """
+        return TechnoteJinjaContext(toml=self.toml)
+
+
+class TechnoteJinjaContext:
+    """A class available to the Jinja context in HTML templates and
+    provides access to technote.toml-based metadata.
+
+    Parameters
+    ----------
+    toml
+        The metadata from ``technote.toml``.
+    """
+
+    def __init__(self, toml: TechnoteToml) -> None:
+        self._toml: TechnoteToml = toml
+
+    @property
+    def toml(self) -> TechnoteToml:
+        """The technote.toml root object."""
+        return self._toml
