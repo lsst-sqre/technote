@@ -32,6 +32,7 @@ __all__ = [
     "linkcheck_ignore",
     # HTML
     "html_context",
+    "html_baseurl",
 ]
 
 _t = TechnoteSphinxConfig.find_and_load()
@@ -83,3 +84,8 @@ _t.append_linkcheck_ignore(linkcheck_ignore)
 # ============================================================================
 
 html_context: Dict[str, Any] = {"technote": _t.jinja_context}
+
+if _t.toml.technote.canonical_url:
+    html_baseurl = str(_t.toml.technote.canonical_url)
+else:
+    html_baseurl = ""
