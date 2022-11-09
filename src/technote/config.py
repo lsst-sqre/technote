@@ -59,6 +59,7 @@ __all__ = [
     "IntersphinxTable",
     "LinkcheckTable",
     "TechnoteSphinxConfig",
+    "TechnoteJinjaContext",
 ]
 
 
@@ -576,3 +577,29 @@ class TechnoteSphinxConfig:
     def nitpicky(self) -> bool:
         """The nitpicky boolean flag."""
         return self.toml.technote.sphinx.nitpicky
+
+    @property
+    def jinja_context(self) -> TechnoteJinjaContext:
+        """The TechnoteJinjaContext that provides metadata to the HTML
+        templates.
+        """
+        return TechnoteJinjaContext(toml=self.toml)
+
+
+class TechnoteJinjaContext:
+    """A class available to the Jinja context in HTML templates and
+    provides access to technote.toml-based metadata.
+
+    Parameters
+    ----------
+    toml
+        The metadata from ``technote.toml``.
+    """
+
+    def __init__(self, toml: TechnoteToml) -> None:
+        self._toml: TechnoteToml = toml
+
+    @property
+    def toml(self) -> TechnoteToml:
+        """The technote.toml root object."""
+        return self._toml

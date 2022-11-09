@@ -7,7 +7,7 @@ To use this configuration in a Technote project, write a conf.py containing::
 
 from __future__ import annotations
 
-from typing import Dict, List, Tuple, Union
+from typing import Any, Dict, List, Tuple, Union
 
 from .config import TechnoteSphinxConfig
 
@@ -30,6 +30,8 @@ __all__ = [
     "linkcheck_retries",
     "linkcheck_timeout",
     "linkcheck_ignore",
+    # HTML
+    "html_context",
 ]
 
 _t = TechnoteSphinxConfig.find_and_load()
@@ -75,3 +77,9 @@ linkcheck_retries = 2
 linkcheck_timeout = 15
 linkcheck_ignore: List[str] = []
 _t.append_linkcheck_ignore(linkcheck_ignore)
+
+# ============================================================================
+# HTML HTML builder settings
+# ============================================================================
+
+html_context: Dict[str, Any] = {"technote": _t.jinja_context}
