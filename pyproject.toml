@@ -40,6 +40,7 @@ dev = [
     "pytest-asyncio",
     "pre-commit",
     "mypy",
+    "types-docutils",
     # Documentation
     "documenteer[guide]",
     "autodoc_pydantic"

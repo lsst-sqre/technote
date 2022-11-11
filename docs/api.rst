@@ -10,6 +10,9 @@ Python API reference
 .. automodapi:: technote.config
    :include-all-objects:
 
+.. automodapi:: technote.ext
+   :include-all-objects:
+
 .. automodapi:: technote.metadata.orcid
    :include-all-objects:
 
