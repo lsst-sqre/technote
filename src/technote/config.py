@@ -490,7 +490,7 @@ class TechnoteSphinxConfig:
             project.
         """
         path = Path("technote.toml")
-        if not path.is_file:
+        if not path.is_file():
             raise ConfigError("Cannot find the technote.toml file.")
         return cls.load(path.read_text())
 
