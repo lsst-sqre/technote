@@ -16,6 +16,7 @@ from .abstract import (
     visit_abstract_node_html,
     visit_abstract_node_tex,
 )
+from .metadata import process_html_page_context_for_metadata
 
 __all__ = ["setup"]
 
@@ -31,6 +32,9 @@ def setup(app: Sphinx) -> Dict[str, Any]:
         html=(visit_abstract_node_html, depart_abstract_node_html),
         latex=(visit_abstract_node_tex, depart_abstract_node_tex),
     )
+
+    # Metadata
+    app.connect("html-page-context", process_html_page_context_for_metadata)
 
     return {
         "version": __version__,

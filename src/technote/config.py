@@ -598,8 +598,30 @@ class TechnoteJinjaContext:
 
     def __init__(self, toml: TechnoteToml) -> None:
         self._toml: TechnoteToml = toml
+        self._content_title: Optional[str] = None
 
     @property
     def toml(self) -> TechnoteToml:
         """The technote.toml root object."""
         return self._toml
+
+    @property
+    def title(self) -> str:
+        """The technote's title.
+
+        The title is the ``h1`` heading from the document if
+        ``technote.title`` isn't set in ``technote.toml``.
+        """
+        if self.toml.technote.title is not None:
+            return self.toml.technote.title
+        else:
+            if self._content_title is None:
+                raise RuntimeError(
+                    "The document is missing a heading for its title."
+                )
+            else:
+                return self._content_title
+
+    def set_content_title(self, title: str) -> None:
+        """Set the title from the content nodes."""
+        self._content_title = title
