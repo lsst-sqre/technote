@@ -450,3 +450,44 @@ h6:hover .headerlink {
   font-size: var(--tn-component-h4-size);
   font-weight: bold;
 }
+
+.technote-sidebar-section__heading {
+  font-size: var(--tn-component-h6-size);
+  font-weight: bold;
+  color: var(--tn-color-neutral-600);
+  margin-bottom: 0;
+}
+
+.technote-sidebar-author-list {
+  margin-top: var(--tn-space-xs-fixed);
+}
+
+/*
+ * comma-list makes a ul an inline list with grammatical comma separated
+ * items.
+ */
+.technote-inline-comma-list {
+  list-style: none;
+  margin-left: 0;
+  padding-left: 0;
+}
+
+.technote-inline-comma-list li {
+  display: inline;
+}
+
+.technote-inline-comma-list li:after {
+  content: ', ';
+}
+
+.technote-inline-comma-list li:last-child:after {
+  content: '';
+}
+
+.technote-inline-comma-list li:nth-last-child(2):after {
+  content: ' and ';
+}
+
+.technote-inline-comma-list li:nth-last-child(3) ~ li:nth-last-child(2):after {
+  content: ', and ';
+}
