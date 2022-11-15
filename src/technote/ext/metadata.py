@@ -8,6 +8,8 @@ from docutils import nodes
 from sphinx.application import Sphinx
 from sphinx.config import Config
 
+from .abstract import AbstractNode
+
 __all__ = ["get_title", "process_html_page_context_for_metadata"]
 
 
@@ -28,6 +30,22 @@ def get_title(
             break
 
 
+def get_abstract(
+    *,
+    app: Sphinx,
+    context: Dict[str, Any],
+    doctree: Optional[nodes.document],
+    config: Config,
+) -> None:
+    if doctree is not None:
+        for abstract_node in doctree.findall(
+            condition=lambda x: isinstance(x, AbstractNode)
+        ):
+            content = abstract_node.astext()
+            context["technote"].set_abstract(content)
+            break
+
+
 def process_html_page_context_for_metadata(
     app: Sphinx,
     pagename: str,
@@ -40,3 +58,4 @@ def process_html_page_context_for_metadata(
     This function is hooked into the Sphinx ``html-page-context`` event.
     """
     get_title(app=app, context=context, doctree=doctree, config=app.config)
+    get_abstract(app=app, context=context, doctree=doctree, config=app.config)
