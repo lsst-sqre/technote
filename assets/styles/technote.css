@@ -19,6 +19,169 @@ html {
    * Flexible Typesetting, Tim Brown, ch 2 and 4
    */
   font-size: 1.1rem;
+
+  /*
+   * Color design tokens.
+   *
+   * These are based on GitHub Primer.
+   * https://primer.style/prism/local/a4751264-de23-430e-a2fc-669488065638/scale/c2a0938a-e1dc-4b20-a07b-e2778ae57f41
+   */
+  --tn-color-black: #1b1f24;
+  --tn-color-white: #ffffff;
+
+  --tn-color-neutral-000: #f6f8fa;
+  --tn-color-neutral-100: #eaeef2;
+  --tn-color-neutral-200: #d0d7de;
+  --tn-color-neutral-300: #afb8c1;
+  --tn-color-neutral-400: #8c959f;
+  --tn-color-neutral-500: #6e7781;
+  --tn-color-neutral-600: #57606a;
+  --tn-color-neutral-700: #424a53;
+  --tn-color-neutral-800: #32383f;
+  --tn-color-neutral-900: #24292f;
+
+  --tn-color-blue-000: #ddf4ff;
+  --tn-color-blue-100: #b6e3ff;
+  --tn-color-blue-200: #80ccff;
+  --tn-color-blue-300: #54aeff;
+  --tn-color-blue-400: #218bff;
+  --tn-color-blue-500: #0969da;
+  --tn-color-blue-600: #0550ae;
+  --tn-color-blue-700: #033d8b;
+  --tn-color-blue-800: #0a3069;
+  --tn-color-blue-900: #002155;
+
+  --tn-color-green-000: #dafbe1;
+  --tn-color-green-100: #aceebb;
+  --tn-color-green-200: #6fdd8b;
+  --tn-color-green-300: #4ac26b;
+  --tn-color-green-400: #2da44e;
+  --tn-color-green-500: #1a7f37;
+  --tn-color-green-600: #116329;
+  --tn-color-green-700: #044f1e;
+  --tn-color-green-800: #003d16;
+  --tn-color-green-900: #002d11;
+
+  --tn-color-yellow-000: #fff8c5;
+  --tn-color-yellow-100: #fae17d;
+  --tn-color-yellow-200: #eac54f;
+  --tn-color-yellow-300: #d4a72c;
+  --tn-color-yellow-400: #bf8700;
+  --tn-color-yellow-500: #9a6700;
+  --tn-color-yellow-600: #7d4e00;
+  --tn-color-yellow-700: #633c01;
+  --tn-color-yellow-800: #4d2d00;
+  --tn-color-yellow-900: #3b2300;
+
+  --tn-color-orange-000: #fff1e5;
+  --tn-color-orange-100: #ffd8b5;
+  --tn-color-orange-200: #ffb77c;
+  --tn-color-orange-300: #fb8f44;
+  --tn-color-orange-400: #e16f24;
+  --tn-color-orange-500: #bc4c00;
+  --tn-color-orange-600: #953800;
+  --tn-color-orange-700: #762c00;
+  --tn-color-orange-800: #5c2200;
+  --tn-color-orange-900: #471700;
+
+  --tn-color-red-000: #ffebe9;
+  --tn-color-red-100: #ffcecb;
+  --tn-color-red-200: #ffaba8;
+  --tn-color-red-300: #ff8182;
+  --tn-color-red-400: #fa4549;
+  --tn-color-red-500: #cf222e;
+  --tn-color-red-600: #a40e26;
+  --tn-color-red-700: #82071e;
+  --tn-color-red-800: #660018;
+  --tn-color-red-900: #4c0014;
+
+  --tn-color-red-000: #fbefff;
+  --tn-color-red-100: #ecd8ff;
+  --tn-color-red-200: #d8b9ff;
+  --tn-color-red-300: #c297ff;
+  --tn-color-red-400: #a475f9;
+  --tn-color-red-500: #8250df;
+  --tn-color-red-600: #6639ba;
+  --tn-color-red-700: #512a97;
+  --tn-color-red-800: #3e1f79;
+  --tn-color-red-900: #2e1461;
+
+  --tn-color-pink-000: #ffeff7;
+  --tn-color-pink-100: #ffd3eb;
+  --tn-color-pink-200: #ffadda;
+  --tn-color-pink-300: #ff80c8;
+  --tn-color-pink-400: #e85aad;
+  --tn-color-pink-500: #bf3989;
+  --tn-color-pink-600: #99286e;
+  --tn-color-pink-700: #772057;
+  --tn-color-pink-800: #611347;
+  --tn-color-pink-900: #4d0336;
+
+  --tn-color-coral-000: #fff0eb;
+  --tn-color-coral-100: #ffd6cc;
+  --tn-color-coral-200: #ffb4a1;
+  --tn-color-coral-300: #fd8c73;
+  --tn-color-coral-400: #ec6547;
+  --tn-color-coral-500: #c4432b;
+  --tn-color-coral-600: #9e2f1c;
+  --tn-color-coral-700: #801f0f;
+  --tn-color-coral-800: #691105;
+  --tn-color-coral-900: #510901;
+
+  /*
+   * Spacing values in em units
+   */
+  --tn-space-unit: 1em;
+  --tn-space-xxxs: calc(0.25 * var(--tn-space-unit));
+  --tn-space-xxs: calc(0.375 * var(--tn-space-unit));
+  --tn-space-xs: calc(0.5 * var(--tn-space-unit));
+  --tn-space-sm: calc(0.75 * var(--tn-space-unit));
+  --tn-space-md: calc(1.25 * var(--tn-space-unit));
+  --tn-space-lg: calc(2 * var(--tn-space-unit));
+  --tn-space-xl: calc(3.25 * var(--tn-space-unit));
+  --tn-space-xxl: calc(5.25 * var(--tn-space-unit));
+  --tn-space-xxxl: calc(8.5 * var(--tn-space-unit));
+
+  /*
+    * Fixed spacing
+    * These aren't affected by --space-unit or the root font size
+    */
+  --tn-space-unit-fixed: 1rem;
+  --tn-space-xxxs-fixed: calc(0.25 * var(--tn-space-unit-fixed));
+  --tn-space-xxs-fixed: calc(0.375 * var(--tn-space-unit-fixed));
+  --tn-space-xs-fixed: calc(0.5 * var(--tn-space-unit-fixed));
+  --tn-space-sm-fixed: calc(0.75 * var(--tn-space-unit-fixed));
+  --tn-space-md-fixed: calc(1.25 * var(--tn-space-unit-fixed));
+  --tn-space-lg-fixed: calc(2 * var(--tn-space-unit-fixed));
+  --tn-space-xl-fixed: calc(3.25 * var(--tn-space-unit-fixed));
+  --tn-space-xxl-fixed: calc(5.25 * var(--tn-space-unit-fixed));
+  --tn-space-xxxl-fixed: calc(8.5 * var(--tn-space-unit-fixed));
+
+  /*
+   * Border radius
+   */
+  --tn-border-radius-0: 0px;
+  --tn-border-radius-1: 4px;
+  --tn-border-radius-2: 7px;
+
+  /*
+   * Typographic design tokens.
+   */
+  --tn-component-h1-size: 3.052rem;
+  --tn-component-h2-size: 2.441rem;
+  --tn-component-h3-size: 1.563rem;
+  --tn-component-h4-size: 1.25rem;
+  --tn-component-h5-size: 1rem;
+  --tn-component-h6-size: 0.8rem;
+
+  --tn-component-h1-weight: normal;
+  --tn-component-h2-weight: normal;
+  --tn-component-h3-weight: bold;
+  --tn-component-h4-weight: bold;
+  --tn-component-h5-weight: bold;
+  --tn-component-h6-weight: bold;
+
+  --tn-component-text-color: var(--tn-color-black);
 }
 
 /*
@@ -28,6 +191,7 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   line-height: 1.5;
+  color: var(--tn-component-text-color);
 }
 
 h1,
@@ -42,34 +206,34 @@ h6 {
 }
 
 h1 {
-  font-size: 3.052rem;
-  font-weight: normal;
+  font-size: var(--tn-component-h1-size);
+  font-weight: var(--tn-component-h1-weight);
   margin: 0 0 1em;
 }
 
 h2 {
-  font-size: 2.441rem;
-  font-weight: normal;
+  font-size: var(--tn-component-h2-size);
+  font-weight: var(--tn-component-h2-weight);
 }
 
 h3 {
-  font-size: 1.563rem;
-  font-weight: bold;
+  font-size: var(--tn-component-h3-size);
+  font-weight: var(--tn-component-h3-weight);
 }
 
 h4 {
-  font-size: 1.25rem;
-  font-weight: bold;
+  font-size: var(--tn-component-h4-size);
+  font-weight: var(--tn-component-h4-weight);
 }
 
 h5 {
-  font-size: 1rem;
-  font-weight: bold;
+  font-size: var(--tn-component-h5-size);
+  font-weight: var(--tn-component-h5-weight);
 }
 
 h6 {
-  font-size: 0.8rem;
-  font-weight: bold;
+  font-size: var(--tn-component-h6-size);
+  font-weight: var(--tn-component-h6-weight);
 }
 
 /* Handle Sphinx's built-in permalink icon. */
