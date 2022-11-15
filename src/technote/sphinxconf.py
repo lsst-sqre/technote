@@ -41,12 +41,12 @@ _t = TechnoteSphinxConfig.find_and_load()
 # SPHINX General sphinx settings
 # ============================================================================
 
-project = _t.title
-author = _t.author
+project = _t.title or ""
+author = _t.author or ""
 exclude_patterns = ["_build", "README.rst", "README.md", "Makefile"]
 html_theme = "technote"
 
-extensions: List[str] = []
+extensions: List[str] = ["technote.ext"]
 _t.append_extensions(extensions)
 
 # Nitpicky settings and ignored errors

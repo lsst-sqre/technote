@@ -490,7 +490,7 @@ class TechnoteSphinxConfig:
             project.
         """
         path = Path("technote.toml")
-        if not path.is_file:
+        if not path.is_file():
             raise ConfigError("Cannot find the technote.toml file.")
         return cls.load(path.read_text())
 
@@ -598,8 +598,48 @@ class TechnoteJinjaContext:
 
     def __init__(self, toml: TechnoteToml) -> None:
         self._toml: TechnoteToml = toml
+        self._content_title: Optional[str] = None
+        self._content_abstract: Optional[str] = None
 
     @property
     def toml(self) -> TechnoteToml:
         """The technote.toml root object."""
         return self._toml
+
+    @property
+    def title(self) -> str:
+        """The technote's title.
+
+        The title is the ``h1`` heading from the document if
+        ``technote.title`` isn't set in ``technote.toml``.
+        """
+        if self.toml.technote.title is not None:
+            return self.toml.technote.title
+        else:
+            if self._content_title is None:
+                raise RuntimeError(
+                    "The document is missing a heading for its title."
+                )
+            else:
+                return self._content_title
+
+    @property
+    def abstract(self) -> str:
+        """The technote's unformatted abstract.
+
+        This content is extracted from the ``abstract`` directive, and all
+        markup is removed as part of that process. This attribute can be used
+        for populating summary tags in the HTML header.
+        """
+        if self._content_abstract:
+            return self._content_abstract
+        else:
+            return "N/A"
+
+    def set_content_title(self, title: str) -> None:
+        """Set the title from the content nodes."""
+        self._content_title = title
+
+    def set_abstract(self, abstract: str) -> None:
+        """Set the abstract metadata from the content."""
+        self._content_abstract = abstract

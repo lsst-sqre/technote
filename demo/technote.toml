@@ -1,7 +1,7 @@
 [technote]
 id = "SQR-000"
 series_id = "SQR"
-title = "The technical note system"
+# title = "The *technical note* system"
 canonical_url = "https://sqr-000.lsst.io"
 github_url = "https://github.com/lsst-sqre/sqr-000"
 github_default_branch = "master"
