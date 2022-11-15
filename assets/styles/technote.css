@@ -445,3 +445,8 @@ h6:hover .headerlink {
 .toc-container > ul > li:first-child > a {
   display: none;
 }
+
+.technote-article-header-id {
+  font-size: var(--tn-component-h4-size);
+  font-weight: bold;
+}
