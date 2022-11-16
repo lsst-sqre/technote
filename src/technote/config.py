@@ -636,6 +636,19 @@ class TechnoteJinjaContext:
         else:
             return "N/A"
 
+    @property
+    def date_updated_iso(self) -> Optional[str]:
+        """The date updated, as an ISO 8601 string."""
+        if self.toml.technote.date_updated:
+            return self._format_iso_date(self.toml.technote.date_updated)
+        else:
+            return None
+
+    @property
+    def version(self) -> Optional[str]:
+        """The version, as a string if available."""
+        return self.toml.technote.version
+
     def set_content_title(self, title: str) -> None:
         """Set the title from the content nodes."""
         self._content_title = title
@@ -643,3 +656,7 @@ class TechnoteJinjaContext:
     def set_abstract(self, abstract: str) -> None:
         """Set the abstract metadata from the content."""
         self._content_abstract = abstract
+
+    def _format_iso_date(self, date: date) -> str:
+        """Format a date in ISO 8601 format."""
+        return date.isoformat()
