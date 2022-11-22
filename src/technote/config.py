@@ -644,6 +644,11 @@ class TechnoteJinjaContext:
         else:
             return None
 
+    @property
+    def version(self) -> Optional[str]:
+        """The version, as a string if available."""
+        return self.toml.technote.version
+
     def set_content_title(self, title: str) -> None:
         """Set the title from the content nodes."""
         self._content_title = title
