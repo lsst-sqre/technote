@@ -416,6 +416,13 @@ h6:hover .headerlink {
 }
 
 /*
+ * Primary sidebar
+ */
+.sb-sidebar-primary {
+  padding: var(--tn-space-xs-fixed);
+}
+
+/*
  * Local TOC styling.
  */
 .toc-container {
