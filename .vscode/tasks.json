@@ -7,7 +7,21 @@
       "group": "build",
       "problemMatcher": [],
       "label": "npm: build",
-      "detail": "webpack"
+      "detail": "Build CSS & JS with webpack"
+    },
+    {
+      "label": "Demo",
+      "detail": "Build demo technote",
+      "type": "shell",
+      "command": "tox -e demo",
+      "problemMatcher": []
+    },
+    {
+      "label": "Preview",
+      "detail": "Build CSS, JS and demo technote",
+      "dependsOn": ["npm: build", "Demo"],
+      "dependsOrder": "sequence",
+      "problemMatcher": []
     }
   ]
 }
