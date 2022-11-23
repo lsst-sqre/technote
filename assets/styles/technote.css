@@ -256,7 +256,7 @@ h6:hover .headerlink {
 }
 
 /* Highlight key containers for debugging. */
-.sb-article {
+/* .sb-article {
   border: 1px solid red;
 }
 .sb-sidebar-secondary {
@@ -264,7 +264,7 @@ h6:hover .headerlink {
 }
 .sb-sidebar-primary {
   border: 1px solid green;
-}
+} */
 
 /*
  * Content container width.
@@ -288,9 +288,9 @@ h6:hover .headerlink {
   .match-content-width {
     width: 38rem;
   }
-  h1::after {
+  /* h1::after {
     content: ' 42';
-  }
+  } */
 }
 @media (min-width: 46rem) {
   .sb-footer-content__inner,
@@ -302,9 +302,9 @@ h6:hover .headerlink {
   .match-content-width {
     width: 40rem;
   }
-  h1::after {
+  /* h1::after {
     content: ' 46';
-  }
+  } */
 }
 @media (min-width: 50rem) {
   /* secondary sidebar appears, width is 17rem. */
@@ -317,9 +317,9 @@ h6:hover .headerlink {
   .match-content-width {
     width: 40rem;
   }
-  h1::after {
+  /* h1::after {
     content: ' 50';
-  }
+  } */
 }
 @media (min-width: 59rem) {
   .sb-footer-content__inner,
@@ -331,9 +331,9 @@ h6:hover .headerlink {
   .match-content-width {
     width: 36rem;
   }
-  h1::after {
+  /* h1::after {
     content: ' 59';
-  }
+  } */
 }
 @media (min-width: 63rem) {
   .sb-footer-content__inner,
@@ -345,9 +345,9 @@ h6:hover .headerlink {
   .match-content-width {
     width: 36rem;
   }
-  h1::after {
+  /* h1::after {
     content: ' 63';
-  }
+  } */
 }
 @media (min-width: 67rem) {
   .sb-footer-content__inner,
@@ -359,9 +359,9 @@ h6:hover .headerlink {
   .match-content-width {
     width: 40rem;
   }
-  h1::after {
+  /* h1::after {
     content: ' 67';
-  }
+  } */
 }
 @media (min-width: 76rem) {
   /* The primary sidebar appears */
@@ -374,9 +374,9 @@ h6:hover .headerlink {
   .match-content-width {
     width: 32rem;
   }
-  h1::after {
+  /* h1::after {
     content: ' 76';
-  }
+  } */
 }
 @media (min-width: 80rem) {
   .sb-article,
@@ -388,18 +388,18 @@ h6:hover .headerlink {
   .drop-secondary-sidebar-for-full-width-content .match-content-width {
     width: 40rem;
   }
-  h1::after {
+  /* h1::after {
     content: ' 80';
-  }
+  } */
 }
 @media (min-width: 84rem) {
   .sb-article,
   .match-content-width {
     width: 40rem;
   }
-  h1::after {
+  /* h1::after {
     content: ' 84';
-  }
+  } */
 }
 @media (min-width: 88rem) {
   .sb-footer-content__inner,
@@ -410,9 +410,9 @@ h6:hover .headerlink {
   .sb-page-width {
     width: 86rem;
   }
-  h1::after {
+  /* h1::after {
     content: ' 88';
-  }
+  } */
 }
 
 /*
