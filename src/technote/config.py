@@ -15,6 +15,7 @@ to support their technote plugins and build infrastructure.
 
 from __future__ import annotations
 
+import os
 import re
 import sys
 from dataclasses import dataclass
@@ -22,6 +23,7 @@ from datetime import date
 from enum import Enum
 from pathlib import Path
 from typing import Any, Dict, List, MutableMapping, Optional, Tuple, Union
+from urllib.parse import urlparse
 
 if sys.version_info < (3, 11):
     import tomli as tomllib
@@ -648,6 +650,56 @@ class TechnoteJinjaContext:
     def version(self) -> Optional[str]:
         """The version, as a string if available."""
         return self.toml.technote.version
+
+    @property
+    def github_url(self) -> Optional[str]:
+        """The GitHub repository URL."""
+        return self.toml.technote.github_url
+
+    @property
+    def github_repo_slug(self) -> Optional[str]:
+        """The GitHub repository slug, ``owner/name``."""
+        if self.github_url is None:
+            return self.github_url
+
+        url_parts = urlparse(self.github_url)
+        slug = "/".join(url_parts.path.lstrip("/").split("/")[:2])
+        if slug.endswith(".git"):  # replace with str.removesuffix in 3.9+
+            slug = slug[:-4]
+        return slug
+
+    @property
+    def github_ref_name(self) -> Optional[str]:
+        """The branch or tag name."""
+        # FIXME this is calculated from GitHub Actions environment variables
+        # https://docs.github.com/en/actions/learn-github-actions/environment-variables#default-environment-variables
+        return os.getenv("GITHUB_REF_NAME")
+
+    @property
+    def github_ref_type(self) -> Optional[str]:
+        """The ref type: branch or tag."""
+        # FIXME this is calculated from GitHub Actions environment variables
+        # https://docs.github.com/en/actions/learn-github-actions/environment-variables#default-environment-variables
+        return os.getenv("GITHUB_REF_TYPE")
+
+    @property
+    def github_edit_url(self) -> Optional[str]:
+        """The URL for editing content on GitHub, from its default branch."""
+        if self.github_url is None:
+            return None
+        if self.github_url.endswith(".git"):  # replace with str.removesuffix
+            root_url = self.github_url[:-4]
+        else:
+            root_url = self.github_url
+
+        # FIXME compute source path during Sphinx build
+        # We're using /blob/ instead of /edit/ to give users the choice of
+        # how to edit (on web or in github.dev).
+        edit_url = (
+            f"{root_url}/blob/{self.toml.technote.github_default_branch}"
+            "/index.rst"
+        )
+        return edit_url
 
     def set_content_title(self, title: str) -> None:
         """Set the title from the content nodes."""

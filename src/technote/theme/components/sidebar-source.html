@@ -1,0 +1,17 @@
+<section class="technote-sidebar-section">
+  <h2 class="technote-sidebar-section__heading">Source</h2>
+
+  <ul class="technote-icon-pair-list">
+    {% if technote.github_url %}
+    <li><a href={{technote.github_url}}>{{ technote.github_repo_slug }}</a></li>
+    {% endif %}
+    {% if technote.github_ref_name %}
+    <li>{{ technote.github_ref_type|capitalize }} {{ technote.github_ref_name }}</li>
+    {% endif %}
+    <!-- <li>Commit</li> -->
+    <!-- <li>CI run link?</li> -->
+    {% if technote.github_edit_url %}
+    <li><a href="{{ technote.github_edit_url }}">Edit on GitHub</a></li>
+    {% endif %}
+  </ul>
+</section>
