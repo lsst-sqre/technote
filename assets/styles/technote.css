@@ -453,6 +453,12 @@ h6:hover .headerlink {
   display: none;
 }
 
+.technote-svg-icon {
+  width: 0.85em;
+  height: 0.85em;
+  display: inline;
+}
+
 .technote-article-header-id {
   font-size: var(--tn-component-h4-size);
   font-weight: bold;
