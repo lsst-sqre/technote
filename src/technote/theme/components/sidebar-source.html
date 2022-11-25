@@ -3,15 +3,36 @@
 
   <ul class="technote-icon-pair-list">
     {% if technote.github_url %}
-    <li><a href={{technote.github_url}}>{{ technote.github_repo_slug }}</a></li>
+    <li>
+      <a href="{{technote.github_url}}">
+        <svg class="technote-svg-icon">
+          <use href="#svg-octicon-octocat-16">
+        </svg> {{ technote.github_repo_slug }}
+      </a>
+    </li>
     {% endif %}
     {% if technote.github_ref_name %}
-    <li>{{ technote.github_ref_type|capitalize }} {{ technote.github_ref_name }}</li>
+    <li>
+      <svg class="technote-svg-icon">
+        {% if technote.github_ref_type == "tag" %}
+        <use href="#svg-octicon-tag-16">
+        {% else %}
+        <use href="#svg-octicon-branch-16">
+        {% endif %}
+      </svg>
+      {{ technote.github_ref_name }}
+    </li>
     {% endif %}
     <!-- <li>Commit</li> -->
     <!-- <li>CI run link?</li> -->
     {% if technote.github_edit_url %}
-    <li><a href="{{ technote.github_edit_url }}">Edit on GitHub</a></li>
+    <li>
+      <a href="{{ technote.github_edit_url }}">
+        <svg class="technote-svg-icon">
+          <use href="#svg-octicon-pencil-16">
+        </svg> Edit on GitHub
+      </a>
+    </li>
     {% endif %}
   </ul>
 </section>
