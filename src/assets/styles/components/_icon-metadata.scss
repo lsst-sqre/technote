@@ -1,0 +1,25 @@
+/*
+ * Icon Metadata Lists consist of a an icon paired with a metadata value.
+ * The value can span multiple lines, but will always be indented beside
+ * the icon.
+ */
+
+.technote-icon-metadata {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: baseline;
+  gap: var(--tn-space-xxs-fixed);
+}
+
+.technote-icon-metadata__icon {
+  width: 1em;
+  flex-grow: 0;
+  flex-shrink: 0;
+  margin: 0;
+}
+
+.technote-icon-metadata__value {
+  flex-grow: 1;
+  margin: 0;
+}
