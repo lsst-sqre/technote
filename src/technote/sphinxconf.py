@@ -33,6 +33,8 @@ __all__ = [
     # HTML
     "html_context",
     "html_baseurl",
+    "html_domain_indices",
+    "html_use_index",
 ]
 
 _t = TechnoteSphinxConfig.find_and_load()
@@ -89,3 +91,6 @@ if _t.toml.technote.canonical_url:
     html_baseurl = str(_t.toml.technote.canonical_url)
 else:
     html_baseurl = ""
+
+html_domain_indices = False
+html_use_index = False
