@@ -1,0 +1,22 @@
+html {
+  box-sizing: border-box;
+}
+
+/*
+ * Inherit border-box sizing from html
+ * https://css-tricks.com/inheriting-box-sizing-probably-slightly-better-best-practice/
+ */
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+:root {
+  /*
+   * Reinforce that we're respecting the user's ability to set a default
+   * font size. The rem unit now becomes relative to this.
+   * Flexible Typesetting, Tim Brown, ch 2 and 4
+   */
+  font-size: 1.1rem;
+}
