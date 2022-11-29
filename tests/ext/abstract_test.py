@@ -26,6 +26,7 @@ def test_abstract_basic_html(app: Sphinx, status: IO, warning: IO) -> None:
     doc = lxml.html.document_fromstring(html_source)
 
     section = doc.cssselect("section.technote-abstract")[0]
+    assert section.get("id") == "abstract"
 
     heading = section.cssselect("h2")[0]
     assert heading.text_content() == "Abstract"
