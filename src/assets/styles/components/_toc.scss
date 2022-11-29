@@ -1,30 +1,37 @@
 /*
  * Local TOC styling.
  */
-.toc-container {
-  font-size: 0.9rem;
-  line-height: 1.3;
-  padding-left: 0;
+
+.technote-toc-container {
+  line-height: 1.2;
+  /* Spacing between items in the toc */
+  --technote-toc-container-spacing: var(--tn-space-xs-fixed);
 }
 
-.toc-container ul {
+.technote-toc-container a {
+  text-decoration: none;
+}
+
+.technote-toc-container a:hover {
+  text-decoration: underline;
+}
+
+.technote-toc-container ul {
   list-style-type: none;
-  padding-left: 0.5rem;
-}
-.toc-container > ul {
-  padding-left: 0;
-}
-.toc-container li {
-  margin-bottom: 0.5rem;
+  padding-left: var(--tn-space-xs-fixed);
+  margin-left: var(--tn-space-xxs-fixed);
+  border-left: 1.5px solid black;
+  margin-top: var(--technote-toc-container-spacing);
 }
 
-/* Hide the first item in the Sphinx toc; which is the H1 of the page itself. */
-.toc-container > ul > li:first-child {
-  padding-top: 0;
-}
-.toc-container > ul > li:first-child > ul {
+/* Root-level sections aren't indented */
+.technote-toc-container > ul {
+  margin-left: 0;
   padding-left: 0;
+  border-left: none;
+  margin-top: 0;
 }
-.toc-container > ul > li:first-child > a {
-  display: none;
+
+.technote-toc-container li {
+  margin-bottom: var(--technote-toc-container-spacing);
 }

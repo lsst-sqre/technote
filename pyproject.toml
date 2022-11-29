@@ -29,6 +29,7 @@ dependencies = [
     "base32-lib",
     "tomli; python_version < \"3.11\"",
     "pydantic[email]",
+    "beautifulsoup4",
 ]
 dynamic = ["version"]
 
@@ -152,4 +153,7 @@ strict_equality = true
 warn_redundant_casts = true
 warn_unreachable = true
 warn_unused_ignores = true
+exclude = [
+    "tests/roots" # ignore conf.py files from test cases
+]
 # plugins =
