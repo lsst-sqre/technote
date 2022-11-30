@@ -25,6 +25,11 @@ def test_toc_html(app: Sphinx, status: IO, warning: IO) -> None:
     doc = lxml.html.document_fromstring(html_source)
 
     toc_ul = doc.cssselect(".technote-toc-container > ul")[0]
-    first_section_li = toc_ul.cssselect("li")[0]
+
+    abstract_li = toc_ul.cssselect("li")[0]
+    assert abstract_li.text_content() == "Abstract"
+    assert abstract_li.cssselect("a")[0].get("href") == "#abstract"
+
+    first_section_li = toc_ul.cssselect("li")[1]
     assert first_section_li.text_content() == "Section one"
     assert first_section_li.cssselect("a")[0].get("href") == "#section-one"
