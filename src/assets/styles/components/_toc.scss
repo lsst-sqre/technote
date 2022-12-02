@@ -2,10 +2,15 @@
  * Local TOC styling.
  */
 
+:root {
+  --tn-component-toc-header-color: var(--tn-color-neutral-600);
+  --tn-component-toc-level-border-color: var(--tn-color-neutral-600);
+}
+
 .technote-toc-header {
   font-size: var(--tn-component-h4-size);
   font-weight: bold;
-  color: var(--tn-color-neutral-600);
+  color: var(--tn-component-toc-header-color);
   // This makes the outline float midway down the page in a sort of useful
   // position. It could definitely be engineered better.
   margin-top: 20vh;
@@ -29,7 +34,7 @@
   list-style-type: none;
   padding-left: var(--tn-space-xs-fixed);
   margin-left: var(--tn-space-xxs-fixed);
-  border-left: 2px solid var(--tn-color-neutral-600);
+  border-left: 2px solid var(--tn-component-toc-level-border-color);
   margin-top: var(--technote-toc-container-spacing);
 }
 
