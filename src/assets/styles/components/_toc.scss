@@ -1,0 +1,51 @@
+/*
+ * Local TOC styling.
+ */
+
+:root {
+  --tn-component-toc-header-color: var(--tn-color-neutral-600);
+  --tn-component-toc-level-border-color: var(--tn-color-neutral-600);
+}
+
+.technote-toc-header {
+  font-size: var(--tn-component-h4-size);
+  font-weight: bold;
+  color: var(--tn-component-toc-header-color);
+  // This makes the outline float midway down the page in a sort of useful
+  // position. It could definitely be engineered better.
+  margin-top: 20vh;
+}
+
+.technote-toc-container {
+  line-height: 1.2;
+  /* Spacing between items in the toc */
+  --technote-toc-container-spacing: var(--tn-space-xs-fixed);
+}
+
+.technote-toc-container a {
+  text-decoration: none;
+}
+
+.technote-toc-container a:hover {
+  text-decoration: underline;
+}
+
+.technote-toc-container ul {
+  list-style-type: none;
+  padding-left: var(--tn-space-xs-fixed);
+  margin-left: var(--tn-space-xxs-fixed);
+  border-left: 2px solid var(--tn-component-toc-level-border-color);
+  margin-top: var(--technote-toc-container-spacing);
+}
+
+/* Root-level sections aren't indented */
+.technote-toc-container > ul {
+  margin-left: 0;
+  padding-left: 0;
+  border-left: none;
+  margin-top: 0;
+}
+
+.technote-toc-container li {
+  margin-bottom: var(--technote-toc-container-spacing);
+}

@@ -1,1 +1,5 @@
-<!-- Intentionally empty -->
+{% if technote.toml.technote.id %}
+<div class="match-content-width">
+  <p class="technote-article-header-id">{{technote.toml.technote.id}}</p>
+</div>
+{% endif %}

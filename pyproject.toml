@@ -2,12 +2,9 @@
 # https://packaging.python.org/en/latest/specifications/declaring-project-metadata/
 name = "technote"
 description = "Rubin Observatory's framework for Sphinx-based technote documents."
-license = {file = "LICENSE"}
-readme= "README.md"
-keywords = [
-    "rubin",
-    "lsst",
-]
+license = { file = "LICENSE" }
+readme = "README.md"
+keywords = ["rubin", "lsst"]
 # https://pypi.org/classifiers/
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -24,11 +21,12 @@ classifiers = [
 ]
 requires-python = ">=3.8"
 dependencies = [
-    "Sphinx>=5.0.0",
+    "Sphinx",
     "sphinx-basic-ng>=1.0.0b1",
     "base32-lib",
     "tomli; python_version < \"3.11\"",
     "pydantic[email]",
+    "beautifulsoup4",
 ]
 dynamic = ["version"]
 
@@ -46,7 +44,7 @@ dev = [
     "cssselect",
     # Documentation
     "documenteer[guide]",
-    "autodoc_pydantic"
+    "autodoc_pydantic",
 ]
 
 [project.urls]
@@ -57,11 +55,7 @@ Source = "https://github.com/lsst-sqre/technote"
 technote = "technote"
 
 [build-system]
-requires = [
-    "setuptools>=61",
-    "wheel",
-    "setuptools_scm[toml]>=6.2"
-]
+requires = ["setuptools>=61", "wheel", "setuptools_scm[toml]>=6.2"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools_scm]
@@ -91,7 +85,7 @@ exclude_lines = [
     "raise NotImplementedError",
     "if 0:",
     "if __name__ == .__main__.:",
-    "if TYPE_CHECKING:"
+    "if TYPE_CHECKING:",
 ]
 
 [tool.black]
@@ -116,7 +110,7 @@ exclude = '''
 # Reference: http://www.pydocstyle.org/en/stable/error_codes.html
 convention = "numpy"
 add_select = [
-    "D212" # Multi-line docstring summary should start at the first line
+    "D212", # Multi-line docstring summary should start at the first line
 ]
 add-ignore = [
     "D105", # Missing docstring in magic method
@@ -139,10 +133,7 @@ skip = ["docs/conf.py"]
 
 [tool.pytest.ini_options]
 asyncio_mode = "strict"
-python_files = [
-    "tests/*.py",
-    "tests/*/*.py"
-]
+python_files = ["tests/*.py", "tests/*/*.py"]
 
 [tool.mypy]
 disallow_untyped_defs = true
@@ -152,4 +143,7 @@ strict_equality = true
 warn_redundant_casts = true
 warn_unreachable = true
 warn_unused_ignores = true
+exclude = [
+    "tests/roots", # ignore conf.py files from test cases
+]
 # plugins =

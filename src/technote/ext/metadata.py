@@ -10,7 +10,12 @@ from sphinx.config import Config
 
 from .abstract import AbstractNode
 
-__all__ = ["get_title", "process_html_page_context_for_metadata"]
+__all__ = [
+    "process_html_page_context_for_metadata",
+    "get_abstract",
+    "get_title",
+    "set_html_title",
+]
 
 
 def get_title(
@@ -37,6 +42,7 @@ def get_abstract(
     doctree: Optional[nodes.document],
     config: Config,
 ) -> None:
+    """Get the abstract as plain text from the abstract directive."""
     if doctree is not None:
         for abstract_node in doctree.findall(
             condition=lambda x: isinstance(x, AbstractNode)
@@ -44,6 +50,14 @@ def get_abstract(
             content = abstract_node.astext()
             context["technote"].set_abstract(content)
             break
+
+
+def set_html_title(*, context: Dict[str, Any]) -> None:
+    """Set the ``html_title`` and ``project`` metadata based on the
+    title metadata, resolved from either technote.toml or the content's
+    top-level heading.
+    """
+    context["title"] = context["technote"].title
 
 
 def process_html_page_context_for_metadata(
@@ -59,3 +73,5 @@ def process_html_page_context_for_metadata(
     """
     get_title(app=app, context=context, doctree=doctree, config=app.config)
     get_abstract(app=app, context=context, doctree=doctree, config=app.config)
+
+    set_html_title(context=context)

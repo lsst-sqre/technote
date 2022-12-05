@@ -25,8 +25,7 @@ def visit_abstract_node_html(
     self: HTML5Translator, node: nodes.Element
 ) -> None:
     """Add HTML content before the `AbstractNode`."""
-    print(type(self))
-    self.body.append('<section class="technote-abstract">')
+    self.body.append('<section class="technote-abstract" id="abstract">')
     self.body.append('<h2 class="technote-abstract__header">Abstract</h2>')
 
 

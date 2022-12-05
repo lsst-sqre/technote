@@ -1,0 +1,16 @@
+{% if technote.toml.technote.authors %}
+<section class="technote-sidebar-section">
+{% if technote.toml.technote.authors|length == 1 %}
+<h2 class="technote-sidebar-section__heading">Author</h2>
+{% else %}
+<h2 class="technote-sidebar-section__heading">Authors</h2>
+{% endif %}
+<ul class="technote-inline-comma-list technote-sidebar-author-list">
+  {% for author in technote.toml.technote.authors %}
+  <li class="technote-sidebar-author-list__author">
+    {{ author.name.plain_text_name }}
+  </li>
+  {% endfor %}
+</ul>
+</section>
+{% endif %}

@@ -1,0 +1,28 @@
+:root {
+  --tn-component-sidebar-header-color: var(--tn-color-neutral-600);
+}
+
+.technote-sidebar-section {
+  margin: 0 0 var(--tn-space-lg-fixed);
+}
+
+.technote-sidebar-section:first-of-type {
+  // Ensure the top spacing to the logo matches the spacing between
+  // sidebar section components.
+  margin-top: var(--tn-space-lg-fixed);
+}
+
+.technote-sidebar-section__heading {
+  font-size: var(--tn-component-h6-size);
+  font-weight: bold;
+  color: var(--tn-component-sidebar-header-color);
+  margin-bottom: 0;
+}
+
+.technote-sidebar-section__heading + * {
+  margin-top: var(--tn-space-xs-fixed);
+}
+
+.technote-sidebar-author-list {
+  margin-top: var(--tn-space-xs-fixed);
+}

@@ -17,6 +17,7 @@ from .abstract import (
     visit_abstract_node_tex,
 )
 from .metadata import process_html_page_context_for_metadata
+from .toc import process_html_page_context_for_toc
 
 __all__ = ["setup"]
 
@@ -35,6 +36,7 @@ def setup(app: Sphinx) -> Dict[str, Any]:
 
     # Metadata
     app.connect("html-page-context", process_html_page_context_for_metadata)
+    app.connect("html-page-context", process_html_page_context_for_toc)
 
     return {
         "version": __version__,

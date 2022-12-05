@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
-from technote.config import TechnoteToml
+from _pytest.monkeypatch import MonkeyPatch
+
+from technote.config import TechnoteJinjaContext, TechnoteToml
 
 sample_toml = """
 [technote]
@@ -29,3 +31,17 @@ def test_toml_parsing() -> None:
     """
     technote_toml = TechnoteToml.parse_toml(sample_toml)
     assert technote_toml.technote.id == "SQR-000"
+
+
+def test_technote_jinja_context(monkeypatch: MonkeyPatch) -> None:
+    """Test TechnoteJinjaContext with the sample toml."""
+    monkeypatch.setenv("GITHUB_REF_NAME", "main")
+    monkeypatch.setenv("GITHUB_REF_TYPE", "branch")
+
+    technote_toml = TechnoteToml.parse_toml(sample_toml)
+    jinja_context = TechnoteJinjaContext(toml=technote_toml)
+
+    assert jinja_context.github_url == "https://github.com/lsst-sqre/sqr-000"
+    assert jinja_context.github_repo_slug == "lsst-sqre/sqr-000"
+    assert jinja_context.github_ref_name == "main"
+    assert jinja_context.github_ref_type == "branch"

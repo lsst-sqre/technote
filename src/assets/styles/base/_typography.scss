@@ -1,0 +1,69 @@
+/*
+ * Typography.
+ */
+body {
+  font-family: var(--tn-component-text-font-family);
+  line-height: var(--tn-component-text-line-height);
+  color: var(--tn-component-text-color);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  /* Put header vertically closer to its own section. */
+  margin: 1.5em 0 0.8em;
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: var(--tn-component-h1-size);
+  font-weight: var(--tn-component-h1-weight);
+  margin: 0 0 1em;
+}
+
+h2 {
+  font-size: var(--tn-component-h2-size);
+  font-weight: var(--tn-component-h2-weight);
+}
+
+h3 {
+  font-size: var(--tn-component-h3-size);
+  font-weight: var(--tn-component-h3-weight);
+}
+
+h4 {
+  font-size: var(--tn-component-h4-size);
+  font-weight: var(--tn-component-h4-weight);
+}
+
+h5 {
+  font-size: var(--tn-component-h5-size);
+  font-weight: var(--tn-component-h5-weight);
+}
+
+h6 {
+  font-size: var(--tn-component-h6-size);
+  font-weight: var(--tn-component-h6-weight);
+}
+
+/* Handle Sphinx's built-in permalink icon. */
+h1 .headerlink,
+h2 .headerlink,
+h3 .headerlink,
+h4 .headerlink,
+h5 .headerlink,
+h6 .headerlink {
+  visibility: hidden;
+  text-decoration: none;
+}
+h1:hover .headerlink,
+h2:hover .headerlink,
+h3:hover .headerlink,
+h4:hover .headerlink,
+h5:hover .headerlink,
+h6:hover .headerlink {
+  visibility: visible;
+}
