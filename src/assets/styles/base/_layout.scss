@@ -32,6 +32,16 @@
   background-color: rgba(0, 0, 0, 0);
 }
 
+// The "primary" header contains the controls for the sidebars
+.sb-header__inner {
+  display: flex;
+  justify-content: space-between;
+}
+
+.sb-header__inner label {
+  margin: var(--tn-space-xs-fixed);
+}
+
 /* Highlight key containers for debugging. */
 /* .sb-article {
   border: 1px solid red;
