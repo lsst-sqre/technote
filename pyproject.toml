@@ -25,7 +25,7 @@ dependencies = [
     "sphinx-basic-ng>=1.0.0b1",
     "base32-lib",
     "tomli; python_version < \"3.11\"",
-    "pydantic[email]",
+    "pydantic[email]<2.0.0",
     "beautifulsoup4",
 ]
 dynamic = ["version"]
