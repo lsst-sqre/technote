@@ -146,7 +146,7 @@ warn_unused_ignores = true
 exclude = [
     "tests/roots", # ignore conf.py files from test cases
 ]
-# plugins =
+plugins = ["pydantic.mypy"]
 
 [tool.scriv]
 categories = [
