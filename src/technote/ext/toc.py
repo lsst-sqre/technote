@@ -6,11 +6,12 @@ context variable.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from bs4 import BeautifulSoup
 from docutils import nodes
 from sphinx.application import Sphinx
+from sphinx.util import logging
 
 from .abstract import AbstractNode
 
@@ -21,16 +22,18 @@ def process_html_page_context_for_toc(
     app: Sphinx,
     pagename: str,
     templatename: str,
-    context: Dict[str, Any],
-    doctree: Optional[nodes.document],
+    context: dict[str, Any],
+    doctree: nodes.document | None,
 ) -> None:
     """Process the HTML page context to add a new ``technote-toc`` context
     variable.
 
     This function is hooked into the Sphinx ``html-page-context`` event.
     """
-    print(f"page: {pagename}")
-    print(f"template: {templatename}")
+    logger = logging.getLogger(__name__)
+
+    logger.debug(f"In toc, page: {pagename}", location=pagename)
+    logger.debug(f"In toc, template: {templatename}", location=pagename)
     try:
         default_toc_html = context["toc"]
     except KeyError:
@@ -38,7 +41,7 @@ def process_html_page_context_for_toc(
         context["technote_toc"] = ""
         return
 
-    prepend_sections: List[SyntheticTocSection] = []
+    prepend_sections: list[SyntheticTocSection] = []
 
     # Find an abstract node, which isn't collected by Sphinx for the local toc
     if doctree:
@@ -55,7 +58,7 @@ def process_html_page_context_for_toc(
 
 def transform_toc_html(
     sphinx_toc: str,
-    prepend_sections: Optional[List[SyntheticTocSection]] = None,
+    prepend_sections: list[SyntheticTocSection] | None = None,
 ) -> str:
     """Transform the Sphinx toc HTML for technotes.
 

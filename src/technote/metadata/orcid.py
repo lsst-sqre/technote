@@ -3,7 +3,8 @@
 from __future__ import annotations
 
 import re
-from typing import Any, Generator
+from collections.abc import Generator
+from typing import Any
 
 from pydantic import BaseConfig, HttpUrl
 from pydantic.errors import UrlError
@@ -44,7 +45,7 @@ class Orcid(HttpUrl):
     This validator implments the ISO 7064 11,2 checksum algorithm.
     """
 
-    allowed_schemes = {"https"}
+    allowed_schemes = {"https"}  # noqa: RUF012
 
     @classmethod
     def __get_validators__(cls) -> Generator[AnyCallable, None, None]:
@@ -59,11 +60,11 @@ class Orcid(HttpUrl):
 
         m = ORCID_PATTERN.search(value)
         if not m:
-            raise OrcidError()
+            raise OrcidError
 
         identifier = m["identifier"]
         if not cls.verify_checksum(identifier):
-            raise OrcidError()
+            raise OrcidError
 
         return HttpUrl.validate(
             f"https://orcid.org/{identifier}", field, config
@@ -76,11 +77,10 @@ class Orcid(HttpUrl):
         """
         total: int = 0
         for digit in identifier:
-            if digit == "X":
-                digit = "10"
-            if not digit.isdigit():
+            numeric_digit = "10" if digit == "X" else digit
+            if not numeric_digit.isdigit():
                 continue
-            total = (total + int(digit)) * 2
+            total = (total + int(numeric_digit)) * 2
         remainder = total % 11
         result = (12 - remainder) % 11
         return result == 10

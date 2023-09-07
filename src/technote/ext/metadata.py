@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, Optional
+from typing import Any
 
 from docutils import nodes
 from sphinx.application import Sphinx
@@ -21,8 +21,8 @@ __all__ = [
 def get_title(
     *,
     app: Sphinx,
-    context: Dict[str, Any],
-    doctree: Optional[nodes.document],
+    context: dict[str, Any],
+    doctree: nodes.document | None,
     config: Config,
 ) -> None:
     """Get the H1 title to use as the technote title."""
@@ -38,8 +38,8 @@ def get_title(
 def get_abstract(
     *,
     app: Sphinx,
-    context: Dict[str, Any],
-    doctree: Optional[nodes.document],
+    context: dict[str, Any],
+    doctree: nodes.document | None,
     config: Config,
 ) -> None:
     """Get the abstract as plain text from the abstract directive."""
@@ -52,7 +52,7 @@ def get_abstract(
             break
 
 
-def set_html_title(*, context: Dict[str, Any]) -> None:
+def set_html_title(*, context: dict[str, Any]) -> None:
     """Set the ``html_title`` and ``project`` metadata based on the
     title metadata, resolved from either technote.toml or the content's
     top-level heading.
@@ -64,8 +64,8 @@ def process_html_page_context_for_metadata(
     app: Sphinx,
     pagename: str,
     templatename: str,
-    context: Dict[str, Any],
-    doctree: Optional[nodes.document],
+    context: dict[str, Any],
+    doctree: nodes.document | None,
 ) -> None:
     """Process the HTML page to prepare the context for the HTML templates.
 

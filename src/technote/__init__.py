@@ -4,7 +4,7 @@ __all__ = ["__version__", "setup"]
 
 from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 from sphinx.application import Sphinx
 
@@ -18,7 +18,7 @@ except PackageNotFoundError:
     __version__ = "0.0.0"
 
 
-def setup(app: Sphinx) -> Dict[str, Any]:
+def setup(app: Sphinx) -> dict[str, Any]:
     """Sphinx entrypoint for technote.
 
     Parameters

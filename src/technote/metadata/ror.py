@@ -3,7 +3,8 @@
 from __future__ import annotations
 
 import re
-from typing import Any, Generator
+from collections.abc import Generator
+from typing import Any
 
 import base32_lib as base32
 from pydantic import BaseConfig, HttpUrl
@@ -30,7 +31,7 @@ class RorError(UrlError):
 class Ror(HttpUrl):
     """A ROR (Research Organization Registry) type for Pydantic validation."""
 
-    allowed_schemes = {"https"}
+    allowed_schemes = {"https"}  # noqa: RUF012
 
     @classmethod
     def __get_validators__(cls) -> Generator[AnyCallable, None, None]:
@@ -45,12 +46,12 @@ class Ror(HttpUrl):
 
         m = ROR_PATTERN.search(value)
         if not m:
-            raise RorError()
+            raise RorError
 
         identifier = m["identifier"]
         try:
             base32.decode(identifier, checksum=True)
-        except ValueError:
-            raise RorError()
+        except ValueError as e:
+            raise RorError from e
 
         return HttpUrl.validate(value, field, config)

@@ -7,7 +7,7 @@ To use this configuration in a Technote project, write a conf.py containing::
 
 from __future__ import annotations
 
-from typing import Any, Dict, List, Tuple, Union
+from typing import Any
 
 from .config import TechnoteSphinxConfig
 
@@ -48,23 +48,23 @@ author = _t.author or ""
 exclude_patterns = ["_build", "README.rst", "README.md", "Makefile"]
 html_theme = "technote"
 
-extensions: List[str] = ["technote.ext"]
+extensions: list[str] = ["technote.ext"]
 _t.append_extensions(extensions)
 
 # Nitpicky settings and ignored errors
 nitpicky = _t.nitpicky
 
-nitpick_ignore: List[Tuple[str, str]] = []
+nitpick_ignore: list[tuple[str, str]] = []
 _t.append_nitpick_ignore(nitpick_ignore)
 
-nitpick_ignore_regex: List[Tuple[str, str]] = []
+nitpick_ignore_regex: list[tuple[str, str]] = []
 _t.append_nitpick_ignore_regex(nitpick_ignore_regex)
 
 # ============================================================================
 # INTERSPHINX Intersphinx settings
 # ============================================================================
 
-intersphinx_mapping: Dict[str, Tuple[str, Union[str, None]]] = {}
+intersphinx_mapping: dict[str, tuple[str, str | None]] = {}
 _t.extend_intersphinx_mapping(intersphinx_mapping)
 
 intersphinx_timeout = 10.0  # seconds
@@ -78,14 +78,14 @@ intersphinx_cache_limit = 5  # days
 
 linkcheck_retries = 2
 linkcheck_timeout = 15
-linkcheck_ignore: List[str] = []
+linkcheck_ignore: list[str] = []
 _t.append_linkcheck_ignore(linkcheck_ignore)
 
 # ============================================================================
 # HTML HTML builder settings
 # ============================================================================
 
-html_context: Dict[str, Any] = {"technote": _t.jinja_context}
+html_context: dict[str, Any] = {"technote": _t.jinja_context}
 
 if _t.toml.technote.canonical_url:
     html_baseurl = str(_t.toml.technote.canonical_url)

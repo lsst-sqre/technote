@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict
+from typing import Any
 
 from sphinx.application import Sphinx
 
@@ -22,7 +22,7 @@ from .toc import process_html_page_context_for_toc
 __all__ = ["setup"]
 
 
-def setup(app: Sphinx) -> Dict[str, Any]:
+def setup(app: Sphinx) -> dict[str, Any]:
     """Set up Technote's own Sphinx extensions; these are automatically loaded
     in all technotes by default.
     """

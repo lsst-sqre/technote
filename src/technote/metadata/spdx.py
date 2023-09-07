@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Dict, List
 
 from pydantic import BaseModel, Field, HttpUrl
 
@@ -22,7 +21,7 @@ class SpdxLicense(BaseModel):
         ..., alias="licenseId", description="SPDX license identifier."
     )
 
-    see_also: List[HttpUrl] = Field(
+    see_also: list[HttpUrl] = Field(
         default_factory=list,
         alias="seeAlso",
         description="URLs to documentation about this license.",
@@ -41,13 +40,13 @@ class SpdxLicense(BaseModel):
 class SpdxFile(BaseModel):
     """Representation of a SPDX license database file as a Pydantic model."""
 
-    license_listVersion: str = Field(
+    license_list_version: str = Field(
         ...,
         alias="licenseListVersion",
         description="Version string of this license file.",
     )
 
-    licenses: List[SpdxLicense]
+    licenses: list[SpdxLicense]
     """The licenses."""
 
     @classmethod
@@ -70,7 +69,7 @@ class SpdxFile(BaseModel):
 class Licenses:
     """License database, with access by license ID."""
 
-    licenses: Dict[str, SpdxLicense]
+    licenses: dict[str, SpdxLicense]
     """Internal license dictionary, keyed by the SPDX ID."""
 
     @classmethod
@@ -83,7 +82,7 @@ class Licenses:
             The license database instance.
         """
         spdx_file = SpdxFile.load_internal()
-        licenses: Dict[str, SpdxLicense] = {
+        licenses: dict[str, SpdxLicense] = {
             license.license_id: license for license in spdx_file.licenses
         }
         return cls(licenses=licenses)

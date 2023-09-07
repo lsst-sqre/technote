@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-from typing import List
-
 from docutils import nodes
 from sphinx.util.docutils import SphinxDirective
 from sphinx.writers.html5 import HTML5Translator
@@ -58,7 +56,7 @@ class AbstractDirective(SphinxDirective):
     final_argument_whitespace = False
     has_content = True
 
-    def run(self) -> List[nodes.Node]:
+    def run(self) -> list[nodes.Node]:
         """Run the directive on content."""
         abstract_node = AbstractNode("\n".join(self.content))
         self.state.nested_parse(

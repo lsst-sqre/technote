@@ -9,7 +9,7 @@ from technote.metadata.orcid import Orcid
 
 
 @pytest.mark.parametrize(
-    "identifier,sample",
+    ("identifier", "sample"),
     [
         ("0000-0002-1825-0097", "0000-0002-1825-0097"),
         ("0000-0001-5109-3700", "hello 0000-0001-5109-3700 world"),

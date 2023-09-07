@@ -1,6 +1,5 @@
 """Pytest configuration and fixtures."""
 
-from typing import List
 
 import pytest
 from sphinx.testing.path import path
@@ -8,7 +7,7 @@ from sphinx.testing.path import path
 pytest_plugins = ("sphinx.testing.fixtures",)
 
 # Exclude 'roots' dirs for pytest test collector
-collect_ignore: List[str] = ["roots"]
+collect_ignore: list[str] = ["roots"]
 
 
 def pytest_configure(config: pytest.Config) -> None:
