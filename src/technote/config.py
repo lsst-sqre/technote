@@ -17,7 +17,7 @@ from __future__ import annotations
 
 import os
 import re
-import sys
+import tomllib
 from collections.abc import MutableMapping
 from dataclasses import dataclass
 from datetime import date
@@ -25,11 +25,6 @@ from enum import Enum
 from pathlib import Path
 from typing import Any
 from urllib.parse import urlparse
-
-if sys.version_info < (3, 11):
-    import tomli as tomllib
-else:
-    import tomllib
 
 from pydantic import (
     BaseModel,
