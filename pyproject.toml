@@ -22,7 +22,7 @@ dependencies = [
     "Sphinx",
     "sphinx-basic-ng>=1.0.0b1",
     "base32-lib",
-    "pydantic[email]<2",
+    "pydantic[email]>=2.0.0",
     "beautifulsoup4",
 ]
 dynamic = ["version"]
@@ -40,7 +40,7 @@ dev = [
     "lxml",
     "cssselect",
     # Documentation
-    "documenteer[guide]",
+    "documenteer[guide] @ git+https://github.com/lsst-sqre/documenteer@tickets/DM-40684",
     "autodoc_pydantic",
 ]
 
