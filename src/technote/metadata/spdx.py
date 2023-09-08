@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -62,7 +63,8 @@ class SpdxFile(BaseModel):
             https://github.com/spdx/license-list-data/blob/master/json/licenses.json.
         """
         p = Path(__file__).parent / "licenses.json"
-        return cls.parse_file(p, content_type="application/json")
+        data = json.loads(p.read_text())
+        return cls.model_validate(data)
 
 
 @dataclass

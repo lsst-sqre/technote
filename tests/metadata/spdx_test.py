@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from pydantic import HttpUrl
+
 from technote.metadata.spdx import Licenses, SpdxFile, SpdxLicense
 
 
@@ -20,5 +22,5 @@ def test_cc_by() -> None:
     assert isinstance(license, SpdxLicense)
     assert license.name == "Creative Commons Attribution 4.0 International"
     assert license.see_also[0] == (
-        "https://creativecommons.org/licenses/by/4.0/legalcode"
+        HttpUrl("https://creativecommons.org/licenses/by/4.0/legalcode")
     )

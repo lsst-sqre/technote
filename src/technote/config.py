@@ -23,23 +23,23 @@ from dataclasses import dataclass
 from datetime import date
 from enum import Enum
 from pathlib import Path
-from typing import Any
+from typing import Self
 from urllib.parse import urlparse
 
 from pydantic import (
     BaseModel,
     EmailStr,
-    Extra,
     Field,
     HttpUrl,
     ValidationError,
-    root_validator,
-    validator,
+    field_validator,
+    model_validator,
 )
 from sphinx.errors import ConfigError
 
-from .metadata.orcid import Orcid
-from .metadata.ror import Ror
+from .metadata.orcid import validate_orcid_url
+from .metadata.orcid import verify_checksum as verify_orcid_checksum
+from .metadata.ror import validate_ror_url
 from .metadata.spdx import Licenses
 from .metadata.zenodo import ZenodoRole
 
@@ -133,7 +133,7 @@ class Organization(BaseModel):
         None, description="A user-specific identifier for an organization."
     )
 
-    ror: Ror | None = Field(
+    ror: HttpUrl | None = Field(
         None, description="The ROR (ror.org) identifier of the institution."
     )
 
@@ -149,26 +149,35 @@ class Organization(BaseModel):
         None, description="The homepage of the institution."
     )
 
-    @validator("name")
+    @field_validator("name")
+    @classmethod
     def clean_whitespace(cls, v: str | None) -> str | None:
         if v:
             return collapse_whitespace(v)
         else:
             return v
 
-    @root_validator
-    def check_well_defined(cls, values: dict[str, Any]) -> dict[str, Any]:
+    @model_validator(mode="after")
+    def check_well_defined(self) -> Self:
         """Ensure that at least the internal ID, ROR, or name are provided."""
-        if values.get("internal_id"):
-            return values
-        if values.get("ror"):
-            return values
-        if values.get("name"):
-            return values
+        if self.internal_id:
+            return self
+        if self.ror:
+            return self
+        if self.name:
+            return self
 
         raise ValueError(
             "An organization must have a name, ror, or internal_id"
         )
+
+    @field_validator("ror", mode="after")
+    @classmethod
+    def validate_ror(cls, v: HttpUrl | None) -> HttpUrl | None:
+        """Ensure that ``ror`` is a valid ROR identifier."""
+        if v is not None:
+            validate_ror_url(v)
+        return v
 
 
 class PersonName(BaseModel):
@@ -200,35 +209,37 @@ class PersonName(BaseModel):
         else:
             return f"{self.given_names} {self.family_names}"
 
-    @validator("family_names", "given_names", "name")
+    @field_validator("family_names", "given_names", "name")
+    @classmethod
     def clean_whitespace(cls, v: str | None) -> str | None:
         if v:
             return collapse_whitespace(v)
         else:
             return v
 
-    @root_validator
-    def check_well_defined(cls, values: dict[str, Any]) -> dict[str, Any]:
+    @model_validator(mode="after")
+    def check_well_defined(self) -> Self:
         """Check that either surname and given are both provided, or name
         alone is set.
         """
-        if values.get("family_names") and values.get("given_names"):
-            if values.get("name"):
+        if self.family_names and self.given_names:
+            if self.name:
                 raise ValueError(
                     "Do not specify name if family_names and given_names are "
                     "both provided."
                 )
-            return values
-        if values.get("name"):
-            if values.get("family_names"):
+            return self
+
+        if self.name:
+            if self.family_names:
                 raise ValueError(
                     "Do not specify `family_names` if using `name`."
                 )
-            if values.get("given_names"):
+            if self.given_names:
                 raise ValueError(
                     "Do not specify `given_names` if using `name`."
                 )
-            return values
+            return self
 
         raise ValueError(
             "Name must include either family_names and given_names fields, "
@@ -245,17 +256,35 @@ class Person(BaseModel):
         None, description="An internal identifier for the person."
     )
 
-    orcid: Orcid | None = Field(
+    orcid: HttpUrl | None = Field(
         None, description="The ORCiD of the person (https://orcid.org)."
     )
 
-    affiliations: list[Organization] | None = Field(
+    affiliations: list[Organization] = Field(
         default_factory=list, description="The person's affiliations."
     )
 
     email: EmailStr | None = Field(
-        description="Contact email associated with the person."
+        None, description="Contact email associated with the person."
     )
+
+    @field_validator("orcid", mode="after")
+    @classmethod
+    def validate_orcid(cls, v: HttpUrl | None) -> HttpUrl | None:
+        """Ensure that ``orcid`` is a valid ORCiD identifier, or `None`."""
+        if v is not None:
+            validate_orcid_url(v)
+        return v
+
+    @field_validator("orcid", mode="before")
+    @classmethod
+    def format_orcid_url(cls, value: str) -> str:
+        """Format a bare ORCiD identifier as a URL."""
+        if value.startswith(("http://oricid", "https://orcid")):
+            return value
+        if verify_orcid_checksum(value):
+            return f"https://orcid.org/{value}"
+        raise ValueError(f"Not an ORCiD identifier checksum ({value})")
 
 
 class Contributor(Person):
@@ -282,10 +311,11 @@ class LicenseTable(BaseModel):
     id: str = Field(
         ...,
         description="The SPDX license ID. See https://spdx.org/licenses/.",
-        examples="CC-BY-SA-4.0",
+        examples=["CC-BY-SA-4.0"],
     )
 
-    @validator("id")
+    @field_validator("id")
+    @classmethod
     def validate_spdx_id(cls, v: str) -> str:
         """Ensure that ``id`` is a SPDX license identifier."""
         if v is not None:
@@ -367,7 +397,7 @@ class TechnoteTable(BaseModel):
     id: str | None = Field(
         None,
         description="An internal identifier for the technote.",
-        examples="SQR-000",
+        examples=["SQR-000"],
     )
 
     series_id: str | None = Field(
@@ -375,7 +405,7 @@ class TechnoteTable(BaseModel):
         description=(
             "An internal identifier for a series this technote belongs to."
         ),
-        examples="SQR",
+        examples=["SQR"],
     )
 
     date_created: date | None = Field(
@@ -410,7 +440,7 @@ class TechnoteTable(BaseModel):
     canonical_url: HttpUrl | None = Field(
         None,
         description="The URL where this technote is published.",
-        examples="https://sqr-000.lsst.io",
+        examples=["https://sqr-000.lsst.io/"],
     )
 
     github_url: HttpUrl | None = Field(
@@ -443,7 +473,7 @@ class TechnoteTable(BaseModel):
     sphinx: SphinxTable = Field(default_factory=SphinxTable)
 
 
-class TechnoteToml(BaseModel, extra=Extra.ignore):
+class TechnoteToml(BaseModel):
     """A model of a ``technote.toml`` configuration file."""
 
     technote: TechnoteTable
@@ -462,7 +492,7 @@ class TechnoteToml(BaseModel, extra=Extra.ignore):
         TechnoteToml
             The parsed `TechnoteToml`.
         """
-        return cls.parse_obj(tomllib.loads(content))
+        return cls.model_validate(tomllib.loads(content))
 
 
 @dataclass
@@ -646,7 +676,10 @@ class TechnoteJinjaContext:
     @property
     def github_url(self) -> str | None:
         """The GitHub repository URL."""
-        return self.toml.technote.github_url
+        if self.toml.technote.github_url is None:
+            return None
+        else:
+            return str(self.toml.technote.github_url)
 
     @property
     def github_repo_slug(self) -> str | None:

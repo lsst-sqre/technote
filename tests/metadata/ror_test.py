@@ -3,20 +3,26 @@
 from __future__ import annotations
 
 import pytest
-from pydantic import BaseModel, ValidationError
+from pydantic import BaseModel, HttpUrl, field_validator
 
-from technote.metadata.ror import Ror
+from technote.metadata.ror import validate_ror_url
 
 
-def test_ror() -> None:
+class Model(BaseModel):
+    """A model with a ROR type."""
+
+    ror: HttpUrl
+
+    @field_validator("ror", mode="after")
+    @classmethod
+    def validate_ror(cls, value: HttpUrl) -> HttpUrl:
+        validate_ror_url(value)
+        return value
+
+
+def test_validate_ror() -> None:
     """Test that a model with a ROR type can be valid."""
-
-    class Model(BaseModel):
-        ror: Ror
-
-    sample = "https://ror.org/02y72wh86"
-    m = Model(ror=sample)
-    assert m.ror == sample
+    Model(ror="https://ror.org/02y72wh86")
 
 
 @pytest.mark.parametrize(
@@ -29,9 +35,5 @@ def test_ror() -> None:
 )
 def test_ror_fail(sample: str) -> None:
     """Test that a pydantic model with incorrect ROR values fail."""
-
-    class Model(BaseModel):
-        ror: Ror
-
-    with pytest.raises(ValidationError):
+    with pytest.raises(ValueError):  # noqa: PT011
         Model(ror=sample)

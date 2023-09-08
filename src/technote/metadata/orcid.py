@@ -3,15 +3,10 @@
 from __future__ import annotations
 
 import re
-from collections.abc import Generator
-from typing import Any
 
-from pydantic import BaseConfig, HttpUrl
-from pydantic.errors import UrlError
-from pydantic.fields import ModelField
-from pydantic.typing import AnyCallable
+from pydantic import HttpUrl
 
-__all__ = ["Orcid", "OrcidError"]
+__all__ = ["validate_orcid_url"]
 
 
 ORCID_PATTERN = re.compile(
@@ -30,57 +25,33 @@ https://support.orcid.org/hc/en-us/articles/360006897674
 """
 
 
-class OrcidError(UrlError):
-    """An error validating an ORCiD identifier, raised by Pydantic."""
+def validate_orcid_url(value: HttpUrl) -> None:
+    """Check an ORCiD URL for validity.
 
-    code = "orcid"
-    msg_template = "invalid ORCiD"
-
-
-class Orcid(HttpUrl):
-    """An ORCiD type for Pydantic validation.
-
-    The validator forces an ORCiD identifier to always be a URL for
-    orcid.org, per https://support.orcid.org/hc/en-us/articles/360006897674.
-    This validator implments the ISO 7064 11,2 checksum algorithm.
+    Raises
+    ------
+    ValueError
+        Raised if the URL is not a valid ROR URL.
     """
+    m = ORCID_PATTERN.search(str(value))
+    if not m:
+        raise ValueError(f"Expected ORCiD URL, received: {value}")
 
-    allowed_schemes = {"https"}  # noqa: RUF012
+    identifier = m["identifier"]
+    if not verify_checksum(identifier):
+        raise ValueError(f"ORCiD identifier checksum failed ({value})")
 
-    @classmethod
-    def __get_validators__(cls) -> Generator[AnyCallable, None, None]:
-        yield cls.validate
 
-    @classmethod
-    def validate(
-        cls, value: Any, field: ModelField, config: BaseConfig
-    ) -> Orcid:
-        if value.__class__ == cls:
-            return value
-
-        m = ORCID_PATTERN.search(value)
-        if not m:
-            raise OrcidError
-
-        identifier = m["identifier"]
-        if not cls.verify_checksum(identifier):
-            raise OrcidError
-
-        return HttpUrl.validate(
-            f"https://orcid.org/{identifier}", field, config
-        )
-
-    @staticmethod
-    def verify_checksum(identifier: str) -> bool:
-        """Verify the checksum of an ORCiD identifier string (path component
-        of the URL) given the ISO 7064 11,2 algorithm.
-        """
-        total: int = 0
-        for digit in identifier:
-            numeric_digit = "10" if digit == "X" else digit
-            if not numeric_digit.isdigit():
-                continue
-            total = (total + int(numeric_digit)) * 2
-        remainder = total % 11
-        result = (12 - remainder) % 11
-        return result == 10
+def verify_checksum(identifier: str) -> bool:
+    """Verify the checksum of an ORCiD identifier string (path component
+    of the URL) given the ISO 7064 11,2 algorithm.
+    """
+    total: int = 0
+    for digit in identifier:
+        numeric_digit = "10" if digit == "X" else digit
+        if not numeric_digit.isdigit():
+            continue
+        total = (total + int(numeric_digit)) * 2
+    remainder = total % 11
+    result = (12 - remainder) % 11
+    return result == 10
