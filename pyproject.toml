@@ -40,7 +40,7 @@ dev = [
     "lxml",
     "cssselect",
     # Documentation
-    "documenteer[guide] @ git+https://github.com/lsst-sqre/documenteer@tickets/DM-40684",
+    "documenteer[guide] @ git+https://github.com/lsst-sqre/documenteer@main",
     "autodoc_pydantic",
 ]
 
