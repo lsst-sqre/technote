@@ -17,33 +17,29 @@ from __future__ import annotations
 
 import os
 import re
-import sys
+import tomllib
+from collections.abc import MutableMapping
 from dataclasses import dataclass
 from datetime import date
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, MutableMapping, Optional, Tuple, Union
+from typing import Self
 from urllib.parse import urlparse
-
-if sys.version_info < (3, 11):
-    import tomli as tomllib
-else:
-    import tomllib
 
 from pydantic import (
     BaseModel,
     EmailStr,
-    Extra,
     Field,
     HttpUrl,
     ValidationError,
-    root_validator,
-    validator,
+    field_validator,
+    model_validator,
 )
 from sphinx.errors import ConfigError
 
-from .metadata.orcid import Orcid
-from .metadata.ror import Ror
+from .metadata.orcid import validate_orcid_url
+from .metadata.orcid import verify_checksum as verify_orcid_checksum
+from .metadata.ror import validate_ror_url
 from .metadata.spdx import Licenses
 from .metadata.zenodo import ZenodoRole
 
@@ -76,7 +72,7 @@ def collapse_whitespace(text: str) -> str:
 class IntersphinxTable(BaseModel):
     """Intersphinx configuration in the ``[technote.sphinx]`` table."""
 
-    projects: Dict[str, HttpUrl] = Field(
+    projects: dict[str, HttpUrl] = Field(
         description="Mapping of projects and their URLs.", default_factory=dict
     )
 
@@ -84,7 +80,7 @@ class IntersphinxTable(BaseModel):
 class LinkcheckTable(BaseModel):
     """Linkcheck builder configurations in the ``[technote.sphinx]`` table."""
 
-    ignore: List[str] = Field(
+    ignore: list[str] = Field(
         description="Regular expressions of URLs to skip checking links",
         default_factory=list,
     )
@@ -97,7 +93,7 @@ class SphinxTable(BaseModel):
         False, description="Escalate warnings to build errors."
     )
 
-    nitpick_ignore: List[Tuple[str, str]] = Field(
+    nitpick_ignore: list[tuple[str, str]] = Field(
         description=(
             "Errors to ignore. First item is the type (like a role or "
             "directive) and the second is the target (like the argument to "
@@ -106,7 +102,7 @@ class SphinxTable(BaseModel):
         default_factory=list,
     )
 
-    nitpick_ignore_regex: List[Tuple[str, str]] = Field(
+    nitpick_ignore_regex: list[tuple[str, str]] = Field(
         description=(
             "Same as ``nitpick_ignore``, but both type and target are "
             "interpreted as regular expressions."
@@ -114,7 +110,7 @@ class SphinxTable(BaseModel):
         default_factory=list,
     )
 
-    extensions: List[str] = Field(
+    extensions: list[str] = Field(
         default_factory=list,
         description="Additional Sphinx extensions to use in the build.",
     )
@@ -133,62 +129,71 @@ class SphinxTable(BaseModel):
 class Organization(BaseModel):
     """Model for describing an organization (often as an affiliation)."""
 
-    internal_id: Optional[str] = Field(
+    internal_id: str | None = Field(
         None, description="A user-specific identifier for an organization."
     )
 
-    ror: Optional[Ror] = Field(
+    ror: HttpUrl | None = Field(
         None, description="The ROR (ror.org) identifier of the institution."
     )
 
-    name: Optional[str] = Field(
+    name: str | None = Field(
         None, description="The display name of the institution."
     )
 
-    address: Optional[str] = Field(
+    address: str | None = Field(
         None, description="The address of the institution."
     )
 
-    url: Optional[HttpUrl] = Field(
+    url: HttpUrl | None = Field(
         None, description="The homepage of the institution."
     )
 
-    @validator("name")
-    def clean_whitespace(cls, v: Optional[str]) -> Optional[str]:
+    @field_validator("name")
+    @classmethod
+    def clean_whitespace(cls, v: str | None) -> str | None:
         if v:
             return collapse_whitespace(v)
         else:
             return v
 
-    @root_validator
-    def check_well_defined(cls, values: Dict[str, Any]) -> Dict[str, Any]:
+    @model_validator(mode="after")
+    def check_well_defined(self) -> Self:
         """Ensure that at least the internal ID, ROR, or name are provided."""
-        if values.get("internal_id"):
-            return values
-        if values.get("ror"):
-            return values
-        if values.get("name"):
-            return values
+        if self.internal_id:
+            return self
+        if self.ror:
+            return self
+        if self.name:
+            return self
 
         raise ValueError(
             "An organization must have a name, ror, or internal_id"
         )
 
+    @field_validator("ror", mode="after")
+    @classmethod
+    def validate_ror(cls, v: HttpUrl | None) -> HttpUrl | None:
+        """Ensure that ``ror`` is a valid ROR identifier."""
+        if v is not None:
+            validate_ror_url(v)
+        return v
+
 
 class PersonName(BaseModel):
     """A person's name."""
 
-    family_names: Optional[str] = Field(
+    family_names: str | None = Field(
         None,
         description="The person's family name (last name in western culture).",
     )
 
-    given_names: Optional[str] = Field(
+    given_names: str | None = Field(
         None,
         description="The person's given name (first name in western culture).",
     )
 
-    name: Optional[str] = Field(
+    name: str | None = Field(
         None,
         description=(
             "The person's name, an alternative to specifying surname and "
@@ -204,35 +209,37 @@ class PersonName(BaseModel):
         else:
             return f"{self.given_names} {self.family_names}"
 
-    @validator("family_names", "given_names", "name")
-    def clean_whitespace(cls, v: Optional[str]) -> Optional[str]:
+    @field_validator("family_names", "given_names", "name")
+    @classmethod
+    def clean_whitespace(cls, v: str | None) -> str | None:
         if v:
             return collapse_whitespace(v)
         else:
             return v
 
-    @root_validator
-    def check_well_defined(cls, values: Dict[str, Any]) -> Dict[str, Any]:
+    @model_validator(mode="after")
+    def check_well_defined(self) -> Self:
         """Check that either surname and given are both provided, or name
-        alone is set
+        alone is set.
         """
-        if values.get("family_names") and values.get("given_names"):
-            if values.get("name"):
+        if self.family_names and self.given_names:
+            if self.name:
                 raise ValueError(
                     "Do not specify name if family_names and given_names are "
                     "both provided."
                 )
-            return values
-        if values.get("name"):
-            if values.get("family_names"):
+            return self
+
+        if self.name:
+            if self.family_names:
                 raise ValueError(
                     "Do not specify `family_names` if using `name`."
                 )
-            elif values.get("given_names"):
+            if self.given_names:
                 raise ValueError(
                     "Do not specify `given_names` if using `name`."
                 )
-            return values
+            return self
 
         raise ValueError(
             "Name must include either family_names and given_names fields, "
@@ -245,21 +252,39 @@ class Person(BaseModel):
 
     name: PersonName
 
-    internal_id: Optional[str] = Field(
+    internal_id: str | None = Field(
         None, description="An internal identifier for the person."
     )
 
-    orcid: Optional[Orcid] = Field(
+    orcid: HttpUrl | None = Field(
         None, description="The ORCiD of the person (https://orcid.org)."
     )
 
-    affiliations: Optional[List[Organization]] = Field(
+    affiliations: list[Organization] = Field(
         default_factory=list, description="The person's affiliations."
     )
 
-    email: Optional[EmailStr] = Field(
-        description="Contact email associated with the person."
+    email: EmailStr | None = Field(
+        None, description="Contact email associated with the person."
     )
+
+    @field_validator("orcid", mode="after")
+    @classmethod
+    def validate_orcid(cls, v: HttpUrl | None) -> HttpUrl | None:
+        """Ensure that ``orcid`` is a valid ORCiD identifier, or `None`."""
+        if v is not None:
+            validate_orcid_url(v)
+        return v
+
+    @field_validator("orcid", mode="before")
+    @classmethod
+    def format_orcid_url(cls, value: str) -> str:
+        """Format a bare ORCiD identifier as a URL."""
+        if value.startswith(("http://oricid", "https://orcid")):
+            return value
+        if verify_orcid_checksum(value):
+            return f"https://orcid.org/{value}"
+        raise ValueError(f"Not an ORCiD identifier checksum ({value})")
 
 
 class Contributor(Person):
@@ -269,11 +294,11 @@ class Contributor(Person):
     `role` attribute.
     """
 
-    role: Optional[ZenodoRole] = Field(
+    role: ZenodoRole | None = Field(
         None, description="the contributor's role."
     )
 
-    note: Optional[str] = Field(
+    note: str | None = Field(
         None, description="Note describing the contribution."
     )
 
@@ -286,10 +311,11 @@ class LicenseTable(BaseModel):
     id: str = Field(
         ...,
         description="The SPDX license ID. See https://spdx.org/licenses/.",
-        examples="CC-BY-SA-4.0",
+        examples=["CC-BY-SA-4.0"],
     )
 
-    @validator("id")
+    @field_validator("id")
+    @classmethod
     def validate_spdx_id(cls, v: str) -> str:
         """Ensure that ``id`` is a SPDX license identifier."""
         if v is not None:
@@ -353,11 +379,9 @@ class TechnoteStatus(BaseModel):
         description="The state of a document, from a controlled vocabulary."
     )
 
-    note: Optional[str] = Field(
-        None, description="An explanation of the state."
-    )
+    note: str | None = Field(None, description="An explanation of the state.")
 
-    supersceding_urls: List[HttpUrl] = Field(
+    supersceding_urls: list[HttpUrl] = Field(
         default_factory=list,
         description=(
             "URLs to documents/webpages that superscede this technote."
@@ -370,33 +394,33 @@ class TechnoteTable(BaseModel):
     ``technote.toml`` (`TechnoteToml`).
     """
 
-    id: Optional[str] = Field(
+    id: str | None = Field(
         None,
         description="An internal identifier for the technote.",
-        examples="SQR-000",
+        examples=["SQR-000"],
     )
 
-    series_id: Optional[str] = Field(
+    series_id: str | None = Field(
         None,
         description=(
             "An internal identifier for a series this technote belongs to."
         ),
-        examples="SQR",
+        examples=["SQR"],
     )
 
-    date_created: Optional[date] = Field(
+    date_created: date | None = Field(
         None, description="Date when the technote was created."
     )
 
-    date_updated: Optional[date] = Field(
+    date_updated: date | None = Field(
         None, description="Date when the technote was updated."
     )
 
-    version: Optional[str] = Field(
+    version: str | None = Field(
         None, description="The current version of the technote."
     )
 
-    doi: Optional[str] = Field(
+    doi: str | None = Field(
         None,
         description=(
             "The most-relevant DOI that identifies this technote. "
@@ -405,7 +429,7 @@ class TechnoteTable(BaseModel):
         ),
     )
 
-    title: Optional[str] = Field(
+    title: str | None = Field(
         None,
         description=(
             "The technote's title. Normally the title is derived from "
@@ -413,13 +437,13 @@ class TechnoteTable(BaseModel):
         ),
     )
 
-    canonical_url: Optional[HttpUrl] = Field(
+    canonical_url: HttpUrl | None = Field(
         None,
         description="The URL where this technote is published.",
-        examples="https://sqr-000.lsst.io",
+        examples=["https://sqr-000.lsst.io/"],
     )
 
-    github_url: Optional[HttpUrl] = Field(
+    github_url: HttpUrl | None = Field(
         None,
         description="The URL of the GitHub repository hosting this technote.",
     )
@@ -428,20 +452,20 @@ class TechnoteTable(BaseModel):
         "main", description="The default branch of the GitHub repository."
     )
 
-    status: Optional[TechnoteStatus] = Field(
+    status: TechnoteStatus | None = Field(
         None, description="The status of the technote."
     )
 
-    license: Optional[LicenseTable] = Field(
+    license: LicenseTable | None = Field(
         None, description="The specification of a content license."
     )
 
-    authors: List[Person] = Field(
+    authors: list[Person] = Field(
         description="The authors of the technote.",
         default_factory=list,
     )
 
-    contributors: List[Contributor] = Field(
+    contributors: list[Contributor] = Field(
         description="Additional persons involved.",
         default_factory=list,
     )
@@ -449,7 +473,7 @@ class TechnoteTable(BaseModel):
     sphinx: SphinxTable = Field(default_factory=SphinxTable)
 
 
-class TechnoteToml(BaseModel, extra=Extra.ignore):
+class TechnoteToml(BaseModel):
     """A model of a ``technote.toml`` configuration file."""
 
     technote: TechnoteTable
@@ -468,7 +492,7 @@ class TechnoteToml(BaseModel, extra=Extra.ignore):
         TechnoteToml
             The parsed `TechnoteToml`.
         """
-        return cls.parse_obj(tomllib.loads(content))
+        return cls.model_validate(tomllib.loads(content))
 
 
 @dataclass
@@ -513,15 +537,13 @@ class TechnoteSphinxConfig:
         try:
             parsed_toml = TechnoteToml.parse_toml(toml_content)
         except ValidationError as e:
-            message = (
-                f"Syntax or validation issue in technote.toml:\n\n" f"{str(e)}"
-            )
-            raise ConfigError(message)
+            message = "Syntax or validation issue in technote.toml"
+            raise ConfigError(message) from e
 
         return cls(toml=parsed_toml)
 
     @property
-    def title(self) -> Optional[str]:
+    def title(self) -> str | None:
         """The title of the document set via technote.toml metadata, or
         None if the document's H1 should be used.
         """
@@ -537,14 +559,14 @@ class TechnoteSphinxConfig:
         else:
             return ""
 
-    def append_extensions(self, extensions: List[str]) -> None:
+    def append_extensions(self, extensions: list[str]) -> None:
         """Append user-configured extensions to an existing list."""
         for new_ext in self.toml.technote.sphinx.extensions:
             if new_ext not in extensions:
                 extensions.append(new_ext)
 
     def extend_intersphinx_mapping(
-        self, mapping: MutableMapping[str, Tuple[str, Union[str, None]]]
+        self, mapping: MutableMapping[str, tuple[str, str | None]]
     ) -> None:
         """Extend the ``intersphinx_mapping`` dictionary with configured
         projects.
@@ -555,20 +577,20 @@ class TechnoteSphinxConfig:
         ) in self.toml.technote.sphinx.intersphinx.projects.items():
             mapping[project] = (str(url), None)
 
-    def append_linkcheck_ignore(self, link_patterns: List[str]) -> None:
+    def append_linkcheck_ignore(self, link_patterns: list[str]) -> None:
         """Append URL patterns for sphinx.linkcheck.ignore to existing
         patterns.
         """
         link_patterns.extend(self.toml.technote.sphinx.linkcheck.ignore)
 
     def append_nitpick_ignore(
-        self, nitpick_ignore: List[Tuple[str, str]]
+        self, nitpick_ignore: list[tuple[str, str]]
     ) -> None:
         """Append ``nitpick_ignore`` items from sphinx.nitpick_ignore."""
         nitpick_ignore.extend(self.toml.technote.sphinx.nitpick_ignore)
 
     def append_nitpick_ignore_regex(
-        self, nitpick_ignore_regex: List[Tuple[str, str]]
+        self, nitpick_ignore_regex: list[tuple[str, str]]
     ) -> None:
         """Append ``nitpick_ignore_regex`` items from sphinx.nitpick_ignore."""
         nitpick_ignore_regex.extend(
@@ -600,8 +622,8 @@ class TechnoteJinjaContext:
 
     def __init__(self, toml: TechnoteToml) -> None:
         self._toml: TechnoteToml = toml
-        self._content_title: Optional[str] = None
-        self._content_abstract: Optional[str] = None
+        self._content_title: str | None = None
+        self._content_abstract: str | None = None
 
     @property
     def toml(self) -> TechnoteToml:
@@ -617,13 +639,13 @@ class TechnoteJinjaContext:
         """
         if self.toml.technote.title is not None:
             return self.toml.technote.title
-        else:
-            if self._content_title is None:
-                raise RuntimeError(
-                    "The document is missing a heading for its title."
-                )
-            else:
-                return self._content_title
+
+        if self._content_title is None:
+            raise RuntimeError(
+                "The document is missing a heading for its title."
+            )
+
+        return self._content_title
 
     @property
     def abstract(self) -> str:
@@ -639,7 +661,7 @@ class TechnoteJinjaContext:
             return "N/A"
 
     @property
-    def date_updated_iso(self) -> Optional[str]:
+    def date_updated_iso(self) -> str | None:
         """The date updated, as an ISO 8601 string."""
         if self.toml.technote.date_updated:
             return self._format_iso_date(self.toml.technote.date_updated)
@@ -647,17 +669,20 @@ class TechnoteJinjaContext:
             return None
 
     @property
-    def version(self) -> Optional[str]:
+    def version(self) -> str | None:
         """The version, as a string if available."""
         return self.toml.technote.version
 
     @property
-    def github_url(self) -> Optional[str]:
+    def github_url(self) -> str | None:
         """The GitHub repository URL."""
-        return self.toml.technote.github_url
+        if self.toml.technote.github_url is None:
+            return None
+        else:
+            return str(self.toml.technote.github_url)
 
     @property
-    def github_repo_slug(self) -> Optional[str]:
+    def github_repo_slug(self) -> str | None:
         """The GitHub repository slug, ``owner/name``."""
         if self.github_url is None:
             return self.github_url
@@ -669,21 +694,21 @@ class TechnoteJinjaContext:
         return slug
 
     @property
-    def github_ref_name(self) -> Optional[str]:
+    def github_ref_name(self) -> str | None:
         """The branch or tag name."""
-        # FIXME this is calculated from GitHub Actions environment variables
+        # FIXME: this is calculated from GitHub Actions environment variables
         # https://docs.github.com/en/actions/learn-github-actions/environment-variables#default-environment-variables
         return os.getenv("GITHUB_REF_NAME")
 
     @property
-    def github_ref_type(self) -> Optional[str]:
+    def github_ref_type(self) -> str | None:
         """The ref type: branch or tag."""
-        # FIXME this is calculated from GitHub Actions environment variables
+        # FIXME: this is calculated from GitHub Actions environment variables
         # https://docs.github.com/en/actions/learn-github-actions/environment-variables#default-environment-variables
         return os.getenv("GITHUB_REF_TYPE")
 
     @property
-    def github_edit_url(self) -> Optional[str]:
+    def github_edit_url(self) -> str | None:
         """The URL for editing content on GitHub, from its default branch."""
         if self.github_url is None:
             return None
@@ -692,14 +717,13 @@ class TechnoteJinjaContext:
         else:
             root_url = self.github_url
 
-        # FIXME compute source path during Sphinx build
+        # FIXME: compute source path during Sphinx build
         # We're using /blob/ instead of /edit/ to give users the choice of
         # how to edit (on web or in github.dev).
-        edit_url = (
+        return (
             f"{root_url}/blob/{self.toml.technote.github_default_branch}"
             "/index.rst"
         )
-        return edit_url
 
     def set_content_title(self, title: str) -> None:
         """Set the title from the content nodes."""

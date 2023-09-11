@@ -1,6 +1,6 @@
 # Change log
 
-<!-- Format for headings: 1.2.3 (YYYY-MM-DD) -->
+<!-- scriv-insert-here -->
 
 ## 0.2.0 (2022-12-05)
 

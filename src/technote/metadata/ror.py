@@ -3,15 +3,11 @@
 from __future__ import annotations
 
 import re
-from typing import Any, Generator
 
 import base32_lib as base32
-from pydantic import BaseConfig, HttpUrl
-from pydantic.errors import UrlError
-from pydantic.fields import ModelField
-from pydantic.typing import AnyCallable
+from pydantic import HttpUrl
 
-__all__ = ["Ror", "RorError"]
+__all__ = ["validate_ror_url"]
 
 ROR_PATTERN = re.compile(
     r"https://ror.org"
@@ -20,37 +16,19 @@ ROR_PATTERN = re.compile(
 )
 
 
-class RorError(UrlError):
-    """An error validating a ROR identifier, raised by Pydantic."""
+def validate_ror_url(value: HttpUrl) -> None:
+    """Check a ROR URL for validity.
 
-    code = "ror"
-    msg_template = "invalid ROR"
-
-
-class Ror(HttpUrl):
-    """A ROR (Research Organization Registry) type for Pydantic validation."""
-
-    allowed_schemes = {"https"}
-
-    @classmethod
-    def __get_validators__(cls) -> Generator[AnyCallable, None, None]:
-        yield cls.validate
-
-    @classmethod
-    def validate(
-        cls, value: Any, field: ModelField, config: BaseConfig
-    ) -> Ror:
-        if value.__class__ == cls:
-            return value
-
-        m = ROR_PATTERN.search(value)
-        if not m:
-            raise RorError()
-
-        identifier = m["identifier"]
-        try:
-            base32.decode(identifier, checksum=True)
-        except ValueError:
-            raise RorError()
-
-        return HttpUrl.validate(value, field, config)
+    Raises
+    ------
+    ValueError
+        Raised if the URL is not a valid ROR URL.
+    """
+    m = ROR_PATTERN.search(str(value))
+    if not m:
+        raise ValueError(f"Expected ROR URL, received: {value}")
+    identifier = m["identifier"]
+    try:
+        base32.decode(identifier, checksum=True)
+    except ValueError as e:
+        raise ValueError("ROR identifier checksum failed") from e

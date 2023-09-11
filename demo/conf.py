@@ -1,4 +1,4 @@
-from technote.sphinxconf import *  # noqa: F401 F403
+from technote.sphinxconf import *  # noqa: F403
 
 html_static_path = ["_static"]
 
