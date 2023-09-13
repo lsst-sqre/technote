@@ -68,6 +68,14 @@ def transform_toc_html(
     soup = BeautifulSoup(sphinx_toc, "html.parser")
     root_list = soup.select_one("li > ul")
 
+    # If there aren't any sections, there won't be a ul list in the sphinx_toc
+    # extracted by process_html_page_context_for_toc. Therefore create an
+    # empty ul.
+    if root_list is None:
+        root_list = BeautifulSoup("<ul></ul>", "html.parser").ul
+
+    # Add toc entries that aren't part of the Sphinx toc collector (such as
+    # the abstract)
     if prepend_sections:
         # reverse order to so we can insert at index 0
         for section in prepend_sections[::-1]:
