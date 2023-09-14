@@ -40,8 +40,15 @@ def setup(app: Sphinx) -> dict[str, Any]:
     app.connect("html-page-context", process_html_page_context_for_toc)
     app.connect("build-finished", overwrite_pygments_css)
 
+    app.connect("builder-inited", _add_js_file)
+
     return {
         "version": __version__,
         "parallel_read_safe": True,
         "parallel_write_safe": True,
     }
+
+
+def _add_js_file(app: Sphinx) -> None:
+    """Add Technote's javascript to the Sphinx page."""
+    app.add_js_file("scripts/technote.js")
