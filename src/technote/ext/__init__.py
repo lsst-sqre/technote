@@ -17,6 +17,7 @@ from .abstract import (
     visit_abstract_node_tex,
 )
 from .metadata import process_html_page_context_for_metadata
+from .pygmentscss import overwrite_pygments_css
 from .toc import process_html_page_context_for_toc
 
 __all__ = ["setup"]
@@ -37,6 +38,7 @@ def setup(app: Sphinx) -> dict[str, Any]:
     # Metadata
     app.connect("html-page-context", process_html_page_context_for_metadata)
     app.connect("html-page-context", process_html_page_context_for_toc)
+    app.connect("build-finished", overwrite_pygments_css)
 
     return {
         "version": __version__,

@@ -24,6 +24,8 @@ dependencies = [
     "base32-lib",
     "pydantic[email]>=2.0.0",
     "beautifulsoup4",
+    "pygments",
+    "accessible-pygments",
 ]
 dynamic = ["version"]
 
