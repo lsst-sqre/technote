@@ -2,6 +2,10 @@
   --tn-component-sidebar-header-color: var(--tn-color-neutral-600);
 }
 
+html[data-theme='dark'] {
+  --tn-component-sidebar-header-color: var(--tn-color-neutral-200);
+}
+
 .technote-sidebar-section {
   margin: 0 0 var(--tn-space-lg-fixed);
 }
