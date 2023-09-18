@@ -9,6 +9,11 @@
 data-theme="light" data-mode="auto"
 {% endblock %}
 
+{% block head_extra %}
+{{ super() }}
+{{ technote.highwire_metadata_tags }}
+{% endblock head_extra %}
+
 {% block body %}
 
 {% block icon_sprites %}

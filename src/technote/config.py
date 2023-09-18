@@ -37,6 +37,7 @@ from pydantic import (
 )
 from sphinx.errors import ConfigError
 
+from .metadata.highwire import HighwireMetadata
 from .metadata.orcid import validate_orcid_url
 from .metadata.orcid import verify_checksum as verify_orcid_checksum
 from .metadata.ror import validate_ror_url
@@ -736,3 +737,13 @@ class TechnoteJinjaContext:
     def _format_iso_date(self, date: date) -> str:
         """Format a date in ISO 8601 format."""
         return date.isoformat()
+
+    @property
+    def highwire_metadata_tags(self) -> str:
+        """The Highwire metadata tags for the technote."""
+        highwire = HighwireMetadata(
+            metadata=self.toml.technote,
+            title=self.title,
+            abstract=self.abstract,
+        )
+        return highwire.as_html()
