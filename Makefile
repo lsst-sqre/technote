@@ -11,3 +11,8 @@ clean:
 	rm -rf docs/_build
 	rm -rf docs/api
 	rm -f demo/_build
+
+.PHONY: demo
+demo:
+	npm run build
+	tox run -e demo
