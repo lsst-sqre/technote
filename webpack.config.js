@@ -6,7 +6,10 @@ module.exports = {
   mode: 'development',
   devtool: 'source-map',
   entry: {
-    technote: ['./src/assets/styles/technote.scss'],
+    technote: [
+      './src/assets/styles/technote.scss',
+      './src/assets/scripts/technote.js',
+    ],
   },
   output: {
     filename: 'scripts/[name].js',

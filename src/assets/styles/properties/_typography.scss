@@ -17,9 +17,17 @@
   --tn-component-h6-weight: bold;
 
   --tn-component-text-color: var(--tn-color-black);
+  --tn-component-link-color: var(--tn-color-blue-500);
+  --tn-component-text-background-color: var(--tn-color-white);
 
   --tn-component-text-font-family: -apple-system, BlinkMacSystemFont, Segoe UI,
     Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
     sans-serif;
   --tn-component-text-line-height: 1.5;
+}
+
+html[data-theme='dark'] {
+  --tn-component-text-color: var(--tn-color-white);
+  --tn-component-link-color: var(--tn-color-blue-300);
+  --tn-component-text-background-color: var(--tn-color-black);
 }

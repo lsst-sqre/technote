@@ -7,6 +7,11 @@
   --tn-component-toc-level-border-color: var(--tn-color-neutral-600);
 }
 
+html[data-theme='dark'] {
+  --tn-component-toc-header-color: var(--tn-color-neutral-200);
+  --tn-component-toc-level-border-color: var(--tn-color-neutral-200);
+}
+
 .technote-toc-header {
   font-size: var(--tn-component-h4-size);
   font-weight: bold;

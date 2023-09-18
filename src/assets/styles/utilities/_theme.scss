@@ -1,0 +1,11 @@
+/*
+ * Utilities for displaying different elements based on the current theme.
+ */
+
+html[data-theme='light'] .technote-themed-dark {
+  display: none;
+}
+
+html[data-theme='dark'] .technote-themed-light {
+  display: none;
+}

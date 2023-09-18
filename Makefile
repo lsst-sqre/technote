@@ -10,3 +10,4 @@ clean:
 	rm -rf .tox
 	rm -rf docs/_build
 	rm -rf docs/api
+	rm -f demo/_build

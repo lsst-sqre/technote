@@ -5,6 +5,7 @@ body {
   font-family: var(--tn-component-text-font-family);
   line-height: var(--tn-component-text-line-height);
   color: var(--tn-component-text-color);
+  background: var(--tn-component-text-background-color);
 }
 
 h1,
@@ -66,4 +67,8 @@ h4:hover .headerlink,
 h5:hover .headerlink,
 h6:hover .headerlink {
   visibility: visible;
+}
+
+a {
+  color: var(--tn-component-link-color);
 }
