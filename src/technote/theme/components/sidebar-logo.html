@@ -1,12 +1,4 @@
-{% if theme_light_logo %}
 <a href="{{ theme_logo_link_url or '#' }}">
-<picture class="technote-sidebar-logo__picture">
-  {% if theme_dark_logo %}
-  <source
-    srcset="{{ pathto('_static/' + theme_dark_logo, 1) }}"
-    media="(prefers-color-scheme: dark)">
-  {% endif %}
-  <img src="{{ pathto('_static/' + theme_light_logo, 1) }}" alt="{{theme_logo_alt_text}}">
-</picture>
+<img class="technote-themed-light" src="{{ pathto('_static/' + theme_light_logo, 1) }}" alt="{{theme_logo_alt_text}}">
+<img class="technote-themed-dark" src="{{ pathto('_static/' + theme_dark_logo, 1) }}" alt="{{theme_logo_alt_text}}">
 </a>
-{% endif %}
