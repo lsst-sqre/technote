@@ -7,7 +7,7 @@
 {% endif %}
 <ul class="technote-inline-comma-list technote-sidebar-author-list">
   {% for author in technote.toml.technote.authors %}
-  <li class="technote-sidebar-author-list__author">
+  <li class="technote-sidebar-author-list__author p-author">
     {{ author.name.plain_text_name }}
   </li>
   {% endfor %}

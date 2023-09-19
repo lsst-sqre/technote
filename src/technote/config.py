@@ -671,6 +671,14 @@ class TechnoteJinjaContext:
             return None
 
     @property
+    def date_created_iso(self) -> str | None:
+        """The date of initial publication, as an ISO 8601 string."""
+        if self.toml.technote.date_created:
+            return self._format_iso_date(self.toml.technote.date_created)
+        else:
+            return None
+
+    @property
     def version(self) -> str | None:
         """The version, as a string if available."""
         return self.toml.technote.version

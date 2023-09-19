@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import IO, Any
 
 import lxml.html
+import mf2py
 import pytest
 from sphinx.application import Sphinx
 from sphinx.util import logging
@@ -47,6 +48,20 @@ def test_metadata_basic(app: Sphinx, status: IO, warning: IO) -> None:
     assert_og(doc, "type", "article")
     assert_og(doc, "article:author", "Jonathan Sick")
     assert_og(doc, "article:published_time", "2023-09-19")
+
+    # Test for microformats2 metadata
+    mf2_parser = mf2py.Parser(doc=html_source)
+    mf2_data = mf2_parser.to_dict()
+    detected_hentry = False
+    for h_item in mf2_data["items"]:
+        if "h-entry" in h_item["type"]:
+            detected_hentry = True
+            props = h_item["properties"]
+            assert props["author"][0] == "Jonathan Sick"
+            assert props["updated"][0] == "2023-09-19"
+            assert "content" in props
+            assert "summary" in props
+    assert detected_hentry
 
 
 def assert_tag(doc: Any, name: str, content: str, index: int = 0) -> None:

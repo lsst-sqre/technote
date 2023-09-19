@@ -47,7 +47,7 @@ data-theme="light" data-mode="auto"
 <label class="sb-sidebar-overlay" for="sb-sidebar-toggle--secondary"></label>
 
 {% block container %}
-<div class="sb-container">
+<div class="sb-container h-entry">
   <div class="sb-container__inner sb-page-width">
     {% block sidebar_primary %}
     <aside class="sb-sidebar-primary">
@@ -68,7 +68,7 @@ data-theme="light" data-mode="auto"
           <header class="sb-header-article">
             {% include "sections/header-article.html" %}
           </header>
-          <article class="sb-article" role="main">
+          <article class="sb-article e-content" role="main">
             {% include "sections/article.html" %}
           </article>
           <footer class="sb-footer-article">
