@@ -22,6 +22,8 @@ def test_metadata_basic(app: Sphinx, status: IO, warning: IO) -> None:
 
     html_source = Path(app.outdir).joinpath("index.html").read_text()
     doc = lxml.html.document_fromstring(html_source)
+
+    # Test for HighWire metadata tags
     assert_tag(doc, "citation_title", "Metadata test document")
     assert_tag(doc, "citation_date", "2023-09-19")
     assert_tag(doc, "citation_technical_report_number", "TEST-000")
@@ -34,9 +36,29 @@ def test_metadata_basic(app: Sphinx, status: IO, warning: IO) -> None:
     )
     assert_tag(doc, "citation_author_institution", "Rubin Observatory")
 
+    # Test for Open Graph metadata tags
+    assert_og(doc, "title", "Metadata test document")
+    assert_og(
+        doc,
+        "description",
+        "First paragraph of abstract.\n\nSecond paragraph of abstract.",
+    )
+    assert_og(doc, "url", "https://test-000.example.com/")
+    assert_og(doc, "type", "article")
+    assert_og(doc, "article:author", "Jonathan Sick")
+    assert_og(doc, "article:published_time", "2023-09-19")
+
 
 def assert_tag(doc: Any, name: str, content: str, index: int = 0) -> None:
     """Compare the content of a meta tag."""
     assert (
         doc.cssselect(f"meta[name='{name}']")[index].get("content") == content
+    )
+
+
+def assert_og(doc: Any, name: str, content: str, index: int = 0) -> None:
+    """Assert the content of an Open Graph tag."""
+    assert (
+        doc.cssselect(f"meta[property='og:{name}']")[index].get("content")
+        == content
     )

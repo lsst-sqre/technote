@@ -11,6 +11,7 @@ data-theme="light" data-mode="auto"
 
 {% block head_extra %}
 {{ super() }}
+{{ technote.opengraph_metadata_tags }}
 {{ technote.highwire_metadata_tags }}
 {% endblock head_extra %}
 

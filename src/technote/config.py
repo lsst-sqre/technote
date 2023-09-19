@@ -38,6 +38,7 @@ from pydantic import (
 from sphinx.errors import ConfigError
 
 from .metadata.highwire import HighwireMetadata
+from .metadata.opengraph import OpenGraphMetadata
 from .metadata.orcid import validate_orcid_url
 from .metadata.orcid import verify_checksum as verify_orcid_checksum
 from .metadata.ror import validate_ror_url
@@ -747,3 +748,13 @@ class TechnoteJinjaContext:
             abstract=self.abstract,
         )
         return highwire.as_html()
+
+    @property
+    def opengraph_metadata_tags(self) -> str:
+        """The OpenGraph metadata tags for the technote."""
+        og = OpenGraphMetadata(
+            metadata=self.toml.technote,
+            title=self.title,
+            abstract=self.abstract,
+        )
+        return og.as_html()
