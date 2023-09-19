@@ -4,11 +4,13 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from .metatagbase import MetaTagFormatterBase
+
 if TYPE_CHECKING:
     from technote.config import TechnoteTable
 
 
-class HighwireMetadata:
+class HighwireMetadata(MetaTagFormatterBase):
     """A class that transforms technote metadata into Highwire metadata
     tags.
 
@@ -31,32 +33,17 @@ class HighwireMetadata:
         self._title = title
         self._abstract = abstract
 
-    def __str__(self) -> str:
-        """Create the Highwire metadata tags."""
-        return self.as_html()
-
-    def as_html(self) -> str:
-        """Create the Highwire metadata HTML tags."""
-        tags: list[str] = []
-        self.extend_not_none(tags, self.title)
-        self.extend_not_none(tags, self.author_info)
-        self.extend_not_none(tags, self.date)
-        self.extend_not_none(tags, self.doi)
-        self.extend_not_none(tags, self.technical_report_number)
-        self.extend_not_none(tags, self.html_url)
-        return "\n".join(tags) + "\n"
-
-    @staticmethod
-    def extend_not_none(
-        entries: list[str], new_item: None | str | list[str]
-    ) -> None:
-        """Extend a list with new items if they are not None."""
-        if new_item is None:
-            return
-        if isinstance(new_item, str):
-            entries.append(new_item)
-        else:
-            entries.extend(new_item)
+    @property
+    def tag_attributes(self) -> list[str]:
+        """The names of class properties that create tags."""
+        return [
+            "title",
+            "author_info",
+            "date",
+            "doi",
+            "technical_report_number",
+            "html_url",
+        ]
 
     @property
     def title(self) -> str:
