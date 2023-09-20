@@ -17,6 +17,7 @@ data-theme="light" data-mode="auto"
 {% if technote.canonical_url %}
 <link rel="canonical" content="{{ technote.canonical_url }}">
 {% endif %}
+{{ technote.generator_tag }}
 {{ technote.opengraph_metadata_tags }}
 {{ technote.highwire_metadata_tags }}
 {% endblock head_extra %}

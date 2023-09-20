@@ -66,6 +66,11 @@ def test_metadata_basic(app: Sphinx, status: IO, warning: IO) -> None:
         doc.cssselect("link[rel='canonical']")[0].get("content")
         == "https://test-000.example.com/"
     )
+    found_technote_generator = False
+    for tag in doc.cssselect("meta[name='generator']"):
+        if tag.get("content").split(" ")[0] == "technote":
+            found_technote_generator = True
+    assert found_technote_generator
 
     # Test for microformats2 metadata
     mf2_parser = mf2py.Parser(doc=html_source)

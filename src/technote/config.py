@@ -22,6 +22,7 @@ from collections.abc import MutableMapping
 from dataclasses import dataclass
 from datetime import date
 from enum import Enum
+from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 from typing import Self
 from urllib.parse import urlparse
@@ -768,3 +769,16 @@ class TechnoteJinjaContext:
             abstract=self.abstract,
         )
         return og.as_html()
+
+    @property
+    def generator_tag(self) -> str:
+        """A meta name=generator tag to identify the version of technote."""
+        try:
+            tn_version = version("technote")
+        except PackageNotFoundError:
+            # package is not installed
+            tn_version = "0.0.0"
+        return (
+            f'<meta name="generator" content="technote {tn_version}: '
+            'https://technote.lsst.io" >'
+        )
