@@ -4,6 +4,8 @@
 User guide
 ##########
 
-.. .. toctree::
-..    :maxdepth: 2
-.. .. :titlesonly:
+.. toctree::
+   :maxdepth: 2
+   :titlesonly:
+
+   metadata
