@@ -49,6 +49,13 @@ def test_metadata_basic(app: Sphinx, status: IO, warning: IO) -> None:
     assert_og(doc, "article:author", "Jonathan Sick")
     assert_og(doc, "article:published_time", "2023-09-19")
 
+    # Find technote data attributes
+    source_link = doc.cssselect("[data-technote-source-url]")[0]
+    assert (
+        source_link.get("data-technote-source-url")
+        == "https://github.com/lsst-sqre/sqr-000"
+    )
+
     # Test for microformats2 metadata
     mf2_parser = mf2py.Parser(doc=html_source)
     mf2_data = mf2_parser.to_dict()

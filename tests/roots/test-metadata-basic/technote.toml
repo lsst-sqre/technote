@@ -4,6 +4,7 @@ series_id = "TEST"
 title = "Metadata test document"
 date_updated = "2023-09-19"
 canonical_url = "https://test-000.example.com/"
+github_url = "https://github.com/lsst-sqre/sqr-000"
 
 [[technote.authors]]
 name = { given_names = "Jonathan", family_names = "Sick" }
