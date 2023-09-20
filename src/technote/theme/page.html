@@ -11,6 +11,12 @@ data-theme="light" data-mode="auto"
 
 {% block head_extra %}
 {{ super() }}
+{% if technote.abstract %}
+<meta name="description" content="{{ technote.abstract }}">
+{% endif %}
+{% if technote.canonical_url %}
+<link rel="canonical" content="{{ technote.canonical_url }}">
+{% endif %}
 {{ technote.opengraph_metadata_tags }}
 {{ technote.highwire_metadata_tags }}
 {% endblock head_extra %}

@@ -56,6 +56,17 @@ def test_metadata_basic(app: Sphinx, status: IO, warning: IO) -> None:
         == "https://github.com/lsst-sqre/sqr-000"
     )
 
+    # Find standard HTML metadata
+    assert doc.cssselect("title")[0].text == "Metadata test document"
+    assert (
+        doc.cssselect("meta[name='description']")[0].get("content")
+        == "First paragraph of abstract.\n\nSecond paragraph of abstract."
+    )
+    assert (
+        doc.cssselect("link[rel='canonical']")[0].get("content")
+        == "https://test-000.example.com/"
+    )
+
     # Test for microformats2 metadata
     mf2_parser = mf2py.Parser(doc=html_source)
     mf2_data = mf2_parser.to_dict()

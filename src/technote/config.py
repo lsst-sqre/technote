@@ -650,17 +650,14 @@ class TechnoteJinjaContext:
         return self._content_title
 
     @property
-    def abstract(self) -> str:
+    def abstract(self) -> str | None:
         """The technote's unformatted abstract.
 
         This content is extracted from the ``abstract`` directive, and all
         markup is removed as part of that process. This attribute can be used
         for populating summary tags in the HTML header.
         """
-        if self._content_abstract:
-            return self._content_abstract
-        else:
-            return "N/A"
+        return self._content_abstract
 
     @property
     def date_updated_iso(self) -> str | None:
@@ -682,6 +679,11 @@ class TechnoteJinjaContext:
     def version(self) -> str | None:
         """The version, as a string if available."""
         return self.toml.technote.version
+
+    @property
+    def canonical_url(self) -> str | None:
+        """The canonical URL of the technote, if available."""
+        return str(self.toml.technote.canonical_url)
 
     @property
     def github_url(self) -> str | None:
