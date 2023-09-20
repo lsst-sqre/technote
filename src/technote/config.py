@@ -22,6 +22,7 @@ from collections.abc import MutableMapping
 from dataclasses import dataclass
 from datetime import date
 from enum import Enum
+from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 from typing import Self
 from urllib.parse import urlparse
@@ -37,6 +38,8 @@ from pydantic import (
 )
 from sphinx.errors import ConfigError
 
+from .metadata.highwire import HighwireMetadata
+from .metadata.opengraph import OpenGraphMetadata
 from .metadata.orcid import validate_orcid_url
 from .metadata.orcid import verify_checksum as verify_orcid_checksum
 from .metadata.ror import validate_ror_url
@@ -648,17 +651,14 @@ class TechnoteJinjaContext:
         return self._content_title
 
     @property
-    def abstract(self) -> str:
+    def abstract(self) -> str | None:
         """The technote's unformatted abstract.
 
         This content is extracted from the ``abstract`` directive, and all
         markup is removed as part of that process. This attribute can be used
         for populating summary tags in the HTML header.
         """
-        if self._content_abstract:
-            return self._content_abstract
-        else:
-            return "N/A"
+        return self._content_abstract
 
     @property
     def date_updated_iso(self) -> str | None:
@@ -669,9 +669,22 @@ class TechnoteJinjaContext:
             return None
 
     @property
+    def date_created_iso(self) -> str | None:
+        """The date of initial publication, as an ISO 8601 string."""
+        if self.toml.technote.date_created:
+            return self._format_iso_date(self.toml.technote.date_created)
+        else:
+            return None
+
+    @property
     def version(self) -> str | None:
         """The version, as a string if available."""
         return self.toml.technote.version
+
+    @property
+    def canonical_url(self) -> str | None:
+        """The canonical URL of the technote, if available."""
+        return str(self.toml.technote.canonical_url)
 
     @property
     def github_url(self) -> str | None:
@@ -736,3 +749,36 @@ class TechnoteJinjaContext:
     def _format_iso_date(self, date: date) -> str:
         """Format a date in ISO 8601 format."""
         return date.isoformat()
+
+    @property
+    def highwire_metadata_tags(self) -> str:
+        """The Highwire metadata tags for the technote."""
+        highwire = HighwireMetadata(
+            metadata=self.toml.technote,
+            title=self.title,
+            abstract=self.abstract,
+        )
+        return highwire.as_html()
+
+    @property
+    def opengraph_metadata_tags(self) -> str:
+        """The OpenGraph metadata tags for the technote."""
+        og = OpenGraphMetadata(
+            metadata=self.toml.technote,
+            title=self.title,
+            abstract=self.abstract,
+        )
+        return og.as_html()
+
+    @property
+    def generator_tag(self) -> str:
+        """A meta name=generator tag to identify the version of technote."""
+        try:
+            tn_version = version("technote")
+        except PackageNotFoundError:
+            # package is not installed
+            tn_version = "0.0.0"
+        return (
+            f'<meta name="generator" content="technote {tn_version}: '
+            'https://technote.lsst.io" >'
+        )

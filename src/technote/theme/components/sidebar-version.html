@@ -9,7 +9,13 @@
 
   {% block date_updated %}
   {% if technote.date_updated_iso %}
-    <p class="technote-sidebar-version__date"><span class="technote-sidebar-version__label">Updated</span> <time class="technote-sidebar-version__value" datetime="technote.date_updated_iso">{{ technote.date_updated_iso }}</time></p>
+    <p class="technote-sidebar-version__date"><span class="technote-sidebar-version__label">Updated</span> <time class="technote-sidebar-version__value dt-updated" datetime="{{ technote.date_updated_iso }}">{{ technote.date_updated_iso }}</time></p>
   {% endif %}
   {% endblock date_updated %}
+
+  {% block date_created %}
+  {% if technote.date_created_iso %}
+    <p class="technote-sidebar-version__date"><span class="technote-sidebar-version__label">Created</span> <time class="technote-sidebar-version__value dt-published" datetime="{{ technote.date_created_iso }}">{{ technote.date_created_iso }}</time></p>
+  {% endif %}
+  {% endblock date_created %}
 </section>

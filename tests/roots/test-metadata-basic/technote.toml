@@ -1,0 +1,14 @@
+[technote]
+id = "TEST-000"
+series_id = "TEST"
+title = "Metadata test document"
+date_updated = "2023-09-19"
+canonical_url = "https://test-000.example.com/"
+github_url = "https://github.com/lsst-sqre/sqr-000"
+
+[[technote.authors]]
+name = { given_names = "Jonathan", family_names = "Sick" }
+orcid = "https://orcid.org/0000-0003-3001-676X"
+affiliations = [
+    { name = "Rubin Observatory", ror = "https://ror.org/048g3cy84" }
+]

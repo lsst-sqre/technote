@@ -9,6 +9,19 @@
 data-theme="light" data-mode="auto"
 {% endblock %}
 
+{% block head_extra %}
+{{ super() }}
+{% if technote.abstract %}
+<meta name="description" content="{{ technote.abstract }}">
+{% endif %}
+{% if technote.canonical_url %}
+<link rel="canonical" content="{{ technote.canonical_url }}">
+{% endif %}
+{{ technote.generator_tag }}
+{{ technote.opengraph_metadata_tags }}
+{{ technote.highwire_metadata_tags }}
+{% endblock head_extra %}
+
 {% block body %}
 
 {% block icon_sprites %}
@@ -41,7 +54,7 @@ data-theme="light" data-mode="auto"
 <label class="sb-sidebar-overlay" for="sb-sidebar-toggle--secondary"></label>
 
 {% block container %}
-<div class="sb-container">
+<div class="sb-container h-entry">
   <div class="sb-container__inner sb-page-width">
     {% block sidebar_primary %}
     <aside class="sb-sidebar-primary">
@@ -62,7 +75,7 @@ data-theme="light" data-mode="auto"
           <header class="sb-header-article">
             {% include "sections/header-article.html" %}
           </header>
-          <article class="sb-article" role="main">
+          <article class="sb-article e-content" role="main">
             {% include "sections/article.html" %}
           </article>
           <footer class="sb-footer-article">
