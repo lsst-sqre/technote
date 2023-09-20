@@ -1,0 +1,5 @@
+# Documentation dependencies are maintained here rather than in
+# the pyproject.toml dev extras to avoid circular dependencies with the
+# documenteer packaging.
+documenteer[guide] @ git+https://github.com/lsst-sqre/documenteer@main
+autodoc_pydantic

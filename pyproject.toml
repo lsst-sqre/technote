@@ -42,9 +42,6 @@ dev = [
     "lxml",
     "cssselect",
     "mf2py",
-    # Documentation
-    "documenteer[guide] @ git+https://github.com/lsst-sqre/documenteer@main",
-    "autodoc_pydantic",
 ]
 
 [project.urls]
