@@ -63,7 +63,7 @@ def test_metadata_basic(app: Sphinx, status: IO, warning: IO) -> None:
         == "First paragraph of abstract.\n\nSecond paragraph of abstract."
     )
     assert (
-        doc.cssselect("link[rel='canonical']")[0].get("content")
+        doc.cssselect("link[rel='canonical']")[0].get("href")
         == "https://test-000.example.com/"
     )
     found_technote_generator = False
