@@ -15,7 +15,7 @@ data-theme="light" data-mode="auto"
 <meta name="description" content="{{ technote.abstract }}">
 {% endif %}
 {% if technote.canonical_url %}
-<link rel="canonical" content="{{ technote.canonical_url }}">
+<link rel="canonical" href="{{ technote.canonical_url }}">
 {% endif %}
 {{ technote.generator_tag }}
 {{ technote.opengraph_metadata_tags }}
