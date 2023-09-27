@@ -1,0 +1,14 @@
+/* The container for the primary sidebar */
+
+@media (min-width: 76rem) {
+  .technote-sidebar-container {
+    // Make the primary sidebar's content's sticky to the top of the page
+    // when visible.
+    position: sticky;
+    top: 1rem;
+
+    // Allow the sidebar content to scroll when necessary
+    overflow-y: auto;
+    max-height: 100vh;
+  }
+}
