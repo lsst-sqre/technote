@@ -56,3 +56,60 @@ pre {
     var(--tn-sphinx-code-block-border-radius) 0 0;
   padding: var(--tn-space-xxxs-fixed) var(--tn-space-xs-fixed);
 }
+
+.admonition {
+  border: var(--tn-sphinx-code-block-border-thickness) solid
+    var(--tn-sphinx-code-block-border-color);
+  border-radius: var(--tn-sphinx-code-block-border-radius);
+  padding: var(--tn-space-xs-fixed);
+  margin-bottom: 1rem;
+}
+
+.admonition :last-child {
+  margin-bottom: 0;
+}
+
+.admonition-title {
+  font-weight: bold;
+  margin: calc(-1 * var(--tn-space-xs-fixed));
+  padding: var(--tn-space-xs-fixed);
+  border-radius: var(--tn-sphinx-code-block-border-radius)
+    var(--tn-sphinx-code-block-border-radius) 0 0;
+  font-size: 0.9rem;
+}
+
+.admonition.attention .admonition-title,
+.admonition.caution .admonition-title,
+.admonition.warning .admonition-title,
+.admonition.important .admonition-title {
+  background-color: var(--tn-color-yellow-100);
+}
+
+.admonition.attention,
+.admonition.caution,
+.admonition.warning,
+.admonition.important {
+  border-color: var(--tn-color-yellow-500);
+}
+
+.admonition.danger .admonition-title,
+.admonition.error .admonition-title {
+  background-color: var(--tn-color-red-100);
+}
+
+.admonition.danger,
+.admonition.error {
+  border-color: var(--tn-color-red-500);
+}
+
+.admonition.tip .admonition-title,
+.admonition.note .admonition-title,
+.admonition.hint .admonition-title {
+  background-color: var(--tn-color-blue-100);
+}
+
+.admonition.tip,
+.admonition.note,
+.admonition.hint {
+  border-color: var(--tn-color-blue-500);
+}

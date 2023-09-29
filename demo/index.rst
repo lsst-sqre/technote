@@ -66,6 +66,53 @@ This is a long code cell:
    run:
    	cd server && tox run -e=run
 
+Admonitions
+===========
+
+Some content.
+
+.. attention::
+
+   This is an attention notice.
+
+More content.
+
+.. caution::
+
+   This is a caution:
+
+   - First item
+   - Second item
+   - Third item
+
+.. danger::
+
+   This is a danger notice.
+
+.. error::
+
+   This is an error.
+
+.. hint::
+
+   This is a hint.
+
+.. important::
+
+   This is important.
+
+.. note::
+
+   This is a note.
+
+.. tip::
+
+   This is a tip.
+
+.. warning::
+
+   This is a warning.
+
 Results
 =======
 
