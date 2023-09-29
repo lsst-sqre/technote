@@ -3,7 +3,7 @@
 a.headerlink {
   opacity: 0; // Hide the anchor link unless hovered over.
   font-size: 0.9em;
-  margin-left: 0.2em;
+  margin-left: var(--tn-space-xxs);
   text-decoration: none;
   transition: all 0.2s ease-out;
   user-select: none;
@@ -25,6 +25,34 @@ a.headerlink:hover {
   opacity: 1;
 }
 
-.literal-block-wrapper .highlight {
+pre {
+  font-size: 0.85rem;
+}
+
+.literal-block-wrapper .highlight pre {
+  margin: 0;
+  padding: var(--tn-space-xs-fixed);
   overflow-x: auto;
+}
+
+.literal-block-wrapper {
+  border: var(--tn-sphinx-code-block-border-thickness) solid
+    var(--tn-sphinx-code-block-border-color);
+  border-radius: var(--tn-sphinx-code-block-border-radius);
+}
+
+.literal-block-wrapper .highlight {
+  // This border radius ensures the pygments background on .highlight doesn't
+  // interfere with the border radius of the .literal-block-wrapper.
+  border-radius: 0 0 var(--tn-sphinx-code-block-border-radius)
+    var(--tn-sphinx-code-block-border-radius);
+}
+
+.code-block-caption {
+  background-color: var(--tn-sphinx-code-block-caption-background-color);
+  border-bottom: var(--tn-sphinx-code-block-border-thickness) solid
+    var(--tn-sphinx-code-block-border-color);
+  border-radius: var(--tn-sphinx-code-block-border-radius)
+    var(--tn-sphinx-code-block-border-radius) 0 0;
+  padding: var(--tn-space-xxxs-fixed) var(--tn-space-xs-fixed);
 }
