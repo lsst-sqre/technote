@@ -4,3 +4,8 @@
   display: inline;
   fill: currentColor;
 }
+
+a .technote-svg-icon {
+  // If the icon is inside a link, reset the colour back to the text colour
+  fill: var(--tn-component-text-color);
+}
