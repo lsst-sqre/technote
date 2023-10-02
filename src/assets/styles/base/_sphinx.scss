@@ -146,3 +146,13 @@ pre {
 .fn-bracket {
   display: none;
 }
+
+blockquote {
+  border-left: 0.25rem solid var(--tn-color-primary);
+  margin-left: 0;
+  padding-left: 1rem;
+}
+
+blockquote .attribution {
+  font-style: italic;
+}
