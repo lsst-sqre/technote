@@ -196,6 +196,14 @@ term
 
    It can span multiple paragraphs.
 
+Figures
+=======
+
+.. figure:: https://placehold.co/600x400/000000/FFFFFF.png
+   :alt: A placeholder image
+
+   This is an image.
+
 Results
 =======
 

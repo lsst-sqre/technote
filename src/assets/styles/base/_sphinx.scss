@@ -178,3 +178,32 @@ dd {
 dd p:first-of-type {
   margin-top: 0.2rem;
 }
+
+figure {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+figure img {
+  max-width: 100%;
+}
+
+figcaption {
+  width: 100%;
+  background-color: var(--tn-sphinx-code-block-caption-background-color);
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  margin: 0;
+  border: none;
+  // margin-top: -7px; // where does this extra margin come from?
+}
+
+figcaption p {
+  margin-top: 0;
+  margin-bottom: 1em;
+  padding: 0;
+}
+
+figcaption p:last-child {
+  margin-bottom: 0;
+}
