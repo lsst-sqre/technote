@@ -166,3 +166,15 @@ main li p {
   margin-top: 1rem;
   margin-bottom: 1rem;
 }
+
+dt {
+  font-weight: bold;
+}
+
+dd {
+  margin-left: 2rem;
+}
+
+dd p:first-of-type {
+  margin-top: 0.2rem;
+}

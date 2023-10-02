@@ -186,6 +186,16 @@ An ordered list with long content using the ``block-list`` class:
 
 #. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin facilisis pharetra neque, at semper nulla mattis auctor. Proin semper mollis enim eget interdum. Mauris eleifend eget diam vitae bibendum. Praesent ut aliquet odio, sodales imperdiet nisi. Nam interdum imperdiet tortor sed fringilla.
 
+A definition list:
+
+term
+   This is a definition.
+
+term
+   This is a definition.
+
+   It can span multiple paragraphs.
+
 Results
 =======
 
