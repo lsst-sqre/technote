@@ -5,9 +5,17 @@
   --tn-sphinx-code-block-border-thickness: 1px;
   --tn-sphinx-code-block-border-radius: var(--tn-border-radius-1);
   --tn-sphinx-code-block-caption-background-color: var(--tn-color-primary-000);
+  --tn-sphinx-footnote-label-background-color: var(--tn-color-blue-000);
+  --tn-sphinx-footnote-label-border-color: var(--tn-color-blue-100);
+  --tn-sphinx-footnote-label-background-hover-color: var(--tn-color-blue-100);
+  --tn-sphinx-footnote-label-border-hover-color: var(--tn-color-blue-200);
 }
 
 html[data-theme='dark'] {
   --tn-sphinx-code-block-border-color: var(--tn-color-primary-700);
   --tn-sphinx-code-block-caption-background-color: var(--tn-color-primary-900);
+  --tn-sphinx-footnote-label-background-color: var(--tn-color-blue-900);
+  --tn-sphinx-footnote-label-border-color: var(--tn-color-blue-800);
+  --tn-sphinx-footnote-label-background-hover-color: var(--tn-color-blue-800);
+  --tn-sphinx-footnote-label-border-hover-color: var(--tn-color-blue-700);
 }

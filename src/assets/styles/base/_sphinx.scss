@@ -113,3 +113,36 @@ pre {
 .admonition.hint {
   border-color: var(--tn-color-blue-500);
 }
+
+.footnote-list .footnote {
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+}
+
+.footnote-list .footnote .label {
+  display: block;
+  min-width: 1.5rem;
+}
+
+.footnote-list .footnote .label a,
+.footnote-reference {
+  background-color: var(--tn-sphinx-footnote-label-background-color);
+  border: 1px solid var(--tn-sphinx-footnote-label-border-color);
+  border-radius: 4px;
+  padding: 2px 4px;
+  text-decoration: none;
+  transition: all 0.2s ease-out;
+}
+
+.footnote-list .footnote .label a:hover,
+.footnote-reference:hover {
+  background-color: var(--tn-sphinx-footnote-label-background-hover-color);
+  border: 1px solid var(--tn-sphinx-footnote-label-border-hover-color);
+}
+
+.fn-bracket {
+  display: none;
+}
