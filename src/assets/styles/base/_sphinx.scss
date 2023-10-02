@@ -156,3 +156,8 @@ blockquote {
 blockquote .attribution {
   font-style: italic;
 }
+
+.compact-list p:first-of-type {
+  margin-top: 0;
+  margin-bottom: 0;
+}
