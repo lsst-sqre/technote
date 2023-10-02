@@ -20,7 +20,7 @@ html[data-theme='dark'] {
   font-size: var(--tn-component-h6-size);
   font-weight: bold;
   color: var(--tn-component-sidebar-header-color);
-  margin-bottom: 0;
+  margin-bottom: 0.5rem;
 }
 
 .technote-sidebar-section__heading + * {
@@ -29,4 +29,11 @@ html[data-theme='dark'] {
 
 .technote-sidebar-author-list {
   margin-top: var(--tn-space-xs-fixed);
+}
+
+.technote-sidebar-metadata-list {
+  margin-top: var(--tn-space-xs-fixed);
+  margin-bottom: var(--tn-space-xs-fixed);
+  list-style-type: none;
+  padding: 0;
 }
