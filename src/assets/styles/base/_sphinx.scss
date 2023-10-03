@@ -214,12 +214,35 @@ table {
   display: block;
   overflow-x: auto;
   max-width: fit-content;
-  margin: 0 auto;
+  margin: 0 auto 0 0;
   overflow-x: auto;
   white-space: nowrap;
+
+  font-size: 0.9rem;
+  font-variant-numeric: lining-nums tabular-nums;
+  border-collapse: collapse;
 }
 
 th {
-  font-weight: bold;
-  background-color: var(--tn-color-neutral-100);
+  font-weight: normal;
+}
+
+thead {
+  border-bottom: 1px solid var(--tn-component-text-color);
+}
+
+td,
+th {
+  padding: 0.125em 0.5em 0.25em 0.5em;
+  line-height: 1;
+  text-align: inherit;
+}
+
+td {
+  // Attempt to align numbers on decimal points; this probably isn't supported?
+  text-align: '.' center;
+}
+
+table caption {
+  caption-side: bottom;
 }
