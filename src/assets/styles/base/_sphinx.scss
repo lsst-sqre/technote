@@ -143,8 +143,23 @@ pre {
   border: 1px solid var(--tn-sphinx-footnote-label-border-hover-color);
 }
 
-.fn-bracket {
+.footnote .fn-bracket,
+.footnote-reference .fn-bracket {
   display: none;
+}
+
+.citation p {
+  // put the citation on the same line as the backlink.
+  display: inline;
+}
+
+.citation .label a {
+  text-decoration: none;
+  transition: all 0.2s ease-out;
+}
+
+.citation .label a:hover {
+  text-decoration: underline;
 }
 
 blockquote {
