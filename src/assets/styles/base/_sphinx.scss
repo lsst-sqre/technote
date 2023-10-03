@@ -208,14 +208,20 @@ figcaption p:last-child {
   margin-bottom: 0;
 }
 
-table {
-  // note display: block is bad for accessibility!
-  // https://www.tpgi.com/short-note-on-what-css-display-properties-do-to-table-semantics/
-  display: block;
+// The .technote-table class is associated with figure elements that wrap
+// tables. This figure is added by the warptables Sphinx extension in
+// technote. It allows us to make a table with overflow-x while avoiding
+// setting the display property of table itself to block, which is bad for
+// accessibility.
+// https://www.tpgi.com/short-note-on-what-css-display-properties-do-to-table-semantics/
+.technote-table {
+  max-width: 100%;
   overflow-x: auto;
+}
+
+table {
   max-width: fit-content;
   margin: 0 auto 0 0;
-  overflow-x: auto;
   white-space: nowrap;
 
   font-size: 0.9rem;
