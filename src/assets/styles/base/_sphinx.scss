@@ -207,3 +207,19 @@ figcaption p {
 figcaption p:last-child {
   margin-bottom: 0;
 }
+
+table {
+  // note display: block is bad for accessibility!
+  // https://www.tpgi.com/short-note-on-what-css-display-properties-do-to-table-semantics/
+  display: block;
+  overflow-x: auto;
+  max-width: fit-content;
+  margin: 0 auto;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+th {
+  font-weight: bold;
+  background-color: var(--tn-color-neutral-100);
+}
