@@ -336,19 +336,13 @@ class TechnoteState(str, Enum):
     .. mermaid::
 
        flowchart LR
-         planning --> active
-         active --> stable
-         stable --> active
+         draft --> stable
+         stable --> draft
          stable --> deprecated
-         active --> deprecated
+         draft --> deprecated
     """
 
-    planning = "planning"
-    """The technote is being researched and planned, but may not have useful
-    content yet.
-    """
-
-    active = "active"
+    draft = "draft"
     """The technote is being actively drafted and updated. It may not be
     complete.
     """
@@ -369,6 +363,17 @@ class TechnoteState(str, Enum):
     """
 
 
+class Link(BaseModel):
+    """A model for a web link."""
+
+    url: HttpUrl = Field(description="The URL of the link.")
+
+    title: str | None = Field(
+        None,
+        description="The title of the link, if available.",
+    )
+
+
 class TechnoteStatus(BaseModel):
     """A model for the technote's status.
 
@@ -384,7 +389,7 @@ class TechnoteStatus(BaseModel):
 
     note: str | None = Field(None, description="An explanation of the state.")
 
-    supersceding_urls: list[HttpUrl] = Field(
+    supersceding_urls: list[Link] = Field(
         default_factory=list,
         description=(
             "URLs to documents/webpages that superscede this technote."

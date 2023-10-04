@@ -1,0 +1,31 @@
+<aside class="technote-status technote-status--{{ status.state.value }}">
+  <p class="technote-status__note" data-technote-status="{{ status.state.value }}">
+  {% if status.state == "draft" %}
+  This is a draft.
+  {% if status.note %}
+  {{ status.note }}
+  {% endif %}
+  </p>
+
+  {% elif status.state == "deprecated" %}
+  This document is deprecated.
+  {% if status.note %}
+  {{ status.note }}
+  {% endif %}
+  </p>
+
+  {% if status.supersceding_urls %}
+  <p>See instead:</p>
+
+  <ul>
+  {% for link in status.supersceding_urls %}
+    <li><a href="{{ link.url }}" class="technote-superceding-url">{{ link.title or link.url }}</a></li>
+  {% endfor %}
+  </ul>
+  {% endif %}
+
+  {% elif status.state == "other" %}
+  {{ status.note }}
+  </p>
+  {% endif %}
+</aside>

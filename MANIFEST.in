@@ -1,4 +1,5 @@
 include src/technote/theme/static/styles/technote.css
 include src/technote/theme/static/styles/technote.css.map
 include src/technote/theme/static/scripts/technote.js
+include src/technote/ext/templates/*.html.jinja
 prune src/assets
