@@ -19,6 +19,7 @@ from .abstract import (
 from .metadata import process_html_page_context_for_metadata
 from .pygmentscss import overwrite_pygments_css
 from .toc import process_html_page_context_for_toc
+from .wraptables import wrap_html_tables
 
 __all__ = ["setup"]
 
@@ -41,6 +42,8 @@ def setup(app: Sphinx) -> dict[str, Any]:
     app.connect("build-finished", overwrite_pygments_css)
 
     app.connect("builder-inited", _add_js_file)
+
+    app.connect("build-finished", wrap_html_tables)
 
     return {
         "version": __version__,

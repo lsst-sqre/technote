@@ -35,6 +35,7 @@ __all__ = [
     "html_baseurl",
     "html_domain_indices",
     "html_use_index",
+    "html_permalinks_icon",
 ]
 
 _t = TechnoteSphinxConfig.find_and_load()
@@ -94,3 +95,4 @@ else:
 
 html_domain_indices = False
 html_use_index = False
+html_permalinks_icon = "#"

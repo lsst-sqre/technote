@@ -43,15 +43,15 @@
 }
 
 /* Highlight key containers for debugging. */
-/* .sb-article {
-  border: 1px solid red;
-}
-.sb-sidebar-secondary {
-  border: 1px solid blue;
-}
-.sb-sidebar-primary {
-  border: 1px solid green;
-} */
+// .sb-article {
+//   border: 1px solid red;
+// }
+// .sb-sidebar-secondary {
+//   border: 1px solid blue;
+// }
+// .sb-sidebar-primary {
+//   border: 1px solid green;
+// }
 
 /*
  * Content container width.
@@ -65,6 +65,19 @@
   /* reset skeleton.css. Using 100vw means we get horizontal scrollbars. */
   width: auto;
 }
+
+@media (max-width: 42rem) {
+  .sb-article-container,
+  .sb-footer-content__inner {
+    width: 100vw;
+  }
+
+  body {
+    // experiment with using hyphens on phones
+    hyphens: auto;
+  }
+}
+
 @media (min-width: 42rem) {
   .sb-footer-content__inner,
   .drop-secondary-sidebar-for-full-width-content .sb-article,
@@ -75,9 +88,9 @@
   .match-content-width {
     width: 38rem;
   }
-  /* h1::after {
-    content: ' 42';
-  } */
+  // h1::after {
+  //   content: ' 42';
+  // }
 }
 @media (min-width: 46rem) {
   .sb-footer-content__inner,
@@ -89,9 +102,9 @@
   .match-content-width {
     width: 40rem;
   }
-  /* h1::after {
-    content: ' 46';
-  } */
+  // h1::after {
+  //   content: ' 46';
+  // }
 }
 @media (min-width: 50rem) {
   .sb-footer-content__inner,

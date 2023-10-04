@@ -1,0 +1,269 @@
+/* Styles Sphinx-generated content classes */
+
+a.headerlink {
+  opacity: 0; // Hide the anchor link unless hovered over.
+  font-size: 0.9em;
+  margin-left: var(--tn-space-xxs);
+  text-decoration: none;
+  transition: all 0.2s ease-out;
+  user-select: none;
+}
+
+h1:hover a.headlink,
+h2:hover a.headerlink,
+h3:hover a.headerlink,
+h4:hover a.headerlink,
+h5:hover a.headerlink,
+h6:hover a.headerlink,
+.code-block-caption:hover a.headerlink {
+  // If the user hovers over the caption/header, then begin to show the anchor
+  // link.
+  opacity: 0.5;
+}
+
+a.headerlink:hover {
+  opacity: 1;
+}
+
+pre {
+  font-size: 0.85rem;
+}
+
+.literal-block-wrapper .highlight pre {
+  margin: 0;
+  padding: var(--tn-space-xs-fixed);
+  overflow-x: auto;
+}
+
+.literal-block-wrapper {
+  border: var(--tn-sphinx-code-block-border-thickness) solid
+    var(--tn-sphinx-code-block-border-color);
+  border-radius: var(--tn-sphinx-code-block-border-radius);
+}
+
+.literal-block-wrapper .highlight {
+  // This border radius ensures the pygments background on .highlight doesn't
+  // interfere with the border radius of the .literal-block-wrapper.
+  border-radius: 0 0 var(--tn-sphinx-code-block-border-radius)
+    var(--tn-sphinx-code-block-border-radius);
+}
+
+.code-block-caption {
+  background-color: var(--tn-sphinx-code-block-caption-background-color);
+  border-bottom: var(--tn-sphinx-code-block-border-thickness) solid
+    var(--tn-sphinx-code-block-border-color);
+  border-radius: var(--tn-sphinx-code-block-border-radius)
+    var(--tn-sphinx-code-block-border-radius) 0 0;
+  padding: var(--tn-space-xxxs-fixed) var(--tn-space-xs-fixed);
+}
+
+.admonition {
+  border: var(--tn-sphinx-code-block-border-thickness) solid
+    var(--tn-sphinx-code-block-border-color);
+  border-radius: var(--tn-sphinx-code-block-border-radius);
+  padding: var(--tn-space-xs-fixed);
+  margin-bottom: 1rem;
+}
+
+.admonition :last-child {
+  margin-bottom: 0;
+}
+
+.admonition-title {
+  font-weight: bold;
+  margin: calc(-1 * var(--tn-space-xs-fixed));
+  padding: var(--tn-space-xs-fixed);
+  border-radius: var(--tn-sphinx-code-block-border-radius)
+    var(--tn-sphinx-code-block-border-radius) 0 0;
+  font-size: 0.9rem;
+}
+
+.admonition.attention .admonition-title,
+.admonition.caution .admonition-title,
+.admonition.warning .admonition-title,
+.admonition.important .admonition-title {
+  background-color: var(--tn-color-yellow-100);
+}
+
+.admonition.attention,
+.admonition.caution,
+.admonition.warning,
+.admonition.important {
+  border-color: var(--tn-color-yellow-500);
+}
+
+.admonition.danger .admonition-title,
+.admonition.error .admonition-title {
+  background-color: var(--tn-color-red-100);
+}
+
+.admonition.danger,
+.admonition.error {
+  border-color: var(--tn-color-red-500);
+}
+
+.admonition.tip .admonition-title,
+.admonition.note .admonition-title,
+.admonition.hint .admonition-title {
+  background-color: var(--tn-color-blue-100);
+}
+
+.admonition.tip,
+.admonition.note,
+.admonition.hint {
+  border-color: var(--tn-color-blue-500);
+}
+
+.footnote-list .footnote {
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+}
+
+.footnote-list .footnote .label {
+  display: block;
+  min-width: 1.5rem;
+}
+
+.footnote-list .footnote .label a,
+.footnote-reference {
+  background-color: var(--tn-sphinx-footnote-label-background-color);
+  border: 1px solid var(--tn-sphinx-footnote-label-border-color);
+  border-radius: 4px;
+  padding: 2px 4px;
+  text-decoration: none;
+  transition: all 0.2s ease-out;
+}
+
+.footnote-list .footnote .label a:hover,
+.footnote-reference:hover {
+  background-color: var(--tn-sphinx-footnote-label-background-hover-color);
+  border: 1px solid var(--tn-sphinx-footnote-label-border-hover-color);
+}
+
+.footnote .fn-bracket,
+.footnote-reference .fn-bracket {
+  display: none;
+}
+
+.citation p {
+  // put the citation on the same line as the backlink.
+  display: inline;
+}
+
+.citation .label a {
+  text-decoration: none;
+  transition: all 0.2s ease-out;
+}
+
+.citation .label a:hover {
+  text-decoration: underline;
+}
+
+blockquote {
+  border-left: 0.25rem solid var(--tn-color-primary);
+  margin-left: 0;
+  padding-left: 1rem;
+}
+
+blockquote .attribution {
+  font-style: italic;
+}
+
+main li p {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.block-list p {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+dt {
+  font-weight: bold;
+}
+
+dd {
+  margin-left: 2rem;
+}
+
+dd p:first-of-type {
+  margin-top: 0.2rem;
+}
+
+figure {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+figure img {
+  max-width: 100%;
+}
+
+figcaption {
+  width: 100%;
+  background-color: var(--tn-sphinx-code-block-caption-background-color);
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  margin: 0;
+  border: none;
+  // margin-top: -7px; // where does this extra margin come from?
+}
+
+figcaption p {
+  margin-top: 0;
+  margin-bottom: 1em;
+  padding: 0;
+}
+
+figcaption p:last-child {
+  margin-bottom: 0;
+}
+
+// The .technote-table class is associated with figure elements that wrap
+// tables. This figure is added by the warptables Sphinx extension in
+// technote. It allows us to make a table with overflow-x while avoiding
+// setting the display property of table itself to block, which is bad for
+// accessibility.
+// https://www.tpgi.com/short-note-on-what-css-display-properties-do-to-table-semantics/
+.technote-table {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+table {
+  max-width: fit-content;
+  margin: 0 auto 0 0;
+  white-space: nowrap;
+
+  font-size: 0.9rem;
+  font-variant-numeric: lining-nums tabular-nums;
+  border-collapse: collapse;
+}
+
+th {
+  font-weight: normal;
+}
+
+thead {
+  border-bottom: 1px solid var(--tn-component-text-color);
+}
+
+td,
+th {
+  padding: 0.125em 0.5em 0.25em 0.5em;
+  line-height: 1;
+  text-align: inherit;
+}
+
+td {
+  // Attempt to align numbers on decimal points; this probably isn't supported?
+  text-align: '.' center;
+}
+
+table caption {
+  caption-side: bottom;
+}

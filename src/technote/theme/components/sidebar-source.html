@@ -1,7 +1,7 @@
 <section class="technote-sidebar-section">
   <h2 class="technote-sidebar-section__heading">Source</h2>
 
-  <ul class="technote-icon-pair-list">
+  <ul class="technote-sidebar-metadata-list technote-icon-pair-list">
     {% if technote.github_url %}
     <li>
       <div class="technote-icon-metadata">
@@ -48,7 +48,7 @@
             </svg>
           </a>
         </div>
-        <p class="technote-icon-metadata__value">Edit on GitHub</p>
+        <p class="technote-icon-metadata__value"><a href="{{ technote.github_edit_url }}">Edit on GitHub</a></p>
       </div>
     </li>
     {% endif %}

@@ -74,16 +74,16 @@
   --tn-color-red-800: #660018;
   --tn-color-red-900: #4c0014;
 
-  --tn-color-red-000: #fbefff;
-  --tn-color-red-100: #ecd8ff;
-  --tn-color-red-200: #d8b9ff;
-  --tn-color-red-300: #c297ff;
-  --tn-color-red-400: #a475f9;
-  --tn-color-red-500: #8250df;
-  --tn-color-red-600: #6639ba;
-  --tn-color-red-700: #512a97;
-  --tn-color-red-800: #3e1f79;
-  --tn-color-red-900: #2e1461;
+  --tn-color-purple-000: #fbefff;
+  --tn-color-purple-100: #ecd8ff;
+  --tn-color-purple-200: #d8b9ff;
+  --tn-color-purple-300: #c297ff;
+  --tn-color-purple-400: #a475f9;
+  --tn-color-purple-500: #8250df;
+  --tn-color-purple-600: #6639ba;
+  --tn-color-purple-700: #512a97;
+  --tn-color-purple-800: #3e1f79;
+  --tn-color-purple-900: #2e1461;
 
   --tn-color-pink-000: #ffeff7;
   --tn-color-pink-100: #ffd3eb;
@@ -106,4 +106,17 @@
   --tn-color-coral-700: #801f0f;
   --tn-color-coral-800: #691105;
   --tn-color-coral-900: #510901;
+
+  // Primary color
+  --tn-color-primary: var(--tn-color-neutral-900);
+  --tn-color-primary-000: var(--tn-color-neutral-000);
+  --tn-color-primary-100: var(--tn-color-neutral-100);
+  --tn-color-primary-200: var(--tn-color-neutral-200);
+  --tn-color-primary-300: var(--tn-color-neutral-300);
+  --tn-color-primary-400: var(--tn-color-neutral-400);
+  --tn-color-primary-500: var(--tn-color-neutral-500);
+  --tn-color-primary-600: var(--tn-color-neutral-600);
+  --tn-color-primary-700: var(--tn-color-neutral-700);
+  --tn-color-primary-800: var(--tn-color-neutral-800);
+  --tn-color-primary-900: var(--tn-color-neutral-900);
 }
