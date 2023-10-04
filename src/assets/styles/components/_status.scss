@@ -1,0 +1,19 @@
+/* Styles for the document status aside */
+
+.technote-status {
+  border: 1px solid var(--tn-component-text-color);
+  padding: 1rem;
+  border-radius: var(--tn-border-radius-1);
+}
+
+.technote-status--deprecated {
+  border-color: var(--tn-color-red-500);
+}
+
+.technote-status p:first-of-type {
+  margin-top: 0;
+}
+
+.technote-status *:last-child {
+  margin-bottom: 0;
+}
