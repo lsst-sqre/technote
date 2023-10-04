@@ -71,6 +71,11 @@
   .sb-footer-content__inner {
     width: 100vw;
   }
+
+  body {
+    // experiment with using hyphens on phones
+    hyphens: auto;
+  }
 }
 
 @media (min-width: 42rem) {
