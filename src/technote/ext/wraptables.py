@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from pathlib import Path
+
 from bs4 import BeautifulSoup
 from sphinx.application import Sphinx
 
@@ -20,7 +22,7 @@ def wrap_html_tables(app: Sphinx, exceptions: Exception | None = None) -> None:
 
     # Assumes that technotes consist of only a single index.html file
     # by definition.
-    html_path = app.builder.outdir / "index.html"
+    html_path = Path(app.builder.outdir) / "index.html"
 
     soup = BeautifulSoup(html_path.read_text(), "html.parser")
     for table_element in soup.find_all("table"):
