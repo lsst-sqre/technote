@@ -336,19 +336,13 @@ class TechnoteState(str, Enum):
     .. mermaid::
 
        flowchart LR
-         planning --> active
-         active --> stable
-         stable --> active
+         draft --> stable
+         stable --> draft
          stable --> deprecated
-         active --> deprecated
+         draft --> deprecated
     """
 
-    planning = "planning"
-    """The technote is being researched and planned, but may not have useful
-    content yet.
-    """
-
-    active = "active"
+    draft = "draft"
     """The technote is being actively drafted and updated. It may not be
     complete.
     """
