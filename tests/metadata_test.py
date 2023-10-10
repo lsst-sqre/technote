@@ -26,7 +26,7 @@ def test_metadata_basic(app: Sphinx, status: IO, warning: IO) -> None:
 
     # Test for HighWire metadata tags
     assert_tag(doc, "citation_title", "Metadata test document")
-    assert_tag(doc, "citation_date", "2023-09-19")
+    assert_tag(doc, "citation_date", "2023/09/19")
     assert_tag(doc, "citation_technical_report_number", "TEST-000")
     assert_tag(
         doc, "citation_fulltext_html_url", "https://test-000.example.com/"
