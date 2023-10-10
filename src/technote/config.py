@@ -20,11 +20,11 @@ import re
 import tomllib
 from collections.abc import MutableMapping
 from dataclasses import dataclass
-from datetime import date
+from datetime import UTC, datetime
 from enum import Enum
 from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
-from typing import Self
+from typing import Any, Self
 from urllib.parse import urlparse
 
 from pydantic import (
@@ -70,6 +70,54 @@ WHITESPACE_PATTERN = re.compile(r"\s+")
 def collapse_whitespace(text: str) -> str:
     """Replace any whitespace character, or group, with a single space."""
     return WHITESPACE_PATTERN.sub(" ", text).strip()
+
+
+def normalize_datetime(v: Any) -> datetime | None:
+    """Pydantic field validator for datetime fields.
+
+    Parameters
+    ----------
+    v
+        Field representing a `~datetime.datetime`.
+
+    Returns
+    -------
+    datetime.datetime or None
+        The timezone-aware `~datetime.datetime` or `None` if the input was
+        `None`.
+
+    Examples
+    --------
+    Here is a partial model that uses this function as a field validator.
+
+    .. code-block:: python
+
+       class Info(BaseModel):
+           last_used: datetime | None = Field(
+               None,
+               title="Last used",
+               description="When last used in seconds since epoch",
+               examples=[1614986130],
+           )
+
+           _normalize_last_used = field_validator("last_used", mode="before")(
+               normalize_datetime
+           )
+    """
+    if v is None:
+        return v
+    if isinstance(v, str):
+        dt = datetime.fromisoformat(v)
+        if dt.tzinfo and dt.tzinfo.utcoffset(dt) is not None:
+            return dt.astimezone(UTC)
+        else:
+            return dt.replace(tzinfo=UTC)
+    if isinstance(v, datetime):
+        if v.tzinfo and v.tzinfo.utcoffset(v) is not None:
+            return v.astimezone(UTC)
+        else:
+            return v.replace(tzinfo=UTC)
+    raise ValueError("Cannot parse datetime from value: ", v)
 
 
 class IntersphinxTable(BaseModel):
@@ -416,11 +464,11 @@ class TechnoteTable(BaseModel):
         examples=["SQR"],
     )
 
-    date_created: date | None = Field(
-        None, description="Date when the technote was created."
+    date_created: datetime | None = Field(
+        None, description="Date and time when the technote was created."
     )
 
-    date_updated: date | None = Field(
+    date_updated: datetime | None = Field(
         None, description="Date when the technote was updated."
     )
 
@@ -479,6 +527,10 @@ class TechnoteTable(BaseModel):
     )
 
     sphinx: SphinxTable = Field(default_factory=SphinxTable)
+
+    _normalize_dates = field_validator(
+        "date_created", "date_updated", mode="before"
+    )(normalize_datetime)
 
 
 class TechnoteToml(BaseModel):
@@ -667,7 +719,7 @@ class TechnoteJinjaContext:
 
     @property
     def date_updated_iso(self) -> str | None:
-        """The date updated, as an ISO 8601 string."""
+        """The date updated, as an ISO 8601 string normalized to UTC."""
         if self.toml.technote.date_updated:
             return self._format_iso_date(self.toml.technote.date_updated)
         else:
@@ -675,9 +727,29 @@ class TechnoteJinjaContext:
 
     @property
     def date_created_iso(self) -> str | None:
-        """The date of initial publication, as an ISO 8601 string."""
+        """The date of initial publication, as an ISO 8601 string
+        normalized to UTC.
+        """
         if self.toml.technote.date_created:
             return self._format_iso_date(self.toml.technote.date_created)
+        else:
+            return None
+
+    @property
+    def datetime_updated_iso(self) -> str | None:
+        """The datetime updated, as an ISO 8601 string normalized to UTC."""
+        if self.toml.technote.date_updated:
+            return self._format_iso_datetime(self.toml.technote.date_updated)
+        else:
+            return None
+
+    @property
+    def datetime_created_iso(self) -> str | None:
+        """The datetime of initial publication, as an ISO 8601 string
+        normalized to UTC.
+        """
+        if self.toml.technote.date_created:
+            return self._format_iso_datetime(self.toml.technote.date_created)
         else:
             return None
 
@@ -751,9 +823,15 @@ class TechnoteJinjaContext:
         """Set the abstract metadata from the content."""
         self._content_abstract = abstract
 
-    def _format_iso_date(self, date: date) -> str:
-        """Format a date in ISO 8601 format."""
-        return date.isoformat()
+    def _format_iso_datetime(self, date: datetime) -> str:
+        """Format a date in ISO 8601 format, normalized to UTC."""
+        dt = date.astimezone(UTC)
+        return dt.strftime("%Y-%m-%dT%H:%M:%SZ")
+
+    def _format_iso_date(self, date: datetime) -> str:
+        """Format a date in ISO 8601 date format, normalized to UTC."""
+        dt = date.astimezone(UTC)
+        return dt.strftime("%Y-%m-%d")
 
     @property
     def highwire_metadata_tags(self) -> str:

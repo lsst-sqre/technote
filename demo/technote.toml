@@ -5,7 +5,7 @@ series_id = "SQR"
 canonical_url = "https://sqr-000.lsst.io"
 github_url = "https://github.com/lsst-sqre/sqr-000"
 github_default_branch = "master"
-date_created = "2015-11-18"
+date_created = "2015-11-18T00:00.00Z"
 date_updated = "2015-11-23"
 
 [[technote.authors]]

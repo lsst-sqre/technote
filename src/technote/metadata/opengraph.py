@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from datetime import UTC, datetime
 from typing import TYPE_CHECKING
 
 from .metatagbase import MetaTagFormatterBase
@@ -91,7 +92,7 @@ class OpenGraphMetadata(MetaTagFormatterBase):
             return [
                 self._format_tag(
                     "article:published_time",
-                    self._metadata.date_updated.isoformat(),
+                    self._format_datetime(self._metadata.date_updated),
                 )
             ]
         if (
@@ -101,7 +102,7 @@ class OpenGraphMetadata(MetaTagFormatterBase):
             return [
                 self._format_tag(
                     "article:published_time",
-                    self._metadata.date_created.isoformat(),
+                    self._format_datetime(self._metadata.date_created),
                 )
             ]
         if (
@@ -111,14 +112,21 @@ class OpenGraphMetadata(MetaTagFormatterBase):
             return [
                 self._format_tag(
                     "article:published_time",
-                    self._metadata.date_created.isoformat(),
+                    self._format_datetime(self._metadata.date_created),
                 ),
                 self._format_tag(
                     "article:modified_time",
-                    self._metadata.date_updated.isoformat(),
+                    self._format_datetime(self._metadata.date_updated),
                 ),
             ]
         return []
+
+    def _format_datetime(self, dt: datetime) -> str:
+        """Format a datetime object as an ISO 8601 string."""
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=UTC)
+        dt = dt.astimezone(UTC)
+        return dt.strftime("%Y-%m-%dT%H:%M:%SZ")
 
     def _format_tag(self, name: str, content: str) -> str:
         """Format a OpenGraph metadata tag."""
