@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING
 from .metatagbase import MetaTagFormatterBase
 
 if TYPE_CHECKING:
-    from technote.config import TechnoteTable
+    from technote.metadata.model import TechnoteMetadata
 
 
 class HighwireMetadata(MetaTagFormatterBase):
@@ -25,13 +25,9 @@ class HighwireMetadata(MetaTagFormatterBase):
     def __init__(
         self,
         *,
-        metadata: TechnoteTable,
-        title: str,
-        abstract: str | None = None,
+        metadata: TechnoteMetadata,
     ) -> None:
         self._metadata = metadata
-        self._title = title
-        self._abstract = abstract
 
     @property
     def tag_attributes(self) -> list[str]:
@@ -48,7 +44,9 @@ class HighwireMetadata(MetaTagFormatterBase):
     @property
     def title(self) -> str:
         """The title metadata."""
-        return f'<meta name="citation_title" content="{ self._title }">'
+        return (
+            f'<meta name="citation_title" content="{ self._metadata.title }">'
+        )
 
     @property
     def author_info(self) -> list[str]:
@@ -110,9 +108,12 @@ class HighwireMetadata(MetaTagFormatterBase):
     @property
     def doi(self) -> str | None:
         """The ``citation_doi`` metadata tag."""
-        if self._metadata.doi is None:
+        if (
+            self._metadata.citation is None
+            or self._metadata.citation.doi is None
+        ):
             return None
-        return self._format_tag("doi", str(self._metadata.doi))
+        return self._format_tag("doi", str(self._metadata.citation.doi))
 
     @property
     def technical_report_number(self) -> str | None:

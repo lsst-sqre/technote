@@ -7,7 +7,10 @@ Python API reference
 .. automodapi:: technote
    :include-all-objects:
 
-.. automodapi:: technote.config
+.. automodapi:: technote.factory
+   :include-all-objects:
+
+.. automodapi:: technote.main
    :include-all-objects:
 
 .. automodapi:: technote.ext
@@ -16,10 +19,22 @@ Python API reference
 .. automodapi:: technote.ext.abstract
    :include-all-objects:
 
+.. automodapi:: technote.ext.insertstatus
+   :include-all-objects:
+
 .. automodapi:: technote.ext.metadata
    :include-all-objects:
 
-.. automodapi:: technote.metadata
+.. automodapi:: technote.ext.pygmentscss
+   :include-all-objects:
+
+.. automodapi:: technote.ext.toc
+   :include-all-objects:
+
+.. automodapi:: technote.ext.wraptables
+   :include-all-objects:
+
+.. automodapi:: technote.metadata.model
    :include-all-objects:
 
 .. automodapi:: technote.metadata.orcid

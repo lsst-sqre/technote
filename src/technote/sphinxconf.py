@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from .config import TechnoteSphinxConfig
+from .main import TechnoteSphinxConfig
 
 # Restrict to only Sphinx configurations
 __all__ = [
@@ -38,7 +38,7 @@ __all__ = [
     "html_permalinks_icon",
 ]
 
-_t = TechnoteSphinxConfig.find_and_load()
+_t = TechnoteSphinxConfig.load()
 
 # ============================================================================
 # SPHINX General sphinx settings

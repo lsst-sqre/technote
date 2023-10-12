@@ -7,6 +7,8 @@ from pathlib import Path
 from bs4 import BeautifulSoup
 from sphinx.application import Sphinx
 
+__all___ = ["wrap_html_tables"]
+
 
 def wrap_html_tables(app: Sphinx, exceptions: Exception | None = None) -> None:
     """Wrap the HTML tables in a figure tag.
