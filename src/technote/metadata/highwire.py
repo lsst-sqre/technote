@@ -85,11 +85,27 @@ class HighwireMetadata(MetaTagFormatterBase):
 
     @property
     def date(self) -> str | None:
-        """The ``citation_date`` metadata tag."""
-        if self._metadata.date_updated is None:
+        """The ``citation_date`` metadata tag.
+
+        The format for the date is ``YYYY/MM/DD``. The updated date is used,
+        but if that is not available, the created date is used.
+        """
+        # Use either the date_updated or date_created
+        if (
+            self._metadata.date_updated is None
+            and self._metadata.date_created is None
+        ):
             return None
-        iso8601_date = self._metadata.date_updated.isoformat()
-        return self._format_tag("date", iso8601_date)
+        elif self._metadata.date_updated is not None:
+            dt = self._metadata.date_updated
+        elif self._metadata.date_created is not None:
+            dt = self._metadata.date_created
+        else:
+            raise RuntimeError(
+                "Cannot resolve a date source for citation_date"
+            )
+
+        return self._format_tag("date", dt.strftime("%Y/%m/%d"))
 
     @property
     def doi(self) -> str | None:

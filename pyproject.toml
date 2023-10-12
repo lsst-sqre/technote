@@ -191,6 +191,9 @@ select = ["ALL"]
 target-version = "py311"
 
 [tool.ruff.per-file-ignores]
+'src/technote/config.py' = [
+    "TRY004",  # need to raise ValueError for Pydantic validation
+]
 "tests/**" = [
     "D103",    # tests don't need docstrings
     "PLR0915", # tests are allowed to be long, sometimes that's convenient

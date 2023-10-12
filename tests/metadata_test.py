@@ -26,7 +26,7 @@ def test_metadata_basic(app: Sphinx, status: IO, warning: IO) -> None:
 
     # Test for HighWire metadata tags
     assert_tag(doc, "citation_title", "Metadata test document")
-    assert_tag(doc, "citation_date", "2023-09-19")
+    assert_tag(doc, "citation_date", "2023/09/19")
     assert_tag(doc, "citation_technical_report_number", "TEST-000")
     assert_tag(
         doc, "citation_fulltext_html_url", "https://test-000.example.com/"
@@ -47,7 +47,7 @@ def test_metadata_basic(app: Sphinx, status: IO, warning: IO) -> None:
     assert_og(doc, "url", "https://test-000.example.com/")
     assert_og(doc, "type", "article")
     assert_og(doc, "article:author", "Jonathan Sick")
-    assert_og(doc, "article:published_time", "2023-09-19")
+    assert_og(doc, "article:published_time", "2023-09-19T00:00:00Z")
 
     # Find technote data attributes
     source_link = doc.cssselect("[data-technote-source-url]")[0]
@@ -81,7 +81,7 @@ def test_metadata_basic(app: Sphinx, status: IO, warning: IO) -> None:
             detected_hentry = True
             props = h_item["properties"]
             assert props["author"][0] == "Jonathan Sick"
-            assert props["updated"][0] == "2023-09-19"
+            assert props["updated"][0] == "2023-09-19T00:00:00Z"
             assert "content" in props
             assert "summary" in props
     assert detected_hentry
