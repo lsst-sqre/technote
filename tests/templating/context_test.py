@@ -1,10 +1,10 @@
-"""Tests for the technote.config module."""
+"""Tests for the technote.templating.TechnoteJinjaContext module."""
 
 from __future__ import annotations
 
 from _pytest.monkeypatch import MonkeyPatch
 
-from technote.config import TechnoteJinjaContext, TechnoteToml
+from technote.factory import Factory
 
 sample_toml = """
 [technote]
@@ -26,21 +26,16 @@ affiliations = [
 """
 
 
-def test_toml_parsing() -> None:
-    """Test TechnoteToml by parsing a sample document that should be
-    well-formatted.
-    """
-    technote_toml = TechnoteToml.parse_toml(sample_toml)
-    assert technote_toml.technote.id == "SQR-000"
-
-
 def test_technote_jinja_context(monkeypatch: MonkeyPatch) -> None:
     """Test TechnoteJinjaContext with the sample toml."""
     monkeypatch.setenv("GITHUB_REF_NAME", "main")
     monkeypatch.setenv("GITHUB_REF_TYPE", "branch")
 
-    technote_toml = TechnoteToml.parse_toml(sample_toml)
-    jinja_context = TechnoteJinjaContext(toml=technote_toml)
+    factory = Factory()
+    technote_toml = factory.parse_toml(sample_toml)
+    factory._toml = technote_toml
+    metadata = factory.load_metadata()
+    jinja_context = factory.create_jinja_context(metadata=metadata)
 
     assert jinja_context.github_url == "https://github.com/lsst-sqre/sqr-000"
     assert jinja_context.github_repo_slug == "lsst-sqre/sqr-000"

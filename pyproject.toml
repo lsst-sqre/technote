@@ -168,6 +168,7 @@ ignore = [
     "EM102",   # justification (duplicate string in traceback) is silly
     "FBT003",  # positional booleans are normal for Pydantic field defaults
     "FIX001",  # fixmes are fine
+    "FIX002",  # todos are fine
     "G004",    # forbidding logging f-strings is appealing, but not our style
     "RET505",  # disagree that omitting else always makes code more readable
     "PLR0913", # factory pattern uses constructors with many arguments

@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING
 from .metatagbase import MetaTagFormatterBase
 
 if TYPE_CHECKING:
-    from technote.config import TechnoteTable
+    from technote.metadata.model import TechnoteMetadata
 
 
 class OpenGraphMetadata(MetaTagFormatterBase):
@@ -24,13 +24,9 @@ class OpenGraphMetadata(MetaTagFormatterBase):
     def __init__(
         self,
         *,
-        metadata: TechnoteTable,
-        title: str,
-        abstract: str | None = None,
+        metadata: TechnoteMetadata,
     ) -> None:
         self._metadata = metadata
-        self._title = title
-        self._abstract = abstract
 
     @property
     def tag_attributes(self) -> list[str]:
@@ -47,14 +43,14 @@ class OpenGraphMetadata(MetaTagFormatterBase):
     @property
     def title(self) -> str:
         """The title of the technote."""
-        return self._format_tag("title", self._title)
+        return self._format_tag("title", self._metadata.title)
 
     @property
     def description(self) -> str | None:
         """The abstract of the technote."""
-        if self._abstract is None:
+        if self._metadata.abstract_plain is None:
             return None
-        return self._format_tag("description", self._abstract)
+        return self._format_tag("description", self._metadata.abstract_plain)
 
     @property
     def url(self) -> str | None:

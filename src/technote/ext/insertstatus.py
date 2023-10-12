@@ -9,7 +9,10 @@ from bs4 import BeautifulSoup
 from jinja2 import Environment, PackageLoader, select_autoescape
 from sphinx.application import Sphinx
 
-from ..config import TechnoteState, TechnoteStatus
+from ..metadata.model import TechnoteState
+from ..templating.context import TechnoteJinjaContext
+
+__all__ = ["insert_status"]
 
 
 def insert_status(app: Sphinx, exceptions: Exception | None) -> None:
@@ -22,12 +25,13 @@ def insert_status(app: Sphinx, exceptions: Exception | None) -> None:
         return
 
     try:
-        technote_config = app.config.html_context["technote"]
+        technote_context = app.config.html_context["technote"]
     except (KeyError, AttributeError):
         return
 
-    status = technote_config.toml.technote.status
-    status = cast(TechnoteStatus, status)
+    technote_context = cast(TechnoteJinjaContext, technote_context)
+
+    status = technote_context.metadata.status
     if status.state == TechnoteState.stable:
         return
 
