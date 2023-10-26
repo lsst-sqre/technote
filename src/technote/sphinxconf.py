@@ -46,7 +46,22 @@ _t = TechnoteSphinxConfig.load()
 
 project = _t.title or ""
 author = _t.author or ""
-exclude_patterns = ["_build", "README.rst", "README.md", "Makefile"]
+exclude_patterns = [
+    "_build",
+    ".technote",
+    ".github",
+    ".tox",
+    ".nox",
+    "venv",
+    ".venv",
+    "README.rst",
+    "README.md",
+    "Makefile",
+    "tox.ini",
+    "requirements.txt",
+    ".pre-commit-config.yaml",
+    "technote.toml",
+]
 html_theme = "technote"
 
 extensions: list[str] = ["technote.ext"]
