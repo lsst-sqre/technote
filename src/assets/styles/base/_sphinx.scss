@@ -194,6 +194,11 @@ dd p:first-of-type {
   margin-top: 0.2rem;
 }
 
+// Ensure bare img elements don't extend beyond the column
+img {
+  max-width: 100%;
+}
+
 figure {
   margin-left: 0;
   margin-right: 0;

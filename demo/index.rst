@@ -210,6 +210,16 @@ Figures
 
    This is an image.
 
+This is a large figure:
+
+.. figure:: rubin-watermark.png
+   :alt: A placeholder image
+
+This is a large image:
+
+.. image:: rubin-watermark.png
+   :alt: A placeholder image
+
 Tables
 ======
 
