@@ -19,6 +19,7 @@ __all__ = [
     "exclude_patterns",
     "html_theme",
     "extensions",
+    "source_suffix",
     "nitpicky",
     "nitpick_ignore",
     "nitpick_ignore_regex",
@@ -66,6 +67,12 @@ html_theme = "technote"
 
 extensions: list[str] = ["technote.ext"]
 _t.append_extensions(extensions)
+
+# Add support for both Markdown and reStructuredText sources
+source_suffix = {
+    ".rst": "restructuredtext",
+    ".md": "markdown",
+}
 
 # Nitpicky settings and ignored errors
 nitpicky = _t.nitpicky
