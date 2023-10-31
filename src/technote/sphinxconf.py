@@ -19,6 +19,7 @@ __all__ = [
     "exclude_patterns",
     "html_theme",
     "extensions",
+    "source_suffix",
     "nitpicky",
     "nitpick_ignore",
     "nitpick_ignore_regex",
@@ -36,6 +37,8 @@ __all__ = [
     "html_domain_indices",
     "html_use_index",
     "html_permalinks_icon",
+    # MYST
+    "myst_enable_extensions",
 ]
 
 _t = TechnoteSphinxConfig.load()
@@ -64,8 +67,17 @@ exclude_patterns = [
 ]
 html_theme = "technote"
 
-extensions: list[str] = ["technote.ext"]
+extensions: list[str] = [
+    "myst_parser",
+    "technote.ext",
+]
 _t.append_extensions(extensions)
+
+# Add support for both Markdown and reStructuredText sources
+source_suffix = {
+    ".rst": "restructuredtext",
+    ".md": "markdown",
+}
 
 # Nitpicky settings and ignored errors
 nitpicky = _t.nitpicky
@@ -111,3 +123,24 @@ else:
 html_domain_indices = False
 html_use_index = False
 html_permalinks_icon = "#"
+
+# ============================================================================
+# #MYST MyST markdown configurations
+# https://myst-parser.readthedocs.io/en/latest/syntax/optional.html
+# ============================================================================
+
+myst_enable_extensions = [
+    "amsmath",
+    "colon_fence",
+    "deflist",
+    "dollarmath",
+    "fieldlist",
+    "html_admonition",
+    "html_image",
+    "linkify",
+    "replacements",
+    "smartquotes",
+    "strikethrough",
+    "substitution",
+    "tasklist",
+]
