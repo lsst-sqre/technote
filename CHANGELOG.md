@@ -2,6 +2,14 @@
 
 <!-- scriv-insert-here -->
 
+<a id='changelog-0.3.1'></a>
+## 0.3.1 (2023-10-31)
+
+### Bug fixes
+
+- Add support for Markdown to the ``source_suffix`` configuration option. This allows Markdown files to be included in the technote build.
+- Images added with a plain ``.. image::`` directive are now constrained to a maximum size of the container width. This is the same behavior as figures.
+
 <a id='changelog-0.3.0'></a>
 ## 0.3.0 (2023-10-26)
 
