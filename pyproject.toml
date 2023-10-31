@@ -26,6 +26,8 @@ dependencies = [
     "beautifulsoup4",
     "pygments",
     "accessible-pygments",
+    "myst-parser",
+    "markdown-it-py[linkify]",
 ]
 dynamic = ["version"]
 

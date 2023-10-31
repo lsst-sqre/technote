@@ -2,13 +2,17 @@
 
 <!-- scriv-insert-here -->
 
-<a id='changelog-0.3.1'></a>
-## 0.3.1 (2023-10-31)
+<a id='changelog-0.4.0'></a>
+## 0.4.0 (2023-10-31)
+
+### New features
+
+- Added the [myst-parser](https://myst-parser.readthedocs.io/en/latest/) to the technote extension set. This allows Markdown files to be included in the technote build.
 
 ### Bug fixes
 
-- Add support for Markdown to the ``source_suffix`` configuration option. This allows Markdown files to be included in the technote build.
-- Images added with a plain ``.. image::`` directive are now constrained to a maximum size of the container width. This is the same behavior as figures.
+- Add support for Markdown to the `source_suffix` configuration option. This allows Markdown files to be included in the technote build.
+- Images added with a plain `.. image::` directive are now constrained to a maximum size of the container width. This is the same behavior as figures.
 
 <a id='changelog-0.3.0'></a>
 ## 0.3.0 (2023-10-26)
