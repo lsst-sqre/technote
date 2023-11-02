@@ -9,3 +9,4 @@ User guide
    :titlesonly:
 
    metadata
+   technote-toml
