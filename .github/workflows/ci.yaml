@@ -42,7 +42,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           cache: 'npm'
           node-version-file: '.nvmrc'
@@ -69,7 +69,7 @@ jobs:
       - name: Install Graphviz
         run: sudo apt-get install graphviz
 
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           cache: 'npm'
           node-version-file: '.nvmrc'
@@ -136,7 +136,7 @@ jobs:
         with:
           fetch-depth: 0 # full history for setuptools_scm
 
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           cache: 'npm'
           node-version-file: '.nvmrc'
