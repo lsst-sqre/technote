@@ -5,6 +5,7 @@ from __future__ import annotations
 import os
 from datetime import UTC, datetime
 from importlib.metadata import PackageNotFoundError, version
+from pathlib import Path
 from urllib.parse import urlparse
 
 from ..metadata.model import TechnoteMetadata
@@ -22,8 +23,11 @@ class TechnoteJinjaContext:
         The technote metadata.
     """
 
-    def __init__(self, metadata: TechnoteMetadata) -> None:
+    def __init__(
+        self, metadata: TechnoteMetadata, root_filename: Path
+    ) -> None:
         self._metadata = metadata
+        self._root_filename = root_filename
 
     @property
     def metadata(self) -> TechnoteMetadata:
@@ -143,12 +147,13 @@ class TechnoteJinjaContext:
         else:
             root_url = self.github_url
 
-        # FIXME: compute source path during Sphinx build
+        filename = self._root_filename.name
+
         # We're using /blob/ instead of /edit/ to give users the choice of
         # how to edit (on web or in github.dev).
         return (
             f"{root_url}/blob/"
-            f"{self.metadata.source_repository.branch or 'main'}/index.rst"
+            f"{self.metadata.source_repository.branch or 'main'}/{filename}"
         )
 
     def set_content_title(self, title: str) -> None:

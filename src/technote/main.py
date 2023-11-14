@@ -10,6 +10,7 @@ from __future__ import annotations
 import re
 from collections.abc import MutableMapping
 from dataclasses import dataclass
+from pathlib import Path
 
 from .factory import Factory
 from .metadata.model import TechnoteMetadata
@@ -41,13 +42,40 @@ class TechnoteSphinxConfig:
     external sources.
     """
 
+    root_filename: Path
+    """Path to the root content document.
+
+    Typically either ``index.md``, ``index.rst``, or ``index.ipynb``.
+    """
+
     @classmethod
     def load(cls) -> TechnoteSphinxConfig:
         """Create a TechnoteSphinxConfig from the current directory."""
         factory = Factory()
         toml_settings = factory.find_and_load_toml()
         metadata = factory.load_metadata()
-        return cls(factory=factory, toml=toml_settings, metadata=metadata)
+
+        _root_file_options = [
+            Path("index.rst"),
+            Path("index.md"),
+            Path("index.ipynb"),
+        ]
+        _root_file = None
+        for _root_file_candidate in _root_file_options:
+            if _root_file_candidate.exists():
+                _root_file = _root_file_candidate
+                break
+        if _root_file is None:
+            raise RuntimeError(
+                "Could not find root file. Is index.rst or index.md missing?"
+            )
+
+        return cls(
+            factory=factory,
+            toml=toml_settings,
+            metadata=metadata,
+            root_filename=_root_file,
+        )
 
     @property
     def title(self) -> str | None:
@@ -114,4 +142,6 @@ class TechnoteSphinxConfig:
         """The TechnoteJinjaContext that provides metadata to the HTML
         templates.
         """
-        return self.factory.create_jinja_context(metadata=self.metadata)
+        return self.factory.create_jinja_context(
+            metadata=self.metadata, root_filename=self.root_filename
+        )

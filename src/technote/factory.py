@@ -123,10 +123,12 @@ class Factory:
         )
 
     def create_jinja_context(
-        self, metadata: TechnoteMetadata
+        self, metadata: TechnoteMetadata, root_filename: Path
     ) -> TechnoteJinjaContext:
         """Create the Jinja context for the technote."""
         # We don't use a cached TechnoteMetadata because TechnoteSphinxConfig
         # or TechnoteJinjaContext may modify the metadata. We don't want to
         # own it in the factory.
-        return TechnoteJinjaContext(metadata=metadata)
+        return TechnoteJinjaContext(
+            metadata=metadata, root_filename=root_filename
+        )
