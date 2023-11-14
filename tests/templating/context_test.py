@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from pathlib import Path
+
 from _pytest.monkeypatch import MonkeyPatch
 
 from technote.factory import Factory
@@ -35,7 +37,9 @@ def test_technote_jinja_context(monkeypatch: MonkeyPatch) -> None:
     technote_toml = factory.parse_toml(sample_toml)
     factory._toml = technote_toml
     metadata = factory.load_metadata()
-    jinja_context = factory.create_jinja_context(metadata=metadata)
+    jinja_context = factory.create_jinja_context(
+        metadata=metadata, root_filename=Path("index.rst")
+    )
 
     assert jinja_context.github_url == "https://github.com/lsst-sqre/sqr-000"
     assert jinja_context.github_repo_slug == "lsst-sqre/sqr-000"
