@@ -10,6 +10,7 @@ User guide
    :caption: Configuration
 
    configure-authors
+   configure-status
    technote-toml
 
 .. toctree::
