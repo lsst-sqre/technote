@@ -11,6 +11,7 @@ User guide
 
    configure-authors
    configure-status
+   configure-sphinx
    technote-toml
 
 .. toctree::

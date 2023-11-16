@@ -138,8 +138,6 @@ Building documentation
 
 Documentation is built with Sphinx_, sourced from the :file:`docs` directory:
 
-.. _Sphinx: https://www.sphinx-doc.org/en/master/
-
 .. code-block:: sh
 
    tox -e docs

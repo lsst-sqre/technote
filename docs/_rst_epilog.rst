@@ -6,6 +6,8 @@
 .. _pytest: https://docs.pytest.org/en/latest/
 .. _tox: https://tox.wiki/en/latest/
 .. _Click: https://click.palletsprojects.com/
+.. _Intersphinx: https://www.sphinx-doc.org/en/master/usage/extensions/intersphinx.html
+.. _Sphinx: https://www.sphinx-doc.org/
 
 .. Badges
 
