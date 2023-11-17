@@ -9,6 +9,7 @@
 .. _Intersphinx: https://www.sphinx-doc.org/en/master/usage/extensions/intersphinx.html
 .. _Sphinx: https://www.sphinx-doc.org/
 .. _TOML: https://toml.io/en/
+.. _Documenteer: https://documenteer.lsst.io/
 
 .. Badges
 

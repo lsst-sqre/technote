@@ -21,3 +21,10 @@ User guide
    :caption: Curation
 
    metadata
+
+.. toctree::
+   :name: toc-theming
+   :maxdepth: 2
+   :caption: Theming
+
+   theming-overview
