@@ -8,6 +8,7 @@
 .. _Click: https://click.palletsprojects.com/
 .. _Intersphinx: https://www.sphinx-doc.org/en/master/usage/extensions/intersphinx.html
 .. _Sphinx: https://www.sphinx-doc.org/
+.. _TOML: https://toml.io/en/
 
 .. Badges
 
