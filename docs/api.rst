@@ -48,3 +48,5 @@ Python API reference
 
 .. automodapi:: technote.metadata.zenodo
    :include-all-objects:
+
+.. automodapi:: technote.sources.tomlsettings
