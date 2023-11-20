@@ -367,6 +367,11 @@ class TechnoteTable(BaseModel):
         examples=["SQR"],
     )
 
+    organization: Organization | None = Field(
+        None,
+        description="The organization that publishes the technote series.",
+    )
+
     date_created: datetime | None = Field(
         None, description="Date and time when the technote was created."
     )

@@ -55,6 +55,16 @@ An internal identifier for a series or collection this technote belongs to.
 
    :ref:`toml-technote-id`
 
+.. _toml-technote-organization:
+
+organization
+------------
+
+|optional|
+
+The organization that publishes the technote series.
+The value is a table with the same structure as :ref:`toml-technote-authors-affiliations`.
+
 .. _toml-technote-title:
 
 title
