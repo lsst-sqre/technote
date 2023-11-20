@@ -150,23 +150,13 @@ name
 
 |required|
 
-The author's name, as it should appear in the technote.
-The name can be specified either of two ways.
-First, as a single string:
+The author's name, as it should appear in the technote:
 
 .. code-block:: toml
 
    [[technote.authors]]
-   name = { "name": "Vera Rubin" }
-
-Alternatively, as structured family and given names:
-
-.. code-block:: toml
-
-   [[technote.authors]]
-   name = { "given_names": "Vera", "family_names": "Rubin" }
-
-The choice of syntax depends on the requirements of your organization and its metadata and theming tools for technotes.
+   name.given = "Vera"
+   name.family = "Rubin"
 
 .. _toml-technote-authors-internal-id:
 
@@ -210,7 +200,8 @@ Each affiliation is a table in the ``[[technote.authors.affiliations]]`` array.
 .. code-block:: toml
 
    [technote.authors]
-   name = { "name": "Vera Rubin" }
+   name.given = "Vera C."
+   name.family = "Rubin"
    affiliations = [
      { name = "Department of Astronomy, University of Washington" },
      { name = "Department of Terrestrial Magnetism, Carnegie Institution of Washington" }
@@ -222,7 +213,8 @@ If each affiliation has a large amount of metadata you can instead use the array
 .. code-block:: toml
 
    [technote.authors]
-   name = { "name": "Vera Rubin" }
+   name.given = "Vera C."
+   name.family = "Rubin"
    [[technote.authors.affiliations]]
    name = "Department of Astronomy, University of Washington"
    [[technote.authors.affiliations]]

@@ -56,9 +56,8 @@ class Factory:
         authors = [
             Person(
                 name=StructuredName(
-                    family_names=author.name.family_names,
-                    given_names=author.name.given_names,
-                    name=author.name.name,
+                    family=author.name.family,
+                    given=author.name.given,
                 ),
                 email=author.email,
                 orcid=str(author.orcid) if author.orcid else None,

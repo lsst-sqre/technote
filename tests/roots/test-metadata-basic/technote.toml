@@ -7,7 +7,8 @@ canonical_url = "https://test-000.example.com/"
 github_url = "https://github.com/lsst-sqre/sqr-000"
 
 [[technote.authors]]
-name = { given_names = "Jonathan", family_names = "Sick" }
+name.given = "Jonathan"
+name.family = "Sick"
 orcid = "https://orcid.org/0000-0003-3001-676X"
 affiliations = [
     { name = "Rubin Observatory", ror = "https://ror.org/048g3cy84" }

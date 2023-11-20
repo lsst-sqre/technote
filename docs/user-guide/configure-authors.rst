@@ -10,20 +10,24 @@ Minimal author metadata
 =======================
 
 At a minimum, an author has a name.
-To make metadata export more precise, the preferred markup is to define both the given (first) and family (last) names:
+Following metadata standards
+The name needs to be structured into given (often the first) and family (often the last) name components.
+This allows Technote to export your documents data to common formats like `CITATION.cff`_, Zenodo, and BibTeX.
 
 .. code-block:: toml
 
    [[technote.authors]]
-   name = { "given_names": "Vera", "family_names": "Rubin" }
+   name.given = "Vera C."
+   name.family = "Rubin"
 
+.. note::
 
-Alternatively, the name can be an unstructured string:
+   Note the dot syntax in the name; this is equivalent to the follow inline table TOML syntax:
 
-.. code-block:: toml
+   .. code-block:: toml
 
-   [[technote.authors]]
-   name = { "name": "Vera C. Rubin" }
+      [[technote.authors]]
+      name = { "name": "Vera C. Rubin" }
 
 ``name`` is just one of many keys in a ``[[technote.authors]]`` table; documentation of how to add additional metadata are provided below.
 
@@ -36,10 +40,12 @@ In TOML, the ``[[ ]]`` indicates an **array** of tables.
 .. code-block:: toml
 
    [[technote.authors]]
-   name = { "given_names": "Arno A.", "family_names": "Penzias" }
+   name.given = "Arno A."
+   name.family = "Penzias"
 
    [[technote.authors]]
-   name = { "given_names": "Robert W.", "family_names": "Wilson" }
+   name.given = "Robert W."
+   name.family = "Wilson"
 
 Each author can have rich metadata, as described next.
 
@@ -52,7 +58,8 @@ The author's email, ORCiD identifier, an internal identifier, and affiliations c
 .. code-block:: toml
 
    [[technote.authors]]
-   name = { "given_names": "Jonathan", "family_names": "Sick" }
+   name.given = "Jonathan"
+   name.family = "Sick"
    email = "jsick@lsst.org"
    orcid = "https://orcid.org/0000-0003-3001-676X"
    internal_id = "sickj"
@@ -74,7 +81,8 @@ These tables can be inline, if brief:
 .. code-block:: toml
 
    [[technote.authors]]
-   name = { given_names = "Jonathan", family_names = "Sick" }
+   name.given = "Jonathan"
+   name.family = "Sick"
    orcid = "https://orcid.org/0000-0003-3001-676X"
    affiliations = [
        { name = "J.Sick Codes" }
@@ -86,7 +94,8 @@ Or as full ``[[technote.authors.affiliations]]`` tables:
 .. code-block:: toml
 
    [[technote.authors]]
-   name = { given_names = "Jonathan", family_names = "Sick" }
+   name.given = "Jonathan"
+   name.family = "Sick"
    orcid = "https://orcid.org/0000-0003-3001-676X"
 
    [[technote.authors.affiliations]]
@@ -103,7 +112,6 @@ People other than authors might contribute to a technote.
 For example, a contact, an editor, or a project manager.
 Each non-author contributor can be marked up with a specific role.
 
-Each contributor
 To start, each contributor is a ``[[technote.contributors]]`` table.
 Contributors take the same keys as authors (``[[technote.authors]]``), but with additional ``role`` and ``note`` fields.
 
@@ -112,8 +120,8 @@ The ``role`` can be any string from the Zenodo vocabulary for roles (`technote.m
 .. code-block:: toml
 
    [[technote.contributors]]
-   name.given_names = "Frossie"
-   name.family_names = "Economou"
+   name.given = "Frossie"
+   name.family = "Economou"
    role = "ProjectManager"
 
 For the ``Other`` role, you can clarify it with a free-form text statement in the ``note`` key.

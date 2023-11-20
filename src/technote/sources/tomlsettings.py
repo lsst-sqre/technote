@@ -217,60 +217,21 @@ class Organization(BaseModel):
 class PersonName(BaseModel):
     """A person's name."""
 
-    family_names: str | None = Field(
-        None,
+    family: str = Field(
         description="The person's family name (last name in western culture).",
     )
 
-    given_names: str | None = Field(
-        None,
+    given: str = Field(
         description="The person's given name (first name in western culture).",
     )
 
-    name: str | None = Field(
-        None,
-        description=(
-            "The person's name, an alternative to specifying surname and "
-            "given names."
-        ),
-    )
-
-    @field_validator("family_names", "given_names", "name")
+    @field_validator("family", "given")
     @classmethod
     def clean_whitespace(cls, v: str | None) -> str | None:
         if v:
             return collapse_whitespace(v)
         else:
             return v
-
-    @model_validator(mode="after")
-    def check_well_defined(self) -> Self:
-        """Check that either surname and given are both provided, or name
-        alone is set.
-        """
-        if self.family_names and self.given_names:
-            if self.name:
-                raise ValueError(
-                    "Do not specify name if family_names and given_names are "
-                    "both provided."
-                )
-            return self
-
-        if self.name:
-            if self.family_names:
-                raise ValueError(
-                    "Do not specify `family_names` if using `name`."
-                )
-            if self.given_names:
-                raise ValueError(
-                    "Do not specify `given_names` if using `name`."
-                )
-            return self
-
-        raise ValueError(
-            "Name must include either family_names and given_names fields, "
-            "or a single name field."
-        )
 
 
 class Person(BaseModel):
