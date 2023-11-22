@@ -12,7 +12,7 @@ from __future__ import annotations
 
 import re
 import tomllib
-from datetime import UTC, datetime
+from datetime import UTC, date, datetime
 from typing import Any, Self
 
 from pydantic import (
@@ -95,6 +95,8 @@ def normalize_datetime(v: Any) -> datetime | None:
             return dt.astimezone(UTC)
         else:
             return dt.replace(tzinfo=UTC)
+    if isinstance(v, date):
+        return datetime.combine(v, datetime.min.time(), tzinfo=UTC)
     if isinstance(v, datetime):
         if v.tzinfo and v.tzinfo.utcoffset(v) is not None:
             return v.astimezone(UTC)
@@ -372,11 +374,11 @@ class TechnoteTable(BaseModel):
         description="The organization that publishes the technote series.",
     )
 
-    date_created: datetime | None = Field(
+    date_created: datetime | date | None = Field(
         None, description="Date and time when the technote was created."
     )
 
-    date_updated: datetime | None = Field(
+    date_updated: datetime | date | None = Field(
         None, description="Date when the technote was updated."
     )
 
@@ -439,6 +441,16 @@ class TechnoteTable(BaseModel):
     _normalize_dates = field_validator(
         "date_created", "date_updated", mode="before"
     )(normalize_datetime)
+
+    @property
+    def date_created_datetime(self) -> datetime | None:
+        """The ``date_created`` as a `~datetime.datetime`."""
+        return normalize_datetime(self.date_created)
+
+    @property
+    def date_updated_datetime(self) -> datetime | None:
+        """The ``date_updatd`` as a `~datetime.datetime`."""
+        return normalize_datetime(self.date_updated)
 
 
 class TechnoteToml(BaseModel):

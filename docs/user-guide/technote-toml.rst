@@ -84,8 +84,16 @@ date_created
 |optional|
 
 Date and time when the technote was created.
-This should be set as an ISO8601 string.
+This should be set as an :rfc:`3339` (i.e., ISO8601) string.
 Either as a date (``YYYY-MM-DD``) or a date and time with a timezone (``YYYY-MM-DDTHH:MM:SSZ``).
+
+TOML treats dates and date-times as native types, and therefore don't use quotes:
+
+.. code-block:: toml
+
+   [technote]
+   date_modified = 2023-01-01T00:00:00Z
+
 
 .. _toml-technote-date-modified:
 
@@ -96,7 +104,15 @@ date_modified
 
 Date and time when the technote was last updated.
 This should be set as an ISO8601 string.
+This should be set as an :rfc:`3339` (i.e., ISO8601) string.
 Either as a date (``YYYY-MM-DD``) or a date and time with a timezone (``YYYY-MM-DDTHH:MM:SSZ``).
+
+TOML treats dates and date-times as native types, and therefore don't use quotes:
+
+.. code-block:: toml
+
+   [technote]
+   date_modified = 2023-01-01T00:00:00Z
 
 .. _toml-technote-version:
 
