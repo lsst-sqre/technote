@@ -7,6 +7,8 @@ github_url = "https://github.com/lsst-sqre/sqr-000"
 github_default_branch = "master"
 date_created = "2015-11-18T00:00:00Z"
 date_updated = "2015-11-23"
+organization.name = "Vera C. Rubin Observatory"
+organization.ror = "https://ror.org/048g3cy84"
 
 [[technote.authors]]
 name.given = "Jonathan"
