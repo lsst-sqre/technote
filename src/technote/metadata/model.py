@@ -46,25 +46,16 @@ class Organization:
 class StructuredName:
     """The domain model for a structured name (e.g. a person's name)."""
 
-    family_names: str | None = None
+    family: str
     """The person's family names (last name in western culture)."""
 
-    given_names: str | None = None
+    given: str
     """The person's given name (first name in western culture)."""
-
-    name: str | None = None
-    """The person's name.
-
-    This is an alternative to specifying family and given names.
-    """
 
     @property
     def plain_text_name(self) -> str:
         """The name in plain text."""
-        if self.name is not None:
-            return self.name
-        else:
-            return f"{self.given_names} {self.family_names}"
+        return f"{self.given} {self.family}"
 
 
 @dataclass(kw_only=True)

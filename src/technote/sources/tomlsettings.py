@@ -12,7 +12,7 @@ from __future__ import annotations
 
 import re
 import tomllib
-from datetime import UTC, datetime
+from datetime import UTC, date, datetime
 from typing import Any, Self
 
 from pydantic import (
@@ -95,6 +95,8 @@ def normalize_datetime(v: Any) -> datetime | None:
             return dt.astimezone(UTC)
         else:
             return dt.replace(tzinfo=UTC)
+    if isinstance(v, date):
+        return datetime.combine(v, datetime.min.time(), tzinfo=UTC)
     if isinstance(v, datetime):
         if v.tzinfo and v.tzinfo.utcoffset(v) is not None:
             return v.astimezone(UTC)
@@ -217,60 +219,21 @@ class Organization(BaseModel):
 class PersonName(BaseModel):
     """A person's name."""
 
-    family_names: str | None = Field(
-        None,
+    family: str = Field(
         description="The person's family name (last name in western culture).",
     )
 
-    given_names: str | None = Field(
-        None,
+    given: str = Field(
         description="The person's given name (first name in western culture).",
     )
 
-    name: str | None = Field(
-        None,
-        description=(
-            "The person's name, an alternative to specifying surname and "
-            "given names."
-        ),
-    )
-
-    @field_validator("family_names", "given_names", "name")
+    @field_validator("family", "given")
     @classmethod
     def clean_whitespace(cls, v: str | None) -> str | None:
         if v:
             return collapse_whitespace(v)
         else:
             return v
-
-    @model_validator(mode="after")
-    def check_well_defined(self) -> Self:
-        """Check that either surname and given are both provided, or name
-        alone is set.
-        """
-        if self.family_names and self.given_names:
-            if self.name:
-                raise ValueError(
-                    "Do not specify name if family_names and given_names are "
-                    "both provided."
-                )
-            return self
-
-        if self.name:
-            if self.family_names:
-                raise ValueError(
-                    "Do not specify `family_names` if using `name`."
-                )
-            if self.given_names:
-                raise ValueError(
-                    "Do not specify `given_names` if using `name`."
-                )
-            return self
-
-        raise ValueError(
-            "Name must include either family_names and given_names fields, "
-            "or a single name field."
-        )
 
 
 class Person(BaseModel):
@@ -406,11 +369,16 @@ class TechnoteTable(BaseModel):
         examples=["SQR"],
     )
 
-    date_created: datetime | None = Field(
+    organization: Organization | None = Field(
+        None,
+        description="The organization that publishes the technote series.",
+    )
+
+    date_created: datetime | date | None = Field(
         None, description="Date and time when the technote was created."
     )
 
-    date_updated: datetime | None = Field(
+    date_updated: datetime | date | None = Field(
         None, description="Date when the technote was updated."
     )
 
@@ -473,6 +441,16 @@ class TechnoteTable(BaseModel):
     _normalize_dates = field_validator(
         "date_created", "date_updated", mode="before"
     )(normalize_datetime)
+
+    @property
+    def date_created_datetime(self) -> datetime | None:
+        """The ``date_created`` as a `~datetime.datetime`."""
+        return normalize_datetime(self.date_created)
+
+    @property
+    def date_updated_datetime(self) -> datetime | None:
+        """The ``date_updatd`` as a `~datetime.datetime`."""
+        return normalize_datetime(self.date_updated)
 
 
 class TechnoteToml(BaseModel):

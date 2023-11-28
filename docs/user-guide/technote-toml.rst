@@ -55,6 +55,16 @@ An internal identifier for a series or collection this technote belongs to.
 
    :ref:`toml-technote-id`
 
+.. _toml-technote-organization:
+
+organization
+------------
+
+|optional|
+
+The organization that publishes the technote series.
+The value is a table with the same structure as :ref:`toml-technote-authors-affiliations`.
+
 .. _toml-technote-title:
 
 title
@@ -74,8 +84,16 @@ date_created
 |optional|
 
 Date and time when the technote was created.
-This should be set as an ISO8601 string.
+This should be set as an :rfc:`3339` (i.e., ISO8601) string.
 Either as a date (``YYYY-MM-DD``) or a date and time with a timezone (``YYYY-MM-DDTHH:MM:SSZ``).
+
+TOML treats dates and date-times as native types, and therefore don't use quotes:
+
+.. code-block:: toml
+
+   [technote]
+   date_modified = 2023-01-01T00:00:00Z
+
 
 .. _toml-technote-date-modified:
 
@@ -86,7 +104,15 @@ date_modified
 
 Date and time when the technote was last updated.
 This should be set as an ISO8601 string.
+This should be set as an :rfc:`3339` (i.e., ISO8601) string.
 Either as a date (``YYYY-MM-DD``) or a date and time with a timezone (``YYYY-MM-DDTHH:MM:SSZ``).
+
+TOML treats dates and date-times as native types, and therefore don't use quotes:
+
+.. code-block:: toml
+
+   [technote]
+   date_modified = 2023-01-01T00:00:00Z
 
 .. _toml-technote-version:
 
@@ -150,23 +176,13 @@ name
 
 |required|
 
-The author's name, as it should appear in the technote.
-The name can be specified either of two ways.
-First, as a single string:
+The author's name, as it should appear in the technote:
 
 .. code-block:: toml
 
    [[technote.authors]]
-   name = { "name": "Vera Rubin" }
-
-Alternatively, as structured family and given names:
-
-.. code-block:: toml
-
-   [[technote.authors]]
-   name = { "given_names": "Vera", "family_names": "Rubin" }
-
-The choice of syntax depends on the requirements of your organization and its metadata and theming tools for technotes.
+   name.given = "Vera"
+   name.family = "Rubin"
 
 .. _toml-technote-authors-internal-id:
 
@@ -210,7 +226,8 @@ Each affiliation is a table in the ``[[technote.authors.affiliations]]`` array.
 .. code-block:: toml
 
    [technote.authors]
-   name = { "name": "Vera Rubin" }
+   name.given = "Vera C."
+   name.family = "Rubin"
    affiliations = [
      { name = "Department of Astronomy, University of Washington" },
      { name = "Department of Terrestrial Magnetism, Carnegie Institution of Washington" }
@@ -222,7 +239,8 @@ If each affiliation has a large amount of metadata you can instead use the array
 .. code-block:: toml
 
    [technote.authors]
-   name = { "name": "Vera Rubin" }
+   name.given = "Vera C."
+   name.family = "Rubin"
    [[technote.authors.affiliations]]
    name = "Department of Astronomy, University of Washington"
    [[technote.authors.affiliations]]

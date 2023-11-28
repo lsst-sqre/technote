@@ -56,9 +56,8 @@ class Factory:
         authors = [
             Person(
                 name=StructuredName(
-                    family_names=author.name.family_names,
-                    given_names=author.name.given_names,
-                    name=author.name.name,
+                    family=author.name.family,
+                    given=author.name.given,
                 ),
                 email=author.email,
                 orcid=str(author.orcid) if author.orcid else None,
@@ -113,8 +112,8 @@ class Factory:
             ),
             id=toml_settings.technote.id,
             series_id=toml_settings.technote.series_id,
-            date_created=toml_settings.technote.date_created,
-            date_updated=toml_settings.technote.date_updated,
+            date_created=toml_settings.technote.date_created_datetime,
+            date_updated=toml_settings.technote.date_updated_datetime,
             version=toml_settings.technote.version,
             authors=authors,
             source_repository=source_repository,

@@ -16,7 +16,8 @@ version = "1.0.0"
 license = { id = "CC-BY-4.0" }
 
 [[technote.authors]]
-name = { family_names = "Sick", given_names = "Jonathan" }
+name.given = "Jonathan"
+name.family = "Sick"
 orcid = "https://orcid.org/0000-0003-3001-676X"
 affiliations = [
     { name = "Rubin Observatory", ror = "https://ror.org/048g3cy84" }
