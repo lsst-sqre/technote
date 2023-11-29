@@ -69,6 +69,7 @@ html_theme = "technote"
 
 extensions: list[str] = [
     "myst_parser",
+    "sphinx.ext.intersphinx",
     "technote.ext",
 ]
 _t.append_extensions(extensions)

@@ -2,6 +2,13 @@
 
 <!-- scriv-insert-here -->
 
+<a id='changelog-0.5.1'></a>
+## 0.5.1 (2023-11-29)
+
+### Bug fixes
+
+- Add `sphinx.ext.intersphinx` to the `extensions` list in `technote.sphinxconf`. This extension is required to use the `[technote.sphinx.intersphinx]` configuration.
+
 <a id='changelog-0.5.0'></a>
 ## 0.5.0 (2023-11-28)
 
