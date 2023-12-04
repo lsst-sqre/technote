@@ -43,7 +43,7 @@ def insert_post_title(app: Sphinx, exceptions: Exception | None) -> None:
         autoescape=select_autoescape(["html"]),
     )
     template = jinja_env.get_template("post-title.html.jinja")
-    status_html = template.render(status=status)
+    status_html = template.render(status=status, technote=technote_context)
     status_soup = BeautifulSoup(status_html, "html.parser")
 
     # Insert the status aside into the technote

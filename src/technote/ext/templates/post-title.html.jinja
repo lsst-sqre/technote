@@ -29,3 +29,17 @@
   </p>
   {% endif %}
 </aside>
+
+{% if technote.metadata.authors %}
+<aside class="technote-inline-authors">
+
+<p class="sr-only">By:</p>
+
+<ul class="technote-inline-comma-list technote-sidebar-author-list">
+  {% for author in technote.metadata.authors %}
+  <li class="technote-sidebar-author-list__author p-author">{{ author.name.plain_text_name }}</li>
+  {% endfor %}
+</ul>
+
+</aside>
+{% endif %}
