@@ -207,6 +207,7 @@ Figures
 
 .. figure:: https://placehold.co/600x400/000000/FFFFFF.png
    :alt: A placeholder image
+   :name: fig-placeholder
 
    This is an image.
 
@@ -219,6 +220,8 @@ This is a large image:
 
 .. image:: rubin-watermark.png
    :alt: A placeholder image
+
+Referencing a figure: :numref:`fig-placeholder`.
 
 Tables
 ======
