@@ -13,6 +13,8 @@ from .main import TechnoteSphinxConfig
 
 # Restrict to only Sphinx configurations
 __all__ = [
+    # Technote configuration
+    "T",
     # SPHINX
     "project",
     "author",
@@ -41,14 +43,14 @@ __all__ = [
     "myst_enable_extensions",
 ]
 
-_t = TechnoteSphinxConfig.load()
+T = TechnoteSphinxConfig.load()
 
 # ============================================================================
 # SPHINX General sphinx settings
 # ============================================================================
 
-project = _t.title or ""
-author = _t.author or ""
+project = T.title or ""
+author = T.author or ""
 exclude_patterns = [
     "_build",
     ".technote",
@@ -72,7 +74,7 @@ extensions: list[str] = [
     "sphinx.ext.intersphinx",
     "technote.ext",
 ]
-_t.append_extensions(extensions)
+T.append_extensions(extensions)
 
 # Add support for both Markdown and reStructuredText sources
 source_suffix = {
@@ -81,20 +83,20 @@ source_suffix = {
 }
 
 # Nitpicky settings and ignored errors
-nitpicky = _t.nitpicky
+nitpicky = T.nitpicky
 
 nitpick_ignore: list[tuple[str, str]] = []
-_t.append_nitpick_ignore(nitpick_ignore)
+T.append_nitpick_ignore(nitpick_ignore)
 
 nitpick_ignore_regex: list[tuple[str, str]] = []
-_t.append_nitpick_ignore_regex(nitpick_ignore_regex)
+T.append_nitpick_ignore_regex(nitpick_ignore_regex)
 
 # ============================================================================
 # INTERSPHINX Intersphinx settings
 # ============================================================================
 
 intersphinx_mapping: dict[str, tuple[str, str | None]] = {}
-_t.extend_intersphinx_mapping(intersphinx_mapping)
+T.extend_intersphinx_mapping(intersphinx_mapping)
 
 intersphinx_timeout = 10.0  # seconds
 
@@ -108,16 +110,16 @@ intersphinx_cache_limit = 5  # days
 linkcheck_retries = 2
 linkcheck_timeout = 15
 linkcheck_ignore: list[str] = []
-_t.append_linkcheck_ignore(linkcheck_ignore)
+T.append_linkcheck_ignore(linkcheck_ignore)
 
 # ============================================================================
 # HTML HTML builder settings
 # ============================================================================
 
-html_context: dict[str, Any] = {"technote": _t.jinja_context}
+html_context: dict[str, Any] = {"technote": T.jinja_context}
 
-if _t.toml.technote.canonical_url:
-    html_baseurl = str(_t.toml.technote.canonical_url)
+if T.toml.technote.canonical_url:
+    html_baseurl = str(T.toml.technote.canonical_url)
 else:
     html_baseurl = ""
 
