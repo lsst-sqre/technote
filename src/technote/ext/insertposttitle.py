@@ -12,14 +12,16 @@ from sphinx.application import Sphinx
 from ..metadata.model import TechnoteState
 from ..templating.context import TechnoteJinjaContext
 
-__all__ = ["insert_status"]
+__all__ = ["insert_post_title"]
 
 
-def insert_status(app: Sphinx, exceptions: Exception | None) -> None:
-    """Insert a status aside into the technote, directly below the title.
+def insert_post_title(app: Sphinx, exceptions: Exception | None) -> None:
+    """Insert a html templates directly below the title.
 
-    The status aside is only added for non-stable states (draft, deprecated,
-    or other).
+    This extension adds the following HTML templates below the h1 section:
+
+    - The status aside is only added for non-stable states (draft, deprecated,
+      or other).
     """
     if exceptions:
         return
@@ -40,7 +42,7 @@ def insert_status(app: Sphinx, exceptions: Exception | None) -> None:
         loader=PackageLoader("technote", "ext/templates"),
         autoescape=select_autoescape(["html"]),
     )
-    template = jinja_env.get_template("status.html.jinja")
+    template = jinja_env.get_template("post-title.html.jinja")
     status_html = template.render(status=status)
     status_soup = BeautifulSoup(status_html, "html.parser")
 
