@@ -9,7 +9,6 @@ from bs4 import BeautifulSoup
 from jinja2 import Environment, PackageLoader, select_autoescape
 from sphinx.application import Sphinx
 
-from ..metadata.model import TechnoteState
 from ..templating.context import TechnoteJinjaContext
 
 __all__ = ["insert_post_title"]
@@ -33,17 +32,13 @@ def insert_post_title(app: Sphinx, exceptions: Exception | None) -> None:
 
     technote_context = cast(TechnoteJinjaContext, technote_context)
 
-    status = technote_context.metadata.status
-    if status.state == TechnoteState.stable:
-        return
-
     # Load template from templates/status.html.jinja
     jinja_env = Environment(
         loader=PackageLoader("technote", "ext/templates"),
         autoescape=select_autoescape(["html"]),
     )
     template = jinja_env.get_template("post-title.html.jinja")
-    status_html = template.render(status=status, technote=technote_context)
+    status_html = template.render(technote=technote_context)
     status_soup = BeautifulSoup(status_html, "html.parser")
 
     # Insert the status aside into the technote
