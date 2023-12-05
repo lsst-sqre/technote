@@ -19,7 +19,7 @@ Python API reference
 .. automodapi:: technote.ext.abstract
    :include-all-objects:
 
-.. automodapi:: technote.ext.insertstatus
+.. automodapi:: technote.ext.insertposttitle
    :include-all-objects:
 
 .. automodapi:: technote.ext.metadata

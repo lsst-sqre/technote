@@ -25,6 +25,7 @@ __all__ = [
     "nitpicky",
     "nitpick_ignore",
     "nitpick_ignore_regex",
+    "numfig",
     # INTERSPHINX
     "intersphinx_mapping",
     "intersphinx_timeout",
@@ -90,6 +91,9 @@ T.append_nitpick_ignore(nitpick_ignore)
 
 nitpick_ignore_regex: list[tuple[str, str]] = []
 T.append_nitpick_ignore_regex(nitpick_ignore_regex)
+
+# Number figures and tables with captions
+numfig = True
 
 # ============================================================================
 # INTERSPHINX Intersphinx settings

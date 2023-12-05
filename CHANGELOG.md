@@ -2,6 +2,25 @@
 
 <!-- scriv-insert-here -->
 
+<a id='changelog-0.6.0'></a>
+## 0.6.0 (2023-12-05)
+
+### New features
+
+- Add `#svg-octicon-versions-16` to the `octicons.html` sprite template. This icon is useful for linking to alternative versions of a technote.
+
+- Add `#svg-octicon-mortar-board-16` to the `octicons.html` sprite template. This icon is useful for linking to the document's citation.
+
+- Export a variable, `T` from `technote.sphinxconf` that is an instance of `technote.main.TechnoteSphinxConfig`. This is useful for organizations that need to access the technote configuration and metadata in their own technote theme.
+
+- Figures and tables with captions are now numbered using the Sphinx `numfig` configuration. Authors can reference figures by number using the `numref` role pointing to the figure's `name` option.
+
+- Authors are now listed below the title of the technote. This is a change from the previous behavior of listing authors in the sidebar.
+
+### Bug fixes
+
+- Fix the `sidebar-authors.html` component template so that extra spaces aren't introduced between authors and commas.
+
 <a id='changelog-0.5.1'></a>
 ## 0.5.1 (2023-11-29)
 

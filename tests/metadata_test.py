@@ -80,7 +80,9 @@ def test_metadata_basic(app: Sphinx, status: IO, warning: IO) -> None:
         if "h-entry" in h_item["type"]:
             detected_hentry = True
             props = h_item["properties"]
-            assert props["author"][0] == "Jonathan Sick"
+            # The post-build cleanup doesn't run with the test builder,
+            # so the insertposttitle extension doesn't run; hence inline
+            # author info won't be added.
             assert props["updated"][0] == "2023-09-19T00:00:00Z"
             assert "content" in props
             assert "summary" in props

@@ -1,0 +1,47 @@
+{% if technote.metadata.status.state != "stable" %}
+<aside class="technote-status technote-status--{{ technote.metadata.status.state.value }}">
+  <p class="technote-status__note" data-technote-status="{{ technote.metadata.status.state.value }}">
+  {% if technote.metadata.status.state == "draft" %}
+  This is a draft.
+  {% if technote.metadata.status.note %}
+  {{ technote.metadata.status.note }}
+  {% endif %}
+  </p>
+
+  {% elif technote.metadata.status.state == "deprecated" %}
+  This document is deprecated.
+  {% if technote.metadata.status.note %}
+  {{ technote.metadata.status.note }}
+  {% endif %}
+  </p>
+
+  {% if technote.metadata.status.supersceding_urls %}
+  <p>See instead:</p>
+
+  <ul>
+  {% for link in technote.metadata.status.supersceding_urls %}
+    <li><a href="{{ link.url }}" class="technote-superceding-url">{{ link.title or link.url }}</a></li>
+  {% endfor %}
+  </ul>
+  {% endif %}
+
+  {% elif technote.metadata.status.state == "other" %}
+  {{ status.note }}
+  </p>
+  {% endif %}
+</aside>
+{% endif %}
+
+{% if technote.metadata.authors %}
+<aside class="technote-inline-authors">
+
+<p class="sr-only">By:</p>
+
+<ul class="technote-inline-comma-list technote-sidebar-author-list">
+  {% for author in technote.metadata.authors %}
+  <li class="technote-sidebar-author-list__author p-author">{{ author.name.plain_text_name }}</li>
+  {% endfor %}
+</ul>
+
+</aside>
+{% endif %}
