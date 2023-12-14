@@ -2,6 +2,13 @@
 
 <!-- scriv-insert-here -->
 
+<a id='changelog-0.6.2'></a>
+## 0.6.2 (2023-12-14)
+
+### Bug fixes
+
+- Fix the `technote.ext.pygmentsscss` extension to handle cases where the HTML builder isn't being run.
+
 <a id='changelog-0.6.1'></a>
 ## 0.6.1 (2023-12-14)
 
