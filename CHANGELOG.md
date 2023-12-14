@@ -2,6 +2,13 @@
 
 <!-- scriv-insert-here -->
 
+<a id='changelog-0.6.1'></a>
+## 0.6.1 (2023-12-14)
+
+### Bug fixes
+
+- The `technote.ext.wraptables` and `technote.ext.insertposttitles` extensions now gracefully handle cases when an `index.html` file does not exist. A reason for this might be that the build is running through the linkcheck builder.
+
 <a id='changelog-0.6.0'></a>
 ## 0.6.0 (2023-12-05)
 

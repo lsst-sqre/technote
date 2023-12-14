@@ -43,6 +43,8 @@ def insert_post_title(app: Sphinx, exceptions: Exception | None) -> None:
 
     # Insert the status aside into the technote
     html_path = Path(app.builder.outdir) / "index.html"
+    if not html_path.is_file():
+        return
     soup = BeautifulSoup(html_path.read_text(), "html.parser")
     title = soup.find("h1")
     title.insert_after(status_soup)
