@@ -29,6 +29,9 @@ def overwrite_pygments_css(
         return
 
     pygment_css_path = Path(app.builder.outdir) / "_static" / "pygments.css"
+    if not pygment_css_path.is_file():
+        # Handles cases where the html builder isn't running (e.g. link check)
+        return
     pygments_css = _create_pygments_css()
     pygment_css_path.write_text(pygments_css)
 
