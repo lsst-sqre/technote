@@ -1,3 +1,6 @@
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10385500.svg)](https://doi.org/10.5281/zenodo.10385500)
+[![Python CI](https://github.com/lsst-sqre/technote/actions/workflows/ci.yaml/badge.svg)](https://github.com/lsst-sqre/technote/actions/workflows/ci.yaml)
+
 # Technote
 
 Rubin Observatory's framework for Sphinx-based technote documents.

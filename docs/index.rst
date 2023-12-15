@@ -20,6 +20,14 @@ technote is developed on GitHub at https://github.com/lsst-sqre/technote.
 
    View a demo technote page
 
+Cite Technote
+=============
+
+You can cite the latest Technote release if you mention Technote in a publication:
+
+.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.10385500.svg
+  :target: https://doi.org/10.5281/zenodo.10385500
+
 .. toctree::
    :hidden:
 
