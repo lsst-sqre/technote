@@ -92,13 +92,13 @@ TOML treats dates and date-times as native types, and therefore don't use quotes
 .. code-block:: toml
 
    [technote]
-   date_modified = 2023-01-01T00:00:00Z
+   date_created = 2023-01-01T00:00:00Z
 
 
-.. _toml-technote-date-modified:
+.. _toml-technote-date-updated:
 
-date_modified
--------------
+date_updated
+------------
 
 |optional|
 
@@ -112,7 +112,7 @@ TOML treats dates and date-times as native types, and therefore don't use quotes
 .. code-block:: toml
 
    [technote]
-   date_modified = 2023-01-01T00:00:00Z
+   date_updated = 2023-01-01T00:00:00Z
 
 .. _toml-technote-version:
 
