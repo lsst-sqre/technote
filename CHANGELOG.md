@@ -60,7 +60,7 @@
 
 - The edit-on-GitHub link created in the Jinja context now correctly points to `index.md` if appropriate. Previously it assumed that the source page would be `index.rst`.
 
-- Allow the date_created and date_modified keys in the `[technote]` table to use native TOML date formats (e.g., `2023-11-20T14:40:22Z`, without quoting as a string).
+- Allow the `date_created`` and `date_created` keys in the `[technote]` table to use native TOML date formats (e.g., `2023-11-20T14:40:22Z`, without quoting as a string).
 
 <a id='changelog-0.4.0'></a>
 ## 0.4.0 (2023-10-31)
