@@ -4,6 +4,7 @@ from __future__ import annotations
 
 __all__ = ["Factory"]
 
+from datetime import UTC, datetime
 from pathlib import Path
 
 from pydantic import ValidationError
@@ -103,6 +104,12 @@ class Factory:
         else:
             license_id = None
 
+        # Default the "date_updated" to now (build time) if it is not
+        # hard-coded into the TOML file.
+        date_updated = toml_settings.technote.date_updated_datetime
+        if date_updated is None:
+            date_updated = datetime.now(tz=UTC)
+
         return TechnoteMetadata(
             title=toml_settings.technote.title or "",
             canonical_url=(
@@ -113,7 +120,7 @@ class Factory:
             id=toml_settings.technote.id,
             series_id=toml_settings.technote.series_id,
             date_created=toml_settings.technote.date_created_datetime,
-            date_updated=toml_settings.technote.date_updated_datetime,
+            date_updated=date_updated,
             version=toml_settings.technote.version,
             authors=authors,
             source_repository=source_repository,
