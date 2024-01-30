@@ -2,6 +2,17 @@
 
 <!-- scriv-insert-here -->
 
+<a id='changelog-0.7.0'></a>
+## 0.7.0 (2024-01-30)
+
+### New features
+
+- When the `technote.date_updated` field in `technote.toml` is not set, the update date internally defaults to "now" (the build time). This ensures that documents always carry some form of metadata about when they were modified.
+
+- Code samples without captions (unwrapped `.highlight` divs) now have borders and are protected against x-overflow. This matches the behavior of code samples with captions.
+- All code samples have negative left margin equal to their content padding so that the code lines up with the text column.
+- The content (`div.sb-container`) now has bottom margin to give content breathing room.
+
 <a id='changelog-0.6.2'></a>
 ## 0.6.2 (2023-12-14)
 
