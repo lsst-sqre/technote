@@ -29,11 +29,14 @@ pre {
   font-size: 0.85rem;
 }
 
-.highlight pre {
+.highlight {
   margin: 0;
   margin-left: calc(-1 * var(--tn-space-xs-fixed));
   padding: var(--tn-space-xs-fixed);
   overflow-x: auto;
+  border: var(--tn-sphinx-code-block-border-thickness) solid
+    var(--tn-sphinx-code-block-border-color);
+  border-radius: var(--tn-sphinx-code-block-border-radius);
 }
 
 .literal-block-wrapper {
@@ -45,10 +48,9 @@ pre {
 }
 
 .literal-block-wrapper .highlight {
-  // This border radius ensures the pygments background on .highlight doesn't
-  // interfere with the border radius of the .literal-block-wrapper.
-  border-radius: 0 0 var(--tn-sphinx-code-block-border-radius)
-    var(--tn-sphinx-code-block-border-radius);
+  // If the code sample has a caption, then turn off its border so that the
+  // border comes from the overall wrapper (.literal-block-wrapper).
+  border: none;
 }
 
 .code-block-caption {
