@@ -38,7 +38,7 @@ To add a site to the Intersphinx_ configuration, add items to the ``[technote.sp
 .. code-block:: toml
    :caption: technote.toml
 
-   [technote.sphinx.intersphinx]
+   [technote.sphinx.intersphinx.projects]
    astropy = "https://docs.astropy.org/en/stable/"
    python = "https://docs.python.org/3/"
 
