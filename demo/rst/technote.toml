@@ -28,3 +28,6 @@ title = "The technical note system"
 
 [[technote.status.supersceding_urls]]
 url = "https://sqr-006.lsst.io/"
+
+[technote.sphinx.intersphinx.projects]
+python = "https://docs.python.org/3/"

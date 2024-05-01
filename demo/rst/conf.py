@@ -7,3 +7,5 @@ html_theme_options = {
     "dark_logo": "technote-logo-dark.svg",
     "logo_link_url": "https://technote.lsst.io",
 }
+
+default_role = "py:obj"
