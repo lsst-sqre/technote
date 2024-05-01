@@ -67,7 +67,7 @@
   width: auto;
 }
 
-@media (max-width: 42rem) {
+@media (max-width: 42em) {
   .sb-article-container,
   .sb-footer-content__inner {
     width: 100vw;
@@ -79,101 +79,101 @@
   }
 }
 
-@media (min-width: 42rem) {
+@media (min-width: 42em) {
   .sb-footer-content__inner,
   .drop-secondary-sidebar-for-full-width-content .sb-article,
   .drop-secondary-sidebar-for-full-width-content .match-content-width {
-    width: 38rem;
+    width: 38em;
   }
   .sb-article,
   .match-content-width {
-    width: 38rem;
+    width: 38em;
   }
   // h1::after {
   //   content: ' 42';
   // }
 }
-@media (min-width: 46rem) {
+@media (min-width: 46em) {
   .sb-footer-content__inner,
   .drop-secondary-sidebar-for-full-width-content .sb-article,
   .drop-secondary-sidebar-for-full-width-content .match-content-width {
-    width: 40rem;
+    width: 40em;
   }
   .sb-article,
   .match-content-width {
-    width: 40rem;
+    width: 40em;
   }
   // h1::after {
   //   content: ' 46';
   // }
 }
-@media (min-width: 50rem) {
+@media (min-width: 50em) {
   .sb-footer-content__inner,
   .drop-secondary-sidebar-for-full-width-content .sb-article,
   .drop-secondary-sidebar-for-full-width-content .match-content-width {
-    width: 40rem;
+    width: 40em;
   }
   .sb-article,
   .match-content-width {
-    width: 40rem;
+    width: 40em;
   }
   /* h1::after {
     content: ' 50';
   } */
 }
-@media (min-width: 59rem) {
+@media (min-width: 59em) {
   /* secondary sidebar appears, width is 17rem. */
   .sb-footer-content__inner,
   .drop-secondary-sidebar-for-full-width-content .sb-article,
   .drop-secondary-sidebar-for-full-width-content .match-content-width {
-    width: 40rem;
+    width: 40em;
   }
   .sb-article,
   .match-content-width {
-    width: 36rem;
+    width: 36em;
   }
   /* h1::after {
     content: ' 59';
   } */
 }
-@media (min-width: 63rem) {
+@media (min-width: 63em) {
   .sb-footer-content__inner,
   .drop-secondary-sidebar-for-full-width-content .sb-article,
   .drop-secondary-sidebar-for-full-width-content .match-content-width {
-    width: 40rem;
+    width: 40em;
   }
   .sb-article,
   .match-content-width {
-    width: 36rem;
+    width: 36em;
   }
   /* h1::after {
     content: ' 63';
   } */
 }
-@media (min-width: 67rem) {
+@media (min-width: 67em) {
   .sb-footer-content__inner,
   .drop-secondary-sidebar-for-full-width-content .sb-article,
   .drop-secondary-sidebar-for-full-width-content .match-content-width {
-    width: 40rem;
+    width: 40em;
   }
   .sb-article,
   .match-content-width {
-    width: 40rem;
+    width: 40em;
   }
   /* h1::after {
     content: ' 67';
   } */
 }
-@media (min-width: 76rem) {
+@media (min-width: 76em) {
   /* The primary sidebar appears */
   .sb-footer-content__inner,
   .drop-secondary-sidebar-for-full-width-content .sb-article,
   .drop-secondary-sidebar-for-full-width-content .match-content-width {
-    width: 40rem;
+    width: 40em;
   }
   .sb-article,
   .match-content-width {
-    width: 32rem;
+    width: 32em;
   }
 
   // Reset the pop-over specific styling for the sidebar.
@@ -185,37 +185,37 @@
     content: ' 76';
   } */
 }
-@media (min-width: 80rem) {
+@media (min-width: 80em) {
   .sb-article,
   .match-content-width {
-    width: 34rem;
+    width: 34em;
   }
   .sb-footer-content__inner,
   .drop-secondary-sidebar-for-full-width-content .sb-article,
   .drop-secondary-sidebar-for-full-width-content .match-content-width {
-    width: 40rem;
+    width: 40em;
   }
   /* h1::after {
     content: ' 80';
   } */
 }
-@media (min-width: 84rem) {
+@media (min-width: 84em) {
   .sb-article,
   .match-content-width {
-    width: 40rem;
+    width: 40em;
   }
   /* h1::after {
     content: ' 84';
   } */
 }
-@media (min-width: 88rem) {
+@media (min-width: 88em) {
   .sb-footer-content__inner,
   .drop-secondary-sidebar-for-full-width-content .sb-article,
   .drop-secondary-sidebar-for-full-width-content .match-content-width {
-    width: 40rem;
+    width: 40em;
   }
   .sb-page-width {
-    width: 86rem;
+    width: 86em;
   }
   /* h1::after {
     content: ' 88';

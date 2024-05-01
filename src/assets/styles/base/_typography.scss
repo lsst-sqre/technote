@@ -4,6 +4,7 @@
 body {
   font-family: var(--tn-component-text-font-family);
   line-height: var(--tn-component-text-line-height);
+  font-size: var(--tn-component-text-font-size);
   color: var(--tn-component-text-color);
   background: var(--tn-component-text-background-color);
 }
@@ -71,4 +72,15 @@ h6:hover .headerlink {
 
 a {
   color: var(--tn-component-link-color);
+}
+
+pre {
+  font-size: 1rem;
+}
+
+code {
+  /* Making inline code slightly smaller seems to help with baseline alignment
+   * some monospace fonts seems bigger that Source Sans.
+   */
+  font-size: 0.9em;
 }
