@@ -1,6 +1,5 @@
 """Pytest configuration and fixtures."""
 
-
 import pytest
 from sphinx.testing.path import path
 

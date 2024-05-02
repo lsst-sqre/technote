@@ -1,6 +1,5 @@
 """Test the technote packaging."""
 
-
 from __future__ import annotations
 
 from technote import __version__

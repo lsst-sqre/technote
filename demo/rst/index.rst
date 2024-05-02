@@ -65,6 +65,8 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin facilisis pharetr
 Code cells
 ==========
 
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin facilisis pharetra neque, at semper nulla mattis auctor. ``inline code`` to test line height behaviour. Proin ``hello world`` facilisis pharetra neque, at semper nulla mattis auctor. `pathlib.Path`. Proin facilisis pharetra neque, at semper nulla mattis auctor.
+
 This is a long code cell:
 
 .. code-block:: Makefile
