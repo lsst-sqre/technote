@@ -42,10 +42,6 @@
   {% endblock head_links -%}
 
   {% block head_stylesheets -%}
-  {% if not omit_skeleton_css -%}
-    <link rel="stylesheet" href="{{ pathto('_static/skeleton.css', 1) }}" type="text/css" />
-  {%- endif -%}
-
   {% for css in css_files -%}
     {%- if css|attr("filename") -%}
       {{ css_tag(css) }}
