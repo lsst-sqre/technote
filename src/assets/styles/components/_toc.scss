@@ -12,28 +12,6 @@ html[data-theme='dark'] {
   --tn-component-toc-level-border-color: var(--tn-color-neutral-200);
 }
 
-.technote-toc {
-  // Ensure that the toc can scroll independently if its longer than the viewport
-  overflow-y: auto;
-  max-height: 100vh;
-}
-
-@media (min-width: 59rem) {
-  // technote-toc is now a part of the page, not a slide-out
-  .technote-toc {
-    // make the toc sticky relative to the top of the page
-    position: sticky;
-    top: 1rem;
-
-    // This makes the outline float midway down the page in a sort of useful
-    // position. It could definitely be engineered better.
-    margin-top: 20vh;
-
-    // give the toc more margin to the content
-    margin-left: 2rem;
-  }
-}
-
 .technote-toc-header {
   margin: 0 0 1rem;
   font-size: var(--tn-component-h4-size);

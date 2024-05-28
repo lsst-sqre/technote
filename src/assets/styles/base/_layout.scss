@@ -16,3 +16,43 @@ body {
   margin: 0;
   min-height: 100%;
 }
+
+/* Basic reset for the full-width banners */
+.technote-announcement-container,
+.technote-banner-container,
+.technote-footer-container {
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+.technote-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  width: 100%;
+  padding: 10px;
+  gap: 2em 4em;
+}
+
+/* Desktop layout */
+@media screen and (min-width: 768px) {
+  .technote-container {
+    grid-template-columns: 30ch 72ch;
+    grid-template-rows: auto 1fr;
+  }
+
+  .technote-logo-container {
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+  }
+
+  .technote-outline-container {
+    grid-column: 1 / 2;
+    grid-row: 2 / 3;
+  }
+
+  .technote-article-container {
+    grid-column: 2 / 3;
+    grid-row: 1 / 3;
+  }
+}

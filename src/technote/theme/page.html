@@ -51,15 +51,15 @@ data-theme="light" data-mode="auto"
     {% include "sections/content-outline.html" %}
   </aside>
 
-  <article role="main" class="e-content">
+  <article role="main" class="technote-article-container e-content">
     <header class="technote-article-header-container">
-      {% include "sections/header-article.html" %}
+      {% include "sections/article-header.html" %}
     </header>
 
-    {% include sections/article.html %}
+    {% include "sections/article.html" %}
 
     <footer class="technote-article-footer-container">
-      {% include "sections/footer-article.html" %}
+      {% include "sections/article-footer.html" %}
     </footer>
   </article>
 
