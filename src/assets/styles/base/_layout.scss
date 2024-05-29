@@ -34,6 +34,49 @@ body {
   gap: 2em 4em;
 }
 
+/* Contents outline (mobile) */
+.technote-outline-container {
+  position: fixed;
+  background: var(--tn-component-text-background-color);
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 0%;
+  opacity: 0;
+  visibility: hidden;
+
+  &.technote-outline-container--visible {
+    height: 100%;
+    opacity: 0.98;
+    visibility: visible;
+    backdrop-filter: blur(10px);
+    padding: 1em;
+
+    display: flex;
+    align-items: center; /* Vertically centers the content */
+    height: 100vh;
+  }
+}
+
+.technote-contents-toggle-container {
+  --height: 3em;
+  position: fixed;
+  height: var(--height);
+  top: calc(100vh - var(--height));
+  width: 100vw;
+  z-index: 100;
+}
+
+.technote-contents-toggle {
+  display: block;
+  margin-left: auto;
+  margin-bottom: 10px;
+  margin-right: 1em;
+  text-align: center;
+  font-size: 1.4rem;
+  cursor: pointer;
+}
+
 /* Desktop layout */
 @media screen and (min-width: 768px) {
   .technote-container {
@@ -49,10 +92,17 @@ body {
   .technote-outline-container {
     grid-column: 1 / 2;
     grid-row: 2 / 3;
+    position: relative;
+    opacity: 1;
+    visibility: visible;
   }
 
   .technote-article-container {
     grid-column: 2 / 3;
     grid-row: 1 / 3;
+  }
+
+  .technote-contents-toggle-container {
+    visibility: hidden;
   }
 }

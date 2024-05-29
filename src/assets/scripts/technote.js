@@ -71,3 +71,28 @@ export function documentReady(callback) {
  * Add handlers.
  */
 documentReady(addThemeModeListener);
+
+/**
+ * Add listener for contents outline navigation button.
+ */
+function toggleContentsOutline() {
+  document
+    .querySelector('#technote-contents-toggle')
+    .classList.toggle('technote-contents-toggle--active');
+  document
+    .querySelector('.technote-outline-container')
+    .classList.toggle('technote-outline-container--visible');
+}
+
+documentReady(function () {
+  document
+    .querySelector('#technote-contents-toggle')
+    .addEventListener('click', toggleContentsOutline);
+
+  document.querySelectorAll('.technote-outline-container a').forEach((el) => {
+    el.addEventListener('click', toggleContentsOutline);
+  });
+  console.log(
+    '[Technote]: Added listener for contents outline navigation button.'
+  );
+});
