@@ -68,6 +68,7 @@ body {
 }
 
 .technote-contents-toggle {
+  --border-width: 2px;
   display: block;
   margin-left: auto;
   margin-bottom: 10px;
@@ -75,6 +76,15 @@ body {
   text-align: center;
   font-size: 1.4rem;
   cursor: pointer;
+  background-color: var(--tn-component-text-background-color);
+  border-radius: 0.5em;
+  padding: 3px 5px;
+  border: var(--border-width) solid transparent;
+  box-shadow: var(--shadow-elevation-medium);
+
+  &:hover {
+    box-shadow: var(--shadow-elevation-high);
+  }
 }
 
 /* Desktop layout */

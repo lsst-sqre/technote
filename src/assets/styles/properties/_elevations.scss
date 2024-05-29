@@ -1,0 +1,27 @@
+/* Shadow tokens. */
+
+/*
+  https://www.joshwcomeau.com/shadow-palette/
+
+  oomph: 0.7
+  crispy: 0.33
+  resolution: 0.75
+*/
+:root {
+  --shadow-color: 0deg 0% 56%;
+  --shadow-elevation-low: 0.3px 0.5px 0.7px hsl(var(--shadow-color) / 0.27),
+    0.5px 0.9px 1.3px -0.8px hsl(var(--shadow-color) / 0.37),
+    1.1px 2.2px 3.1px -1.6px hsl(var(--shadow-color) / 0.46);
+  --shadow-elevation-medium: 0.3px 0.5px 0.7px hsl(var(--shadow-color) / 0.29),
+    1px 2.1px 2.9px -0.5px hsl(var(--shadow-color) / 0.36),
+    2.4px 4.8px 6.7px -1.1px hsl(var(--shadow-color) / 0.44),
+    5.5px 11px 15.4px -1.6px hsl(var(--shadow-color) / 0.51);
+  --shadow-elevation-high: 0.3px 0.5px 0.7px hsl(var(--shadow-color) / 0.27),
+    2.2px 4.3px 6px -0.2px hsl(var(--shadow-color) / 0.3),
+    4px 8px 11.2px -0.5px hsl(var(--shadow-color) / 0.34),
+    6.3px 12.5px 17.5px -0.7px hsl(var(--shadow-color) / 0.37),
+    9.5px 18.9px 26.5px -0.9px hsl(var(--shadow-color) / 0.4),
+    14.1px 28.3px 39.6px -1.2px hsl(var(--shadow-color) / 0.44),
+    20.8px 41.6px 58.3px -1.4px hsl(var(--shadow-color) / 0.47),
+    30px 60px 84px -1.6px hsl(var(--shadow-color) / 0.51);
+}
