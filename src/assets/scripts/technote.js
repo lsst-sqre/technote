@@ -82,6 +82,19 @@ function toggleContentsOutline() {
   document
     .querySelector('.technote-outline-container')
     .classList.toggle('technote-outline-container--visible');
+
+  const showLabel =
+    '<svg class="technote-svg-icon"><use href="#svg-octicon-three-bars-16"></svg> Contents';
+  const hideLabel =
+    '<svg class="technote-svg-icon"><use href="#svg-octicon-filled-x-16"></svg> Hide contents';
+
+  document.querySelector(
+    '#technote-contents-toggle.technote-contents-toggle--active'
+  )
+    ? (document.querySelector('#technote-contents-toggle').innerHTML =
+        hideLabel)
+    : (document.querySelector('#technote-contents-toggle').innerHTML =
+        showLabel);
 }
 
 documentReady(function () {
