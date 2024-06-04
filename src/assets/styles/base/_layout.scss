@@ -20,10 +20,22 @@ body {
 /* Basic reset for the full-width banners */
 .technote-announcement-container,
 .technote-banner-container,
-.technote-footer-container {
+.technote-footer-container,
+.technote-container-wrapper {
   width: 100%;
   padding: 0;
   margin: 0;
+}
+
+/* This wrapper constrains the overall width of the main.technote-container
+ * without the need to use extra media queries.
+ */
+.technote-container-wrapper {
+  width: 100%;
+  max-width: calc(
+    var(--tn-sidebar-width) + var(--tn-content-max-width) +
+      var(--tn-layout-column-gap)
+  );
 }
 
 .technote-container {
@@ -31,7 +43,7 @@ body {
   grid-template-columns: 1fr;
   width: 100%;
   padding: 10px;
-  gap: 2em 4em;
+  gap: 2em 2em;
 }
 
 /* Contents outline (mobile) */
@@ -98,7 +110,7 @@ body {
 /* Desktop layout */
 @media screen and (min-width: 768px) {
   .technote-container {
-    grid-template-columns: 30ch 72ch;
+    grid-template-columns: var(--tn-sidebar-width) 1fr;
     grid-template-rows: auto 1fr;
   }
 
@@ -122,5 +134,12 @@ body {
 
   .technote-contents-toggle-container {
     visibility: hidden;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .technote-container {
+    // grid-template-columns: 30ch 72ch;
+    column-gap: 4em;
   }
 }
