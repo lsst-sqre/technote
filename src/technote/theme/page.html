@@ -49,31 +49,29 @@ data-theme="light" data-mode="auto"
 </aside>
 
 {% block container %}
-<div class="technote-container-wrapper">
-  <main class="technote-container h-entry">
+<main class="technote-container h-entry">
 
-    <header class="technote-logo-container">
-      {% include "sections/logo.html" %}
+  <header class="technote-logo-container">
+    {% include "sections/logo.html" %}
+  </header>
+
+  <aside class="technote-outline-container">
+    {% include "sections/content-outline.html" %}
+  </aside>
+
+  <article role="main" class="technote-article-container e-content">
+    <header class="technote-article-header-container">
+      {% include "sections/article-header.html" %}
     </header>
 
-    <aside class="technote-outline-container">
-      {% include "sections/content-outline.html" %}
-    </aside>
+    {% include "sections/article.html" %}
 
-    <article role="main" class="technote-article-container e-content">
-      <header class="technote-article-header-container">
-        {% include "sections/article-header.html" %}
-      </header>
+    <footer class="technote-article-footer-container">
+      {% include "sections/article-footer.html" %}
+    </footer>
+  </article>
 
-      {% include "sections/article.html" %}
-
-      <footer class="technote-article-footer-container">
-        {% include "sections/article-footer.html" %}
-      </footer>
-    </article>
-
-  </main>
-</div>
+</main>
 
 {% endblock container %}
 

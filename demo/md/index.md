@@ -14,3 +14,21 @@ Add an image with a caption:
 
 The Rubin watermark.
 ```
+
+Wide content:
+
+```{rst-class} technote-wide-content
+```
+
+```{image} https://placehold.co/1200x400
+```
+
+### A subsection
+
+More wide content:
+
+```{rst-class} technote-wide-content
+```
+
+```{image} https://placehold.co/1200x400
+```
