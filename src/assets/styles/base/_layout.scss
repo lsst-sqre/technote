@@ -20,29 +20,17 @@ body {
 /* Basic reset for the full-width banners */
 .technote-announcement-container,
 .technote-banner-container,
-.technote-footer-container,
-.technote-container-wrapper {
+.technote-footer-container {
   width: 100%;
   padding: 0;
   margin: 0;
-}
-
-/* This wrapper constrains the overall width of the main.technote-container
- * without the need to use extra media queries.
- */
-.technote-container-wrapper {
-  width: 100%;
-  max-width: calc(
-    var(--tn-sidebar-width) + var(--tn-content-max-width) +
-      var(--tn-layout-column-gap)
-  );
 }
 
 .technote-container {
   display: grid;
   grid-template-columns: 1fr;
   width: 100%;
-  padding: 10px;
+  padding: var(--tn-layout-container-padding);
   gap: 2em 2em;
 }
 
@@ -134,7 +122,11 @@ body {
        full-bleed blocks.
      */
     display: grid;
-    grid-template-columns: calc(min(100%, var(--tn-content-max-width))) 1fr;
+    /* The content width is re-used when calculating the negative-margin
+       and max-width for the full-bleed blocks.
+     */
+    --tn-content-width: calc(min(100%, var(--tn-content-max-width)));
+    grid-template-columns: var(--tn-content-width) 1fr;
   }
 
   /* Constrain content to a readable column. */
@@ -144,8 +136,26 @@ body {
 
   /* Full-bleed blocks */
   .technote-wide-content {
-    max-width: 100%;
-    grid-column: 1 / -1;
+    /* This negative margin extends the container for wide content out by the
+       width of the right whitespace. This is calculated as the viewport
+       width that's left over after removing the widths of the left sidebar,
+       the grid column gap, the main content column width, and the padding.
+     */
+    margin-right: calc(
+      -100vw + var(--tn-sidebar-width) + var(--tn-layout-column-gap) + var(
+          --tn-content-width
+        ) + var(--tn-layout-container-padding)
+    );
+  }
+
+  /* Reset the max-width for full-bleed images. Normally they're 100% of the container. */
+  .technote-wide-content img,
+  img.technote-wide-content {
+    max-width: calc(
+      100vw - var(--tn-sidebar-width) - var(--tn-layout-column-gap) - var(
+          --tn-layout-container-padding
+        )
+    );
   }
 
   /* The contents toggle button isn't available on desktop. */
