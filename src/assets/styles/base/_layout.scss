@@ -94,6 +94,27 @@ body {
   }
 }
 
+@media screen and (max-width: 768px) {
+  figure.technote-table:has(.technote-wide-content),
+  .technote-wide-content {
+    margin-right: 0;
+    overflow-x: auto;
+    max-width: 100%;
+    /* Getting reliable overflow scroll in the mobile view is reliable
+     * when a specific width is set on the container.
+     */
+    width: calc(100vw - 2 * var(--tn-layout-container-padding));
+  }
+
+  .technote-wide-content img,
+  img.technote-wide-content,
+  .technote-wide-content.figure img,
+  .technote-table:has(.technote-wide-content),
+  table.technote-wide-content {
+    max-width: 100%;
+  }
+}
+
 /* Desktop layout */
 @media screen and (min-width: 768px) {
   .technote-container {
@@ -155,7 +176,7 @@ body {
     );
 
     /* Allow tables that are wider than the viewport to scroll. */
-    overflow-x: scroll;
+    overflow-x: auto;
   }
 
   /* Reset the max-width for full-bleed images. Normally they're 100% of the container. */
