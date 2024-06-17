@@ -134,7 +134,14 @@ body {
     grid-column: 1 / 2;
   }
 
-  /* Full-bleed blocks */
+  /* Full-bleed blocks
+   *
+   * When a table is marked with a table-wide-content rst-class, that class
+   * actually applies to the table inside the figure, but we need the entire
+   * figure to to be full bleed. The :has selector lets us select the
+   * figure that contains a table.technote-wide-content.
+   */
+  figure.technote-table:has(.technote-wide-content),
   .technote-wide-content {
     /* This negative margin extends the container for wide content out by the
        width of the right whitespace. This is calculated as the viewport
@@ -146,11 +153,17 @@ body {
           --tn-content-width
         ) + var(--tn-layout-container-padding)
     );
+
+    /* Allow tables that are wider than the viewport to scroll. */
+    overflow-x: scroll;
   }
 
   /* Reset the max-width for full-bleed images. Normally they're 100% of the container. */
   .technote-wide-content img,
-  img.technote-wide-content {
+  img.technote-wide-content,
+  .technote-wide-content.figure img,
+  .technote-table:has(.technote-wide-content),
+  table.technote-wide-content {
     max-width: calc(
       100vw - var(--tn-sidebar-width) - var(--tn-layout-column-gap) - var(
           --tn-layout-container-padding

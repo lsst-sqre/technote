@@ -203,12 +203,16 @@ img {
 
 figure {
   margin-left: 0;
-  margin-right: 0;
 }
 
-figure img {
-  max-width: 100%;
-}
+// figure {
+//   margin-left: 0;
+//   margin-right: 0;
+// }
+
+// figure img {
+//   max-width: 100%;
+// }
 
 figcaption {
   width: 100%;
@@ -236,10 +240,10 @@ figcaption p:last-child {
 // setting the display property of table itself to block, which is bad for
 // accessibility.
 // https://www.tpgi.com/short-note-on-what-css-display-properties-do-to-table-semantics/
-.technote-table {
-  max-width: 100%;
-  overflow-x: auto;
-}
+// .technote-table {
+//   max-width: 100%;
+//   overflow-x: auto;
+// }
 
 table {
   max-width: fit-content;
