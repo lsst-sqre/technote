@@ -120,6 +120,7 @@ body {
   .technote-container {
     grid-template-columns: var(--tn-sidebar-width) 1fr;
     grid-template-rows: auto 1fr;
+    height: 100vh; /* Full height to allow for sticky sidebar */
   }
 
   .technote-logo-container {
@@ -138,6 +139,9 @@ body {
   .technote-article-container {
     grid-column: 2 / 3;
     grid-row: 1 / 3;
+
+    /* Allow overflow because .technote-container is full height */
+    overflow-y: auto;
 
     /* Create a grid within article to constrain content but allow
        full-bleed blocks.
