@@ -134,6 +134,9 @@ body {
     position: relative;
     opacity: 1;
     visibility: visible;
+    /* to let the outline scroll independently */
+    height: 100%;
+    overflow-y: auto;
   }
 
   .technote-article-container {
