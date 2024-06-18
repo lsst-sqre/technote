@@ -10,20 +10,22 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl quis 
 
 Add an image with a caption:
 
-<!-- ```{figure} rubin-watermark.png
+```{figure} rubin-watermark.png
 
 The Rubin watermark.
-``` -->
+```
+
+## Wide content
 
 Wide content:
 
-<!-- ```{rst-class} technote-wide-content
+```{rst-class} technote-wide-content
 ```
 
 ```{image} https://placehold.co/1200x400
-``` -->
+```
 
-<!-- ### A subsection
+### A subsection
 
 More wide content:
 
@@ -31,7 +33,9 @@ More wide content:
 ```
 
 ```{image} https://placehold.co/1200x400
-``` -->
+```
+
+### Tables
 
 ```{rst-class} technote-wide-content
 ```
@@ -63,3 +67,12 @@ More wide content:
 ```
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl quis molestie ultricies, nunc nisl aliquet nunc, quis aliquam nisl nunc eu nisl.
+
+### Code blocks
+
+```{rst-class} technote-wide-content
+```
+
+```{code-block} python
+print("Hello, world! This is a code block. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl quis molestie ultricies, nunc nisl aliquet nunc, quis aliquam nisl nunc eu nisl.")
+```
