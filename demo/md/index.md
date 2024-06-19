@@ -93,11 +93,22 @@ A wide code block:
 print("Hello, world! This is a code block. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl quis molestie ultricies, nunc nisl aliquet nunc, quis aliquam nisl nunc eu nisl.")
 ```
 
-A wide code block with a caption:
+A wide code block with a caption where the class is set internally:
 
 ```{code-block} python
 :caption: A wide code block
 :class: technote-wide-content
+
+print("Hello, world! This is a code block. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl quis molestie ultricies, nunc nisl aliquet nunc, quis aliquam nisl nunc eu nisl.")
+```
+
+A wide code block with a caption where the class is set externally:
+
+```{rst-class} technote-wide-content
+```
+
+```{code-block} python
+:caption: A wide code block. This is a long caption. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl quis molestie ultricies, nunc nisl aliquet nunc, quis aliquam nisl nunc eu nisl.
 
 print("Hello, world! This is a code block. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl quis molestie ultricies, nunc nisl aliquet nunc, quis aliquam nisl nunc eu nisl.")
 ```
