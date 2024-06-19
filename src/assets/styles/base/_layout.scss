@@ -34,6 +34,12 @@ body {
   gap: 2em 2em;
 }
 
+.technote-article-container {
+  /* Make the technote container a queryable container */
+  container-type: inline-size;
+  container-name: technote-article;
+}
+
 /* Contents outline (mobile) */
 .technote-outline-container {
   position: fixed;
