@@ -193,7 +193,9 @@ body {
     margin-right: calc(
       -100vw + var(--tn-sidebar-width) + var(--tn-layout-column-gap) + var(
           --tn-content-width
-        ) + var(--tn-layout-container-padding)
+        ) + 2 * var(--tn-layout-container-padding) + var(
+          --tn-sphinx-block-padding-x
+        ) + var(--tn-sphinx-block-border-thickness)
     );
   }
 
