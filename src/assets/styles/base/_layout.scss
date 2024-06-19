@@ -143,6 +143,14 @@ body {
     grid-column: 2 / 3;
     grid-row: 1 / 3;
 
+    /* This padding to the left allows space for the block elements (e.g.
+       admonitions and code blocks) to have their borders extend to the left.
+       This allows the text content of the block to line up with the body.
+     */
+    padding-left: calc(
+      var(--tn-sphinx-block-padding-x) + var(--tn-sphinx-block-border-thickness)
+    );
+
     /* Allow overflow because .technote-container is full height */
     overflow-y: auto;
 
