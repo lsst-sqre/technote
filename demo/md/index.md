@@ -70,9 +70,34 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl quis 
 
 ### Code blocks
 
+A regular code block:
+
+```{code-block} python
+print("Hello, world!")
+```
+
+And with a caption:
+
+```{code-block} python
+:caption: A code block with a caption
+
+print("Hello, world!")
+```
+
+A wide code block:
+
 ```{rst-class} technote-wide-content
 ```
 
 ```{code-block} python
+print("Hello, world! This is a code block. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl quis molestie ultricies, nunc nisl aliquet nunc, quis aliquam nisl nunc eu nisl.")
+```
+
+A wide code block with a caption:
+
+```{code-block} python
+:caption: A wide code block
+:class: technote-wide-content
+
 print("Hello, world! This is a code block. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl quis molestie ultricies, nunc nisl aliquet nunc, quis aliquam nisl nunc eu nisl.")
 ```

@@ -195,8 +195,14 @@ body {
           --tn-content-width
         ) + var(--tn-layout-container-padding)
     );
+  }
 
-    /* Allow tables that are wider than the viewport to scroll. */
+  figure.technote-table:has(.technote-wide-content) {
+    /* Allow tables that are wider than the viewport to scroll.
+
+      Only tables use this rule; not code-blocks. The .highlight class
+      already provides overflow-x.
+    */
     overflow-x: auto;
   }
 
