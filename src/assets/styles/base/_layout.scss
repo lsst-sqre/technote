@@ -56,11 +56,11 @@ body {
     height 0s;
 
   &.technote-outline-container--visible {
-    height: 100%;
     opacity: 0.98;
     visibility: visible;
     backdrop-filter: blur(10px);
     padding: 1em;
+    z-index: 10;
 
     display: flex;
     align-items: center; /* Vertically centers the content */
