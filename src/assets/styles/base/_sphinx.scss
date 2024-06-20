@@ -59,7 +59,8 @@ a.headerlink:hover {
   margin-left: calc(-1 * var(--tn-sphinx-block-padding-x));
 }
 
-.technote-wide-content .code-block-caption {
+.technote-wide-content .code-block-caption,
+.technote-wide-content figcaption {
   /* Add padding to constrain the caption to the width of the
      text column.
    */
