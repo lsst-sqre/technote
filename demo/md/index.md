@@ -8,34 +8,47 @@ A *technote* is a web-native single page document that enables rapid technical c
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl quis molestie ultricies, nunc nisl aliquet nunc, quis aliquam nisl nunc eu nisl.
 
-Add an image with a caption:
+## Images and figures
+
+A figure with a caption:
 
 ```{figure} rubin-watermark.png
 
-The Rubin watermark.
+The Rubin watermark. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl quis molestie ultricies, nunc nisl aliquet nunc, quis aliquam nisl nunc eu nisl.
 ```
 
-## Wide content
+### Wide figures
 
-Wide content:
+A figure marked with the `technote-wide-content` class applied as a `figclass` option:
 
-```{rst-class} technote-wide-content
-```
+```{figure} https://placehold.co/1200x400
+:figclass: technote-wide-content
 
-```{image} https://placehold.co/1200x400
-```
-
-### A subsection
-
-More wide content:
-
-```{rst-class} technote-wide-content
-```
-
-```{image} https://placehold.co/1200x400
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl quis molestie ultricies, nunc nisl aliquet nunc, quis aliquam nisl nunc eu nisl.
 ```
 
 ### Tables
+
+A table:
+
+```{list-table}
+:header-rows: 1
+
+* - Column 1
+  - Column 2
+  - Column 3
+* - Row 1
+  - 1
+  - 1
+* - Row 2
+  - 2
+  - 2
+* - Row 3
+  - 3
+  - 3
+```
+
+A table marked with the `technote-wide-content` class:
 
 ```{rst-class} technote-wide-content
 ```
@@ -84,21 +97,12 @@ And with a caption:
 print("Hello, world!")
 ```
 
-A wide code block:
+A wide code block without a caption:
 
 ```{rst-class} technote-wide-content
 ```
 
 ```{code-block} python
-print("Hello, world! This is a code block. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl quis molestie ultricies, nunc nisl aliquet nunc, quis aliquam nisl nunc eu nisl.")
-```
-
-A wide code block with a caption where the class is set internally:
-
-```{code-block} python
-:caption: A wide code block
-:class: technote-wide-content
-
 print("Hello, world! This is a code block. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl quis molestie ultricies, nunc nisl aliquet nunc, quis aliquam nisl nunc eu nisl.")
 ```
 
@@ -112,3 +116,55 @@ A wide code block with a caption where the class is set externally:
 
 print("Hello, world! This is a code block. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl quis molestie ultricies, nunc nisl aliquet nunc, quis aliquam nisl nunc eu nisl.")
 ```
+
+A wide code block with a caption where the class is set internally (this will not work):
+
+```{code-block} python
+:caption: A wide code block
+:class: technote-wide-content
+
+print("Hello, world! This is a code block. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl quis molestie ultricies, nunc nisl aliquet nunc, quis aliquam nisl nunc eu nisl.")
+```
+
+## Admonitions
+
+An admonition:
+
+```{note}
+This is a note. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl quis molestie ultricies, nunc nisl aliquet nunc, quis aliquam nisl nunc eu nisl.
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl quis molestie ultricies, nunc nisl aliquet nunc, quis aliquam nisl nunc eu nisl.
+```
+
+## Lists
+
+A bulleted list:
+
+- Item 1
+- Item 2
+- Item 3
+
+A numbered list:
+
+1. Item 1
+2. Item 2
+3. Item 3
+
+A bulleted list with a nested numbered list:
+
+- Item 1
+  1. Item 1.1
+  2. Item 1.2
+- Item 2
+- Item 3
+
+A definition list:
+
+term 1
+  Definition 1
+term 2
+  Definition 2 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl quis molestie ultricies, nunc nisl aliquet nunc, quis aliquam nisl nunc eu nisl.
+
+## Links
+
+A link to [Rubin Observatory](https://www.rubinobservatory.org).
