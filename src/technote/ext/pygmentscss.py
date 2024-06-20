@@ -17,12 +17,12 @@ def overwrite_pygments_css(
     """Overwrite the pygments CSS file with a version that enables toggling
     between light and dark themes.
 
-    Each selector is prefixed with html[data-theme='light|dark'] to enable
+    Each selector is prefixed with ``html[data-theme='light|dark']`` to enable
     toggling between light and dark themes with JavaScript.
 
     This approach is heavily based on pydata-sphinx-theme and furo:
 
-    - https://github.com/pydata/pydata-sphinx-theme/blob/main/src/pydata_sphinx_theme/pygment.py
+    - https://github.com/pydata/pydata-sphinx-theme/
     - https://github.com/pradyunsg/furo/blob/main/src/furo/__init__.py
     """
     if exceptions:

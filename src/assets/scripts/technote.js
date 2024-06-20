@@ -71,3 +71,41 @@ export function documentReady(callback) {
  * Add handlers.
  */
 documentReady(addThemeModeListener);
+
+/**
+ * Add listener for contents outline navigation button.
+ */
+function toggleContentsOutline() {
+  document
+    .querySelector('#technote-contents-toggle')
+    .classList.toggle('technote-contents-toggle--active');
+  document
+    .querySelector('.technote-outline-container')
+    .classList.toggle('technote-outline-container--visible');
+
+  const showLabel =
+    '<svg class="technote-svg-icon"><use href="#svg-octicon-three-bars-16"></svg> Contents';
+  const hideLabel =
+    '<svg class="technote-svg-icon"><use href="#svg-octicon-filled-x-16"></svg> Hide contents';
+
+  document.querySelector(
+    '#technote-contents-toggle.technote-contents-toggle--active'
+  )
+    ? (document.querySelector('#technote-contents-toggle').innerHTML =
+        hideLabel)
+    : (document.querySelector('#technote-contents-toggle').innerHTML =
+        showLabel);
+}
+
+documentReady(function () {
+  document
+    .querySelector('#technote-contents-toggle')
+    .addEventListener('click', toggleContentsOutline);
+
+  document.querySelectorAll('.technote-outline-container a').forEach((el) => {
+    el.addEventListener('click', toggleContentsOutline);
+  });
+  console.log(
+    '[Technote]: Added listener for contents outline navigation button.'
+  );
+});

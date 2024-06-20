@@ -51,6 +51,18 @@ h6 {
   font-weight: var(--tn-component-h6-weight);
 }
 
+/* Tweaks to typography in mobile views */
+@container technote-article (max-width: 768px) {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin-bottom: 0.5em;
+  }
+}
+
 /* Handle Sphinx's built-in permalink icon. */
 h1 .headerlink,
 h2 .headerlink,
