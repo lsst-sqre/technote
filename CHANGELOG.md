@@ -2,6 +2,25 @@
 
 <!-- scriv-insert-here -->
 
+<a id='changelog-0.9.0'></a>
+## 0.9.0 (2024-07-11)
+
+### Backwards-incompatible changes
+
+- We've "vendored" sphinx-basic-ng into the Technote project itself. This is to prepare for changing the technote theme to a two column layout.
+
+- Technote no longer uses the `sphinx-basic-ng` theme. Users that depended in the `sphinx-basic-ng` themes HTML and class structure for theming will need to update their CSS.
+
+### New features
+
+- Technote now features a two-column layout. The left column contains the table of contents and metadata, while the right column contains the content. This layout allows for wide content to "bleed" into the whitespace to the right of the content column. With this change, we've dropped the CSS patterns from the `sphinx-basic-ng` theme. The Technote layout is now built around CSS grid.
+
+- Wide content (such as figures, tables, and code blocks) can now extend past the content column if the author sets the `technote-wide-content` class on the content. This class is applied as a `figclass` option in figures or as a preceding `rst-class` directive to tables and code blocks.
+
+### Other changes
+
+- Adopt ruff for formatting (dropping Black).
+
 <a id='changelog-0.8.0'></a>
 ## 0.8.0 (2024-05-02)
 
