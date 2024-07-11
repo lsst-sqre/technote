@@ -38,6 +38,9 @@ body {
   /* Make the technote container a queryable container */
   container-type: inline-size;
   container-name: technote-article;
+
+  /* Add breathing room to the end of the article */
+  padding-bottom: 2em;
 }
 
 /* Contents outline (mobile) */
