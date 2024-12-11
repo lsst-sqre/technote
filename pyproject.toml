@@ -35,7 +35,7 @@ dynamic = ["version"]
 dev = [
     # Testing
     "coverage[toml]",
-    "pytest<8.0",
+    "pytest<9.0",
     "pytest-asyncio",
     "pre-commit",
     "mypy",
