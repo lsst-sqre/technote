@@ -20,9 +20,20 @@ class Model(BaseModel):
         return value
 
 
-def test_validate_ror() -> None:
-    """Test that a model with a ROR type can be valid."""
-    Model(ror="https://ror.org/02y72wh86")
+@pytest.mark.parametrize(
+    "ror_url",
+    [
+        "https://ror.org/048g3cy84",  # Rubin Observatory
+        "https://ror.org/05gzmn429",  # SLAC
+        "https://ror.org/00b93bs30",  # American Astronomical Society
+        "https://ror.org/02jbv0t02",  # Lawrence Berkeley National Laboratory
+        "https://ror.org/01ggx4157",  # CERN
+        "https://ror.org/02y72wh86",  # Queen's University
+    ],
+)
+def test_validate_ror_known_valid(ror_url: str) -> None:
+    """Test that known valid ROR identifiers pass validation."""
+    Model.model_validate({"ror": ror_url})
 
 
 @pytest.mark.parametrize(
@@ -36,4 +47,4 @@ def test_validate_ror() -> None:
 def test_ror_fail(sample: str) -> None:
     """Test that a pydantic model with incorrect ROR values fail."""
     with pytest.raises(ValueError):  # noqa: PT011
-        Model(ror=sample)
+        Model.model_validate({"ror": sample})
