@@ -2,6 +2,17 @@
 
 <!-- scriv-insert-here -->
 
+<a id='changelog-0.9.1'></a>
+## 0.9.1 (2025-07-25)
+
+### Bug fixes
+
+- Fixed the ROR URL validation regex to correctly match valid ROR identifiers.
+
+### Other changes
+
+- Updated how license metadata is specified in `pyproject.toml`.
+
 <a id='changelog-0.9.0'></a>
 ## 0.9.0 (2024-07-11)
 
