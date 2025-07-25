@@ -74,6 +74,12 @@ def transform_toc_html(
     if root_list is None:
         root_list = BeautifulSoup("<ul></ul>", "html.parser").ul
 
+    if root_list is None:
+        raise RuntimeError(
+            "Failed to transform Sphinx TOC HTML. Sphinx TOC HTML is:\n\n"
+            f"{sphinx_toc}"
+        )
+
     # Add toc entries that aren't part of the Sphinx toc collector (such as
     # the abstract)
     if prepend_sections:

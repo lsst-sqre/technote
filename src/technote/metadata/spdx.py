@@ -60,7 +60,7 @@ class SpdxFile(BaseModel):
             The SpdxFile instance from the licenses.json file packaged in
             Lander. This file is a mirror of the canonical license database
             maintained at
-            https://github.com/spdx/license-list-data/blob/master/json/licenses.json.
+            https://github.com/spdx/license-list-data/blob/main/json/licenses.json.
         """
         p = Path(__file__).parent / "licenses.json"
         data = json.loads(p.read_text())

@@ -47,5 +47,6 @@ def insert_post_title(app: Sphinx, exceptions: Exception | None) -> None:
         return
     soup = BeautifulSoup(html_path.read_text(), "html.parser")
     title = soup.find("h1")
-    title.insert_after(status_soup)
+    if title is not None:
+        title.insert_after(status_soup)
     html_path.write_text(str(soup))

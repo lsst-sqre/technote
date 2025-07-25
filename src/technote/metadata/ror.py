@@ -10,8 +10,7 @@ from pydantic import HttpUrl
 __all__ = ["validate_ror_url"]
 
 ROR_PATTERN = re.compile(
-    r"https://ror.org"
-    r"\/(?P<identifier>0[0-9abcdefghjkmpqrstuvwxyzabcdefghjkmpqrstuvwxyz]{8})",
+    r"https://ror\.org\/(?P<identifier>0[a-hj-km-np-tv-z0-9]{6}[0-9]{2})",
     flags=re.IGNORECASE,
 )
 
