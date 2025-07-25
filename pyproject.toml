@@ -2,16 +2,17 @@
 # https://packaging.python.org/en/latest/specifications/declaring-project-metadata/
 name = "technote"
 description = "Rubin Observatory's framework for Sphinx-based technote documents."
-license = { file = "LICENSE" }
+license = "MIT"
+license-files = ["LICENSE"]
 readme = "README.md"
 keywords = ["rubin", "lsst"]
 # https://pypi.org/classifiers/
 classifiers = [
     "Development Status :: 4 - Beta",
-    "License :: OSI Approved :: MIT License",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
     "Intended Audience :: Developers",
     "Natural Language :: English",
     "Operating System :: POSIX",
