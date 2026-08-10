@@ -1,5 +1,10 @@
 # Documentation dependencies are maintained here rather than in
 # the pyproject.toml dev extras to avoid circular dependencies with the
 # documenteer packaging.
-documenteer[guide] @ git+https://github.com/lsst-sqre/documenteer@main
+#
+# Install the released package rather than documenteer's git main. Main's
+# documenteer/conf/guide.py requires rubin-pydata-theme.css, a webpack build
+# artifact that is gitignored and so is absent from a source install, which
+# fails the docs build with a Sphinx ConfigError.
+documenteer[guide]>=2.4.1
 autodoc_pydantic
