@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from .dateformat import format_slash_date
 from .metatagbase import MetaTagFormatterBase
 
 if TYPE_CHECKING:
@@ -83,8 +84,9 @@ class HighwireMetadata(MetaTagFormatterBase):
     def date(self) -> str | None:
         """The ``citation_date`` metadata tag.
 
-        The format for the date is ``YYYY/MM/DD``. The updated date is used,
-        but if that is not available, the created date is used.
+        The format for the date is ``YYYY/MM/DD``, in UTC. The updated
+        date is used, but if that is not available, the created date is
+        used.
         """
         # Use either the date_updated or date_created
         if (
@@ -101,7 +103,7 @@ class HighwireMetadata(MetaTagFormatterBase):
                 "Cannot resolve a date source for citation_date"
             )
 
-        return self._format_tag("date", dt.strftime("%Y/%m/%d"))
+        return self._format_tag("date", format_slash_date(dt))
 
     @property
     def doi(self) -> str | None:

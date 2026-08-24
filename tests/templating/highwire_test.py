@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta, timezone
 
 from technote.metadata.model import (
     Organization,
@@ -12,6 +12,7 @@ from technote.metadata.model import (
     TechnoteMetadata,
     TechnoteState,
 )
+from technote.templating.dublincore import DublinCoreMetadata
 from technote.templating.highwire import HighwireMetadata
 
 
@@ -80,3 +81,23 @@ def test_author_institution_without_name() -> None:
         'data-highwire="true">'
     ]
     assert "citation_author_institution" not in "\n".join(tags)
+
+
+def test_citation_date_is_utc_normalized() -> None:
+    """The citation_date is normalized to UTC, so it agrees with the date
+    that the Dublin Core tags report for the same metadata.
+    """
+    # 2023-09-19T23:00-05:00 is 2023-09-20 in UTC.
+    date_created = datetime(
+        2023, 9, 19, 23, 0, tzinfo=timezone(timedelta(hours=-5))
+    )
+    metadata = make_metadata(date_created=date_created, date_updated=None)
+
+    highwire_date = HighwireMetadata(metadata=metadata).date
+    dublincore_html = DublinCoreMetadata(metadata=metadata).as_html()
+
+    assert highwire_date == (
+        '<meta name="citation_date" content="2023/09/20" '
+        'data-highwire="true">'
+    )
+    assert '<meta name="DC.date" content="2023-09-20" >' in dublincore_html

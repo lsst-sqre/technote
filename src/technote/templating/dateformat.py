@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from datetime import UTC, datetime
 
-__all__ = ["format_iso_date", "format_iso_datetime"]
+__all__ = ["format_iso_date", "format_iso_datetime", "format_slash_date"]
 
 
 def format_iso_date(dt: datetime) -> str:
@@ -22,6 +22,25 @@ def format_iso_date(dt: datetime) -> str:
         The UTC date.
     """
     return _normalize_to_utc(dt).strftime("%Y-%m-%d")
+
+
+def format_slash_date(dt: datetime) -> str:
+    """Format a datetime as a slash-separated date (``YYYY/MM/DD``) in UTC.
+
+    This is the date format that Highwire metadata tags use.
+
+    Parameters
+    ----------
+    dt
+        The datetime to format. A naive datetime is interpreted as UTC;
+        an aware datetime is converted to UTC.
+
+    Returns
+    -------
+    str
+        The UTC date.
+    """
+    return _normalize_to_utc(dt).strftime("%Y/%m/%d")
 
 
 def format_iso_datetime(dt: datetime) -> str:
