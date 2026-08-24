@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, ClassVar
 
 from .dateformat import format_iso_date
 from .metatagbase import MetaTagFormatterBase
@@ -29,6 +29,9 @@ class DublinCoreMetadata(MetaTagFormatterBase):
     - https://www.dublincore.org/specifications/dublin-core/dces/
     - https://www.dublincore.org/specifications/dublin-core/dc-html/
     """
+
+    tag_name_attribute: ClassVar[str] = "name"
+    tag_name_prefix: ClassVar[str] = "DC."
 
     def __init__(
         self,
@@ -136,8 +139,3 @@ class DublinCoreMetadata(MetaTagFormatterBase):
         if self._metadata.license_id is None:
             return None
         return self._format_tag("rights", self._metadata.license_id)
-
-    def _format_tag(self, name: str, content: str) -> str:
-        """Format a Dublin Core metadata tag."""
-        escaped = self.escape_content(content)
-        return f'<meta name="DC.{ name }" content="{ escaped }" >'

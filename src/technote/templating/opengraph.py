@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, ClassVar
 
 from .dateformat import format_iso_datetime
 from .metatagbase import MetaTagFormatterBase
@@ -20,6 +20,9 @@ class OpenGraphMetadata(MetaTagFormatterBase):
 
     - https://ogp.me/
     """
+
+    tag_name_attribute: ClassVar[str] = "property"
+    tag_name_prefix: ClassVar[str] = "og:"
 
     def __init__(
         self,
@@ -116,8 +119,3 @@ class OpenGraphMetadata(MetaTagFormatterBase):
                 ),
             ]
         return []
-
-    def _format_tag(self, name: str, content: str) -> str:
-        """Format a OpenGraph metadata tag."""
-        escaped = self.escape_content(content)
-        return f'<meta property="og:{ name }" content="{ escaped }" >'

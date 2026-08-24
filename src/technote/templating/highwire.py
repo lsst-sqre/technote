@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, ClassVar
 
 from .dateformat import format_slash_date
 from .metatagbase import MetaTagFormatterBase
@@ -22,6 +22,10 @@ class HighwireMetadata(MetaTagFormatterBase):
     - https://cheb.hatenablog.com/entry/2014/07/25/002548#f-c017c3cf
     - https://scholar.google.com/intl/en/scholar/inclusion.html#indexing
     """
+
+    tag_name_attribute: ClassVar[str] = "name"
+    tag_name_prefix: ClassVar[str] = "citation_"
+    extra_tag_attributes: ClassVar[dict[str, str]] = {"data-highwire": "true"}
 
     def __init__(
         self,
@@ -129,12 +133,4 @@ class HighwireMetadata(MetaTagFormatterBase):
             return None
         return self._format_tag(
             "fulltext_html_url", str(self._metadata.canonical_url)
-        )
-
-    def _format_tag(self, name: str, content: str) -> str:
-        """Format a Highwire metadata tag."""
-        escaped = self.escape_content(content)
-        return (
-            f'<meta name="citation_{ name }" content="{ escaped }" '
-            f'data-highwire="true">'
         )
