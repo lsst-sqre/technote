@@ -149,3 +149,26 @@ def test_schemaorg_str() -> None:
     """Rendering the class as a string produces the script tag."""
     schemaorg = SchemaDotOrgMetadata(metadata=make_metadata())
     assert str(schemaorg) == schemaorg.as_html()
+
+
+def test_schemaorg_publisher_without_name() -> None:
+    """A publisher identified only by a ROR omits the name entirely."""
+    metadata = make_metadata(
+        organization=Organization(name="", ror="https://ror.org/048g3cy84")
+    )
+    data = SchemaDotOrgMetadata(metadata=metadata).as_json_ld()
+
+    assert data["publisher"] == {
+        "@type": "Organization",
+        "@id": "https://ror.org/048g3cy84",
+    }
+
+
+def test_schemaorg_publisher_without_identity() -> None:
+    """A publisher with neither a name nor a public identifier is dropped."""
+    metadata = make_metadata(
+        organization=Organization(name="", internal_id="rubin")
+    )
+    data = SchemaDotOrgMetadata(metadata=metadata).as_json_ld()
+
+    assert "publisher" not in data

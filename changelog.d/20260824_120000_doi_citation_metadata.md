@@ -18,6 +18,8 @@
 
 - The `citation_title` Highwire tag now carries the `data-highwire="true"` attribute, matching every other Highwire tag technote emits.
 
+- The schema.org `publisher` no longer carries an empty `name` when the `[technote.organization]` table is identified only by its `ror` (or `internal_id`). The ROR is now published as the publisher's `@id` alone, and an organization with no name, ROR, or URL is omitted from the JSON-LD entirely.
+
 ### Other changes
 
 - `Citation` now normalizes its `doi` field to the bare `10.NNNN/suffix` form, so a `Citation` constructed with a `https://doi.org` URL (or a `doi:` prefix) no longer produces a doubled-up DOI URL in the technote's metadata. An invalid DOI raises `ValueError`. The `normalize_doi` function now lives in the new `technote.metadata.doi` module.

@@ -128,10 +128,13 @@ class SchemaDotOrgMetadata:
         if authors:
             data["author"] = authors
 
-        if self._metadata.organization is not None:
-            data["publisher"] = self._format_organization(
-                self._metadata.organization
-            )
+        organization = self._metadata.organization
+        if organization is not None and (
+            organization.name or organization.ror or organization.url
+        ):
+            # An organization with only an internal ID can't be described
+            # to a schema.org consumer, so it's dropped entirely.
+            data["publisher"] = self._format_organization(organization)
 
         license_url = self._license_url
         if license_url is not None:
@@ -182,10 +185,9 @@ class SchemaDotOrgMetadata:
         """Format an `~technote.metadata.model.Organization` as a schema.org
         ``Organization``.
         """
-        data: dict[str, Any] = {
-            "@type": "Organization",
-            "name": organization.name,
-        }
+        data: dict[str, Any] = {"@type": "Organization"}
+        if organization.name:
+            data["name"] = organization.name
         if organization.ror is not None:
             data["@id"] = str(organization.ror)
         if organization.url is not None:
