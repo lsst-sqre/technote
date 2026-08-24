@@ -138,6 +138,23 @@ def test_metadata_basic(app: Sphinx, status: IO, warning: IO) -> None:
     assert detected_hentry
 
 
+@pytest.mark.sphinx("html", testroot="abstract-basic")
+def test_metadata_without_canonical_url(
+    app: Sphinx, status: IO, warning: IO
+) -> None:
+    """Test that no canonical link is emitted when the technote doesn't
+    configure a ``canonical_url``.
+    """
+    app.verbosity = 2
+    logging.setup(app, status, warning)
+    app.builder.build_all()
+
+    html_source = Path(app.outdir).joinpath("index.html").read_text()
+    doc = lxml.html.document_fromstring(html_source)
+
+    assert doc.cssselect("link[rel='canonical']") == []
+
+
 def assert_tag(doc: Any, name: str, content: str, index: int = 0) -> None:
     """Compare the content of a meta tag."""
     assert (

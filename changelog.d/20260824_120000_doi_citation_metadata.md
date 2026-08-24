@@ -14,6 +14,8 @@
 
 ### Bug fixes
 
+- A technote without a `canonical_url` in `technote.toml` no longer emits `<link rel="canonical" href="None">` in its HTML head. The `TechnoteJinjaContext.canonical_url` property stringified the unset value into the literal `"None"`, which search engines resolved as a relative URL to `/None`. The property now returns `None`, and the theme omits the canonical link entirely.
+
 - Content in `meta` tags is now HTML-escaped, so titles and abstracts containing `"`, `<`, `>`, or `&` no longer produce broken markup.
 
 - The `citation_title` Highwire tag now carries the `data-highwire="true"` attribute, matching every other Highwire tag technote emits.

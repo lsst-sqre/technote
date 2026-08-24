@@ -95,3 +95,20 @@ def test_technote_jinja_context_with_empty_doi() -> None:
     assert jinja_context.citation is None
     assert jinja_context.doi is None
     assert jinja_context.doi_url is None
+
+
+def test_technote_jinja_context_without_canonical_url() -> None:
+    """Test that ``canonical_url`` is None when it isn't configured."""
+    toml_without_canonical_url = sample_toml.replace(
+        'canonical_url = "https://sqr-000.lsst.io/"\n', ""
+    )
+
+    factory = Factory()
+    factory.parse_toml(toml_without_canonical_url)
+    metadata = factory.load_metadata()
+    jinja_context = factory.create_jinja_context(
+        metadata=metadata, root_filename=Path("index.rst")
+    )
+
+    assert metadata.canonical_url is None
+    assert jinja_context.canonical_url is None

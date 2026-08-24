@@ -97,6 +97,8 @@ class TechnoteJinjaContext:
     @property
     def canonical_url(self) -> str | None:
         """The canonical URL of the technote, if available."""
+        if self.metadata.canonical_url is None:
+            return None
         return str(self.metadata.canonical_url)
 
     @property
