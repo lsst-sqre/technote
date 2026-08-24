@@ -491,10 +491,19 @@ class TechnoteTable(BaseModel):
 
     @field_validator("doi", mode="before")
     @classmethod
-    def validate_doi(cls, v: str | None) -> str | None:
+    def validate_doi(cls, v: Any) -> str | None:
         """Normalize ``doi`` into a bare DOI, accepting ``doi.org`` URLs."""
         if v is None:
             return None
+        if not isinstance(v, str):
+            # ValueError, not TypeError: Pydantic only converts ValueError
+            # and AssertionError into validation errors. A TypeError would
+            # propagate as an unhandled traceback.
+            raise ValueError(  # noqa: TRY004
+                f"Not a DOI ({v!r}). A DOI must be a quoted string like "
+                '"10.5281/zenodo.10385500", and may also be given as a '
+                "https://doi.org/ URL."
+            )
         return normalize_doi(v)
 
     @property

@@ -88,3 +88,10 @@ def test_toml_invalid_doi() -> None:
     """Test that an invalid DOI in technote.toml is a validation error."""
     with pytest.raises(ValidationError, match="Not a DOI"):
         TechnoteToml.parse_toml('[technote]\ndoi = "not-a-doi"\n')
+
+
+def test_toml_non_string_doi() -> None:
+    """Test that an unquoted (non-string) DOI is a validation error."""
+    with pytest.raises(ValidationError, match="doi") as exc_info:
+        TechnoteToml.parse_toml("[technote]\ndoi = 10.5281\n")
+    assert "Not a DOI" in str(exc_info.value)
