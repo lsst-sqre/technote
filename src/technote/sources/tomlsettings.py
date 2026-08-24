@@ -493,8 +493,15 @@ class TechnoteTable(BaseModel):
     @field_validator("doi", mode="before")
     @classmethod
     def validate_doi(cls, v: Any) -> str | None:
-        """Normalize ``doi`` into a bare DOI, accepting ``doi.org`` URLs."""
+        """Normalize ``doi`` into a bare DOI, accepting ``doi.org`` URLs.
+
+        An empty (or whitespace-only) string is treated as an unset DOI so
+        that ``doi = ""`` placeholders in existing ``technote.toml`` files
+        continue to work.
+        """
         if v is None:
+            return None
+        if isinstance(v, str) and not v.strip():
             return None
         if not isinstance(v, str):
             # ValueError, not TypeError: Pydantic only converts ValueError

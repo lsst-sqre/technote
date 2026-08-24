@@ -76,3 +76,22 @@ def test_technote_jinja_context_without_doi() -> None:
     assert jinja_context.citation is None
     assert jinja_context.doi is None
     assert jinja_context.doi_url is None
+
+
+def test_technote_jinja_context_with_empty_doi() -> None:
+    """Test that an empty ``doi`` string is treated as no DOI at all."""
+    toml_with_empty_doi = sample_toml.replace(
+        'doi = "https://doi.org/10.5281/zenodo.10385500"\n', 'doi = ""\n'
+    )
+
+    factory = Factory()
+    factory.parse_toml(toml_with_empty_doi)
+    metadata = factory.load_metadata()
+    jinja_context = factory.create_jinja_context(
+        metadata=metadata, root_filename=Path("index.rst")
+    )
+
+    assert metadata.citation is None
+    assert jinja_context.citation is None
+    assert jinja_context.doi is None
+    assert jinja_context.doi_url is None

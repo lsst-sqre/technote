@@ -93,6 +93,13 @@ def test_toml_doi_default() -> None:
     assert technote_toml.technote.doi is None
 
 
+@pytest.mark.parametrize("value", ["", "   "])
+def test_toml_doi_empty_string(value: str) -> None:
+    """Test that an empty ``doi`` string is treated as an unset DOI."""
+    technote_toml = TechnoteToml.parse_toml(f'[technote]\ndoi = "{value}"\n')
+    assert technote_toml.technote.doi is None
+
+
 def test_toml_invalid_doi() -> None:
     """Test that an invalid DOI in technote.toml is a validation error."""
     with pytest.raises(ValidationError, match="Not a DOI"):
