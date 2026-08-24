@@ -34,6 +34,9 @@ Python API reference
 .. automodapi:: technote.ext.wraptables
    :include-all-objects:
 
+.. automodapi:: technote.metadata.doi
+   :include-all-objects:
+
 .. automodapi:: technote.metadata.model
    :include-all-objects:
 

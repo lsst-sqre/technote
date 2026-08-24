@@ -20,4 +20,6 @@
 
 ### Other changes
 
+- `Citation` now normalizes its `doi` field to the bare `10.NNNN/suffix` form, so a `Citation` constructed with a `https://doi.org` URL (or a `doi:` prefix) no longer produces a doubled-up DOI URL in the technote's metadata. An invalid DOI raises `ValueError`. The `normalize_doi` function now lives in the new `technote.metadata.doi` module.
+
 - The SPDX license database is now loaded once per process rather than on each lookup.

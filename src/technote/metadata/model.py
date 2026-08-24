@@ -6,6 +6,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 
+from .doi import normalize_doi
 from .zenodo import ZenodoRole
 
 __all__ = [
@@ -172,10 +173,27 @@ class Citation:
     """
 
     doi: str | None = None
-    """The DOI of the technote, in its bare form (``10.NNNN/suffix``)."""
+    """The DOI of the technote.
+
+    The DOI can be set either in its bare form (``10.NNNN/suffix``), as a
+    ``doi.org`` URL, or with a ``doi:`` prefix; it is normalized to the bare
+    form on construction. A value that is not a syntactically-valid DOI
+    raises `ValueError`.
+    """
 
     ads_bibcode: str | None = None
     """The ADS bibcode of the technote."""
+
+    def __post_init__(self) -> None:
+        """Normalize the DOI into its bare form.
+
+        Raises
+        ------
+        ValueError
+            Raised if ``doi`` is not a syntactically-valid DOI.
+        """
+        if self.doi is not None:
+            self.doi = normalize_doi(self.doi)
 
     @property
     def doi_url(self) -> str | None:
