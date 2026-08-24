@@ -2,6 +2,9 @@
 
 from __future__ import annotations
 
+import pytest
+from pydantic import ValidationError
+
 from technote.sources.tomlsettings import TechnoteToml
 
 sample_toml = """
@@ -31,3 +34,45 @@ def test_toml_parsing() -> None:
     """
     technote_toml = TechnoteToml.parse_toml(sample_toml)
     assert technote_toml.technote.id == "SQR-000"
+
+
+def test_toml_doi() -> None:
+    """Test that a DOI in technote.toml is normalized to its bare form."""
+    toml_content = (
+        '[technote]\ndoi = "https://doi.org/10.5281/zenodo.10385500"\n'
+    )
+    technote_toml = TechnoteToml.parse_toml(toml_content)
+    assert technote_toml.technote.doi == "10.5281/zenodo.10385500"
+
+
+def test_toml_doi_with_prefix_space() -> None:
+    """Test a ``doi:`` prefix separated from the DOI by a space."""
+    toml_content = '[technote]\ndoi = "doi: 10.5281/zenodo.10385500"\n'
+    technote_toml = TechnoteToml.parse_toml(toml_content)
+    assert technote_toml.technote.doi == "10.5281/zenodo.10385500"
+
+
+def test_toml_doi_default() -> None:
+    """Test that the DOI is None when it is not set."""
+    technote_toml = TechnoteToml.parse_toml(sample_toml)
+    assert technote_toml.technote.doi is None
+
+
+@pytest.mark.parametrize("value", ["", "   "])
+def test_toml_doi_empty_string(value: str) -> None:
+    """Test that an empty ``doi`` string is treated as an unset DOI."""
+    technote_toml = TechnoteToml.parse_toml(f'[technote]\ndoi = "{value}"\n')
+    assert technote_toml.technote.doi is None
+
+
+def test_toml_invalid_doi() -> None:
+    """Test that an invalid DOI in technote.toml is a validation error."""
+    with pytest.raises(ValidationError, match="Not a DOI"):
+        TechnoteToml.parse_toml('[technote]\ndoi = "not-a-doi"\n')
+
+
+def test_toml_non_string_doi() -> None:
+    """Test that an unquoted (non-string) DOI is a validation error."""
+    with pytest.raises(ValidationError, match="doi") as exc_info:
+        TechnoteToml.parse_toml("[technote]\ndoi = 10.5281\n")
+    assert "Not a DOI" in str(exc_info.value)

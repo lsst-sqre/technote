@@ -3,8 +3,12 @@ id = "TEST-000"
 series_id = "TEST"
 title = "Metadata test document"
 date_updated = "2023-09-19"
+version = "1.0.0"
+doi = "https://doi.org/10.5281/zenodo.10385500"
 canonical_url = "https://test-000.example.com/"
 github_url = "https://github.com/lsst-sqre/sqr-000"
+license = { id = "CC-BY-4.0" }
+organization = { name = "Vera C. Rubin Observatory", ror = "https://ror.org/048g3cy84", url = "https://www.lsst.org" }
 
 [[technote.authors]]
 name.given = "Jonathan"

@@ -3,14 +3,16 @@
 from __future__ import annotations
 
 import os
-from datetime import UTC, datetime
 from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 from urllib.parse import urlparse
 
-from ..metadata.model import TechnoteMetadata
+from ..metadata.model import Citation, TechnoteMetadata
+from .dateformat import format_iso_date, format_iso_datetime
+from .dublincore import DublinCoreMetadata
 from .highwire import HighwireMetadata
 from .opengraph import OpenGraphMetadata
+from .schemaorg import SchemaDotOrgMetadata
 
 
 class TechnoteJinjaContext:
@@ -57,7 +59,7 @@ class TechnoteJinjaContext:
     def date_updated_iso(self) -> str | None:
         """The date updated, as an ISO 8601 string (YYYY-MM-DD)."""
         if self.metadata.date_updated:
-            return self._format_iso_date(self.metadata.date_updated)
+            return format_iso_date(self.metadata.date_updated)
         else:
             return None
 
@@ -65,7 +67,7 @@ class TechnoteJinjaContext:
     def date_created_iso(self) -> str | None:
         """The date of initial publication, as ISO 8601 (YYYY-MM-DD)."""
         if self.metadata.date_created:
-            return self._format_iso_date(self.metadata.date_created)
+            return format_iso_date(self.metadata.date_created)
         else:
             return None
 
@@ -73,7 +75,7 @@ class TechnoteJinjaContext:
     def datetime_updated_iso(self) -> str | None:
         """The datetime updated, as an ISO 8601 string normalized to UTC."""
         if self.metadata.date_updated:
-            return self._format_iso_datetime(self.metadata.date_updated)
+            return format_iso_datetime(self.metadata.date_updated)
         else:
             return None
 
@@ -83,7 +85,7 @@ class TechnoteJinjaContext:
         normalized to UTC.
         """
         if self.metadata.date_created:
-            return self._format_iso_datetime(self.metadata.date_created)
+            return format_iso_datetime(self.metadata.date_created)
         else:
             return None
 
@@ -95,7 +97,32 @@ class TechnoteJinjaContext:
     @property
     def canonical_url(self) -> str | None:
         """The canonical URL of the technote, if available."""
+        if self.metadata.canonical_url is None:
+            return None
         return str(self.metadata.canonical_url)
+
+    @property
+    def citation(self) -> Citation | None:
+        """The citation metadata for the technote, if available."""
+        return self.metadata.citation
+
+    @property
+    def doi(self) -> str | None:
+        """The technote's DOI in its bare form (``10.NNNN/suffix``), if
+        available.
+        """
+        if self.metadata.citation is None:
+            return None
+        return self.metadata.citation.doi
+
+    @property
+    def doi_url(self) -> str | None:
+        """The technote's DOI as a resolvable ``https://doi.org`` URL, if
+        available.
+        """
+        if self.metadata.citation is None:
+            return None
+        return self.metadata.citation.doi_url
 
     @property
     def github_url(self) -> str | None:
@@ -168,16 +195,6 @@ class TechnoteJinjaContext:
         """Set the abstract metadata from the content."""
         self.metadata.abstract_plain = abstract
 
-    def _format_iso_datetime(self, date: datetime) -> str:
-        """Format a date in ISO 8601 format, normalized to UTC."""
-        dt = date.astimezone(UTC)
-        return dt.strftime("%Y-%m-%dT%H:%M:%SZ")
-
-    def _format_iso_date(self, date: datetime) -> str:
-        """Format a date in ISO 8601 date format, normalized to UTC."""
-        dt = date.astimezone(UTC)
-        return dt.strftime("%Y-%m-%d")
-
     @property
     def highwire_metadata_tags(self) -> str:
         """The Highwire metadata tags for the technote."""
@@ -193,6 +210,22 @@ class TechnoteJinjaContext:
             metadata=self.metadata,
         )
         return og.as_html()
+
+    @property
+    def dublincore_metadata_tags(self) -> str:
+        """The Dublin Core metadata tags for the technote."""
+        dublincore = DublinCoreMetadata(
+            metadata=self.metadata,
+        )
+        return dublincore.as_html()
+
+    @property
+    def schemaorg_metadata_tags(self) -> str:
+        """The schema.org JSON-LD metadata script tag for the technote."""
+        schemaorg = SchemaDotOrgMetadata(
+            metadata=self.metadata,
+        )
+        return schemaorg.as_html()
 
     @property
     def generator_tag(self) -> str:

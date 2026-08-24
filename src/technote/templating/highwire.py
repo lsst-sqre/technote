@@ -2,8 +2,9 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, ClassVar
 
+from .dateformat import format_slash_date
 from .metatagbase import MetaTagFormatterBase
 
 if TYPE_CHECKING:
@@ -21,6 +22,10 @@ class HighwireMetadata(MetaTagFormatterBase):
     - https://cheb.hatenablog.com/entry/2014/07/25/002548#f-c017c3cf
     - https://scholar.google.com/intl/en/scholar/inclusion.html#indexing
     """
+
+    tag_name_attribute: ClassVar[str] = "name"
+    tag_name_prefix: ClassVar[str] = "citation_"
+    extra_tag_attributes: ClassVar[dict[str, str]] = {"data-highwire": "true"}
 
     def __init__(
         self,
@@ -44,9 +49,7 @@ class HighwireMetadata(MetaTagFormatterBase):
     @property
     def title(self) -> str:
         """The title metadata."""
-        return (
-            f'<meta name="citation_title" content="{ self._metadata.title }">'
-        )
+        return self._format_tag("title", self._metadata.title)
 
     @property
     def author_info(self) -> list[str]:
@@ -68,7 +71,7 @@ class HighwireMetadata(MetaTagFormatterBase):
             affil_tags = [
                 self._format_tag("author_institution", affiliation.name)
                 for affiliation in author.affiliations
-                if affiliation.name is not None
+                if affiliation.name
             ]
             author_tags.extend(affil_tags)
             if author.email is not None:
@@ -85,8 +88,9 @@ class HighwireMetadata(MetaTagFormatterBase):
     def date(self) -> str | None:
         """The ``citation_date`` metadata tag.
 
-        The format for the date is ``YYYY/MM/DD``. The updated date is used,
-        but if that is not available, the created date is used.
+        The format for the date is ``YYYY/MM/DD``, in UTC. The updated
+        date is used, but if that is not available, the created date is
+        used.
         """
         # Use either the date_updated or date_created
         if (
@@ -103,7 +107,7 @@ class HighwireMetadata(MetaTagFormatterBase):
                 "Cannot resolve a date source for citation_date"
             )
 
-        return self._format_tag("date", dt.strftime("%Y/%m/%d"))
+        return self._format_tag("date", format_slash_date(dt))
 
     @property
     def doi(self) -> str | None:
@@ -129,11 +133,4 @@ class HighwireMetadata(MetaTagFormatterBase):
             return None
         return self._format_tag(
             "fulltext_html_url", str(self._metadata.canonical_url)
-        )
-
-    def _format_tag(self, name: str, content: str) -> str:
-        """Format a Highwire metadata tag."""
-        return (
-            f'<meta name="citation_{ name }" content="{ content }" '
-            f'data-highwire="true">'
         )

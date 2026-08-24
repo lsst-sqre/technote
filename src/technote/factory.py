@@ -11,6 +11,7 @@ from pydantic import ValidationError
 from sphinx.errors import ConfigError
 
 from .metadata.model import (
+    Citation,
     Link,
     Organization,
     Person,
@@ -99,6 +100,31 @@ class Factory:
                 state=TechnoteState.stable, note=None, supersceding_urls=[]
             )
 
+        toml_organization = toml_settings.technote.organization
+        if toml_organization is not None:
+            organization = Organization(
+                name=toml_organization.name or "",
+                url=(
+                    str(toml_organization.url)
+                    if toml_organization.url
+                    else None
+                ),
+                address=toml_organization.address,
+                ror=(
+                    str(toml_organization.ror)
+                    if toml_organization.ror
+                    else None
+                ),
+                internal_id=toml_organization.internal_id,
+            )
+        else:
+            organization = None
+
+        if toml_settings.technote.doi is not None:
+            citation = Citation(doi=toml_settings.technote.doi)
+        else:
+            citation = None
+
         if toml_settings.technote.license is not None:
             license_id = toml_settings.technote.license.id
         else:
@@ -124,8 +150,10 @@ class Factory:
             version=toml_settings.technote.version,
             authors=authors,
             source_repository=source_repository,
+            organization=organization,
             status=status,
             license_id=license_id,
+            citation=citation,
         )
 
     def create_jinja_context(

@@ -4,11 +4,12 @@ from __future__ import annotations
 
 import json
 from dataclasses import dataclass
+from functools import cache
 from pathlib import Path
 
 from pydantic import BaseModel, Field, HttpUrl
 
-__all__ = ["SpdxLicense", "SpdxFile", "Licenses"]
+__all__ = ["SpdxLicense", "SpdxFile", "Licenses", "load_licenses"]
 
 
 class SpdxLicense(BaseModel):
@@ -94,3 +95,19 @@ class Licenses:
 
     def __contains__(self, spdx_id: str) -> bool:
         return spdx_id in self.licenses
+
+
+@cache
+def load_licenses() -> Licenses:
+    """Load the SPDX license database, caching it for the process.
+
+    The database is read-only, so a single instance can be shared. Use this
+    function instead of `Licenses.load` in code that runs repeatedly during a
+    Sphinx build, such as once per page.
+
+    Returns
+    -------
+    `Licenses`
+        The license database instance.
+    """
+    return Licenses.load()

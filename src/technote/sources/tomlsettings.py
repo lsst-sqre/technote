@@ -24,11 +24,12 @@ from pydantic import (
     model_validator,
 )
 
+from ..metadata.doi import normalize_doi
 from ..metadata.model import TechnoteState
 from ..metadata.orcid import validate_orcid_url
 from ..metadata.orcid import verify_checksum as verify_orcid_checksum
 from ..metadata.ror import validate_ror_url
-from ..metadata.spdx import Licenses
+from ..metadata.spdx import load_licenses
 from ..metadata.zenodo import ZenodoRole
 
 __all__ = [
@@ -308,7 +309,7 @@ class LicenseTable(BaseModel):
     def validate_spdx_id(cls, v: str) -> str:
         """Ensure that ``id`` is a SPDX license identifier."""
         if v is not None:
-            licenses = Licenses.load()
+            licenses = load_licenses()
             if v not in licenses:
                 raise ValueError(
                     f"License ID '{v}' is not a valid SPDX license identifier."
@@ -391,8 +392,11 @@ class TechnoteTable(BaseModel):
         description=(
             "The most-relevant DOI that identifies this technote. "
             "This can be a pre-registerered DOI (i.e. for Zenodo) so that the "
-            "DOI can be present in the released technote source."
+            "DOI can be present in the released technote source. The DOI can "
+            "be given either bare or as a https://doi.org/ URL; it is "
+            "normalized to its bare form."
         ),
+        examples=["10.5281/zenodo.10385500"],
     )
 
     title: str | None = Field(
@@ -441,6 +445,30 @@ class TechnoteTable(BaseModel):
     _normalize_dates = field_validator(
         "date_created", "date_updated", mode="before"
     )(normalize_datetime)
+
+    @field_validator("doi", mode="before")
+    @classmethod
+    def validate_doi(cls, v: Any) -> str | None:
+        """Normalize ``doi`` into a bare DOI, accepting ``doi.org`` URLs.
+
+        An empty (or whitespace-only) string is treated as an unset DOI so
+        that ``doi = ""`` placeholders in existing ``technote.toml`` files
+        continue to work.
+        """
+        if v is None:
+            return None
+        if isinstance(v, str) and not v.strip():
+            return None
+        if not isinstance(v, str):
+            # ValueError, not TypeError: Pydantic only converts ValueError
+            # and AssertionError into validation errors. A TypeError would
+            # propagate as an unhandled traceback.
+            raise ValueError(  # noqa: TRY004
+                f"Not a DOI ({v!r}). A DOI must be a quoted string like "
+                '"10.5281/zenodo.10385500", and may also be given as a '
+                "https://doi.org/ URL."
+            )
+        return normalize_doi(v)
 
     @property
     def date_created_datetime(self) -> datetime | None:
