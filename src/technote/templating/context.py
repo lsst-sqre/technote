@@ -8,9 +8,11 @@ from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 from urllib.parse import urlparse
 
-from ..metadata.model import TechnoteMetadata
+from ..metadata.model import Citation, TechnoteMetadata
+from .dublincore import DublinCoreMetadata
 from .highwire import HighwireMetadata
 from .opengraph import OpenGraphMetadata
+from .schemaorg import SchemaDotOrgMetadata
 
 
 class TechnoteJinjaContext:
@@ -96,6 +98,29 @@ class TechnoteJinjaContext:
     def canonical_url(self) -> str | None:
         """The canonical URL of the technote, if available."""
         return str(self.metadata.canonical_url)
+
+    @property
+    def citation(self) -> Citation | None:
+        """The citation metadata for the technote, if available."""
+        return self.metadata.citation
+
+    @property
+    def doi(self) -> str | None:
+        """The technote's DOI in its bare form (``10.NNNN/suffix``), if
+        available.
+        """
+        if self.metadata.citation is None:
+            return None
+        return self.metadata.citation.doi
+
+    @property
+    def doi_url(self) -> str | None:
+        """The technote's DOI as a resolvable ``https://doi.org`` URL, if
+        available.
+        """
+        if self.metadata.citation is None:
+            return None
+        return self.metadata.citation.doi_url
 
     @property
     def github_url(self) -> str | None:
@@ -193,6 +218,22 @@ class TechnoteJinjaContext:
             metadata=self.metadata,
         )
         return og.as_html()
+
+    @property
+    def dublincore_metadata_tags(self) -> str:
+        """The Dublin Core metadata tags for the technote."""
+        dublincore = DublinCoreMetadata(
+            metadata=self.metadata,
+        )
+        return dublincore.as_html()
+
+    @property
+    def schemaorg_metadata_tags(self) -> str:
+        """The schema.org JSON-LD metadata script tag for the technote."""
+        schemaorg = SchemaDotOrgMetadata(
+            metadata=self.metadata,
+        )
+        return schemaorg.as_html()
 
     @property
     def generator_tag(self) -> str:

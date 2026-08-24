@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 from typing import IO, Any
 
@@ -36,6 +37,7 @@ def test_metadata_basic(app: Sphinx, status: IO, warning: IO) -> None:
         doc, "citation_author_orcid", "https://orcid.org/0000-0003-3001-676X"
     )
     assert_tag(doc, "citation_author_institution", "Rubin Observatory")
+    assert_tag(doc, "citation_doi", "10.5281/zenodo.10385500")
 
     # Test for Open Graph metadata tags
     assert_og(doc, "title", "Metadata test document")
@@ -48,6 +50,53 @@ def test_metadata_basic(app: Sphinx, status: IO, warning: IO) -> None:
     assert_og(doc, "type", "article")
     assert_og(doc, "article:author", "Jonathan Sick")
     assert_og(doc, "article:published_time", "2023-09-19T00:00:00Z")
+
+    # Test for Dublin Core metadata tags
+    assert_tag(doc, "DC.title", "Metadata test document")
+    assert_tag(doc, "DC.creator", "Jonathan Sick")
+    assert_tag(doc, "DC.identifier", "https://doi.org/10.5281/zenodo.10385500")
+    assert_tag(doc, "DC.date", "2023-09-19")
+    assert_tag(doc, "DC.publisher", "Vera C. Rubin Observatory")
+    assert_tag(doc, "DC.type", "Text")
+    assert_tag(doc, "DC.format", "text/html")
+    assert_tag(doc, "DC.language", "en")
+    assert_tag(doc, "DC.rights", "CC-BY-4.0")
+    assert_tag(
+        doc,
+        "DC.description",
+        "First paragraph of abstract.\n\nSecond paragraph of abstract.",
+    )
+
+    # Test for the schema.org JSON-LD block
+    json_ld_tags = doc.cssselect("script[type='application/ld+json']")
+    assert len(json_ld_tags) == 1
+    json_ld = json.loads(json_ld_tags[0].text_content())
+    assert json_ld["@context"] == "https://schema.org"
+    assert json_ld["@type"] == "Report"
+    assert json_ld["@id"] == "https://doi.org/10.5281/zenodo.10385500"
+    assert json_ld["name"] == "Metadata test document"
+    assert json_ld["url"] == "https://test-000.example.com/"
+    assert json_ld["identifier"] == {
+        "@type": "PropertyValue",
+        "propertyID": "DOI",
+        "value": "10.5281/zenodo.10385500",
+        "url": "https://doi.org/10.5281/zenodo.10385500",
+    }
+    assert json_ld["reportNumber"] == "TEST-000"
+    assert json_ld["version"] == "1.0.0"
+    assert json_ld["dateModified"] == "2023-09-19"
+    assert json_ld["author"][0]["name"] == "Jonathan Sick"
+    assert json_ld["author"][0]["@id"] == (
+        "https://orcid.org/0000-0003-3001-676X"
+    )
+    assert json_ld["author"][0]["affiliation"][0]["name"] == (
+        "Rubin Observatory"
+    )
+    assert json_ld["publisher"]["name"] == "Vera C. Rubin Observatory"
+    assert json_ld["license"].startswith(
+        "https://creativecommons.org/licenses/by/4.0"
+    )
+    assert json_ld["inLanguage"] == "en"
 
     # Find technote data attributes
     source_link = doc.cssselect("[data-technote-source-url]")[0]
