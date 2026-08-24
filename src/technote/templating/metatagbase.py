@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import html
 from abc import ABC, abstractmethod
 
 
@@ -36,3 +37,8 @@ class MetaTagFormatterBase(ABC):
             entries.append(new_item)
         else:
             entries.extend(new_item)
+
+    @staticmethod
+    def escape_content(content: str) -> str:
+        """Escape a string for use as the ``content`` of a ``meta`` tag."""
+        return html.escape(content, quote=True)

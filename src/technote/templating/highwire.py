@@ -44,9 +44,7 @@ class HighwireMetadata(MetaTagFormatterBase):
     @property
     def title(self) -> str:
         """The title metadata."""
-        return (
-            f'<meta name="citation_title" content="{ self._metadata.title }">'
-        )
+        return self._format_tag("title", self._metadata.title)
 
     @property
     def author_info(self) -> list[str]:
@@ -133,7 +131,8 @@ class HighwireMetadata(MetaTagFormatterBase):
 
     def _format_tag(self, name: str, content: str) -> str:
         """Format a Highwire metadata tag."""
+        escaped = self.escape_content(content)
         return (
-            f'<meta name="citation_{ name }" content="{ content }" '
+            f'<meta name="citation_{ name }" content="{ escaped }" '
             f'data-highwire="true">'
         )

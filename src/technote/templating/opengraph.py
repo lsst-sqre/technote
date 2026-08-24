@@ -126,4 +126,5 @@ class OpenGraphMetadata(MetaTagFormatterBase):
 
     def _format_tag(self, name: str, content: str) -> str:
         """Format a OpenGraph metadata tag."""
-        return f'<meta property="og:{ name }" content="{ content }" >'
+        escaped = self.escape_content(content)
+        return f'<meta property="og:{ name }" content="{ escaped }" >'
