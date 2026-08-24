@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from .dateformat import format_iso_date
 from .metatagbase import MetaTagFormatterBase
 
 if TYPE_CHECKING:
@@ -95,7 +96,7 @@ class DublinCoreMetadata(MetaTagFormatterBase):
 
     @property
     def date(self) -> str | None:
-        """The ``DC.date`` metadata tag (``YYYY-MM-DD``).
+        """The ``DC.date`` metadata tag (``YYYY-MM-DD``, in UTC).
 
         The creation date is the date of publication. The updated date is
         used when a creation date is not available.
@@ -103,7 +104,7 @@ class DublinCoreMetadata(MetaTagFormatterBase):
         dt = self._metadata.date_created or self._metadata.date_updated
         if dt is None:
             return None
-        return self._format_tag("date", dt.strftime("%Y-%m-%d"))
+        return self._format_tag("date", format_iso_date(dt))
 
     @property
     def publisher(self) -> str | None:

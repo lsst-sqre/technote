@@ -3,10 +3,10 @@
 from __future__ import annotations
 
 import json
-from datetime import UTC, datetime
 from typing import TYPE_CHECKING, Any
 
 from ..metadata.spdx import load_licenses
+from .dateformat import format_iso_date
 
 if TYPE_CHECKING:
     from technote.metadata.model import Organization, Person, TechnoteMetadata
@@ -109,13 +109,11 @@ class SchemaDotOrgMetadata:
         """Build the publication and modification date fields."""
         data: dict[str, Any] = {}
         if self._metadata.date_created is not None:
-            data["datePublished"] = self._format_date(
+            data["datePublished"] = format_iso_date(
                 self._metadata.date_created
             )
         if self._metadata.date_updated is not None:
-            data["dateModified"] = self._format_date(
-                self._metadata.date_updated
-            )
+            data["dateModified"] = format_iso_date(self._metadata.date_updated)
         return data
 
     def _attribution_fields(self) -> dict[str, Any]:
@@ -195,12 +193,6 @@ class SchemaDotOrgMetadata:
         if organization.address is not None:
             data["address"] = organization.address
         return data
-
-    def _format_date(self, dt: datetime) -> str:
-        """Format a datetime as an ISO 8601 date, normalized to UTC."""
-        if dt.tzinfo is None:
-            dt = dt.replace(tzinfo=UTC)
-        return dt.astimezone(UTC).strftime("%Y-%m-%d")
 
     @staticmethod
     def _escape_json(content: str) -> str:

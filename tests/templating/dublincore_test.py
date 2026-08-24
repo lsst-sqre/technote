@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from datetime import datetime, timedelta, timezone
+
 from technote.metadata.model import (
     Citation,
     Organization,
@@ -12,6 +14,7 @@ from technote.metadata.model import (
     TechnoteState,
 )
 from technote.templating.dublincore import DublinCoreMetadata
+from technote.templating.schemaorg import SchemaDotOrgMetadata
 
 
 def make_metadata(**kwargs: object) -> TechnoteMetadata:
@@ -96,3 +99,20 @@ def test_dublincore_escapes_content() -> None:
         '<meta name="DC.title" '
         'content="A &quot;quoted&quot; &amp; &lt;angled&gt; title" >'
     ) in html
+
+
+def test_dublincore_date_is_utc_normalized() -> None:
+    """The DC.date is normalized to UTC, so it agrees with the date that
+    the schema.org JSON-LD reports for the same metadata.
+    """
+    # 2023-09-19T23:00-05:00 is 2023-09-20 in UTC.
+    date_created = datetime(
+        2023, 9, 19, 23, 0, tzinfo=timezone(timedelta(hours=-5))
+    )
+    metadata = make_metadata(date_created=date_created)
+
+    html = DublinCoreMetadata(metadata=metadata).as_html()
+    json_ld = SchemaDotOrgMetadata(metadata=metadata).as_json_ld()
+
+    assert '<meta name="DC.date" content="2023-09-20" >' in html
+    assert json_ld["datePublished"] == "2023-09-20"

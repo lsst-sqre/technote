@@ -3,12 +3,12 @@
 from __future__ import annotations
 
 import os
-from datetime import UTC, datetime
 from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 from urllib.parse import urlparse
 
 from ..metadata.model import Citation, TechnoteMetadata
+from .dateformat import format_iso_date, format_iso_datetime
 from .dublincore import DublinCoreMetadata
 from .highwire import HighwireMetadata
 from .opengraph import OpenGraphMetadata
@@ -59,7 +59,7 @@ class TechnoteJinjaContext:
     def date_updated_iso(self) -> str | None:
         """The date updated, as an ISO 8601 string (YYYY-MM-DD)."""
         if self.metadata.date_updated:
-            return self._format_iso_date(self.metadata.date_updated)
+            return format_iso_date(self.metadata.date_updated)
         else:
             return None
 
@@ -67,7 +67,7 @@ class TechnoteJinjaContext:
     def date_created_iso(self) -> str | None:
         """The date of initial publication, as ISO 8601 (YYYY-MM-DD)."""
         if self.metadata.date_created:
-            return self._format_iso_date(self.metadata.date_created)
+            return format_iso_date(self.metadata.date_created)
         else:
             return None
 
@@ -75,7 +75,7 @@ class TechnoteJinjaContext:
     def datetime_updated_iso(self) -> str | None:
         """The datetime updated, as an ISO 8601 string normalized to UTC."""
         if self.metadata.date_updated:
-            return self._format_iso_datetime(self.metadata.date_updated)
+            return format_iso_datetime(self.metadata.date_updated)
         else:
             return None
 
@@ -85,7 +85,7 @@ class TechnoteJinjaContext:
         normalized to UTC.
         """
         if self.metadata.date_created:
-            return self._format_iso_datetime(self.metadata.date_created)
+            return format_iso_datetime(self.metadata.date_created)
         else:
             return None
 
@@ -194,16 +194,6 @@ class TechnoteJinjaContext:
     def set_abstract(self, abstract: str) -> None:
         """Set the abstract metadata from the content."""
         self.metadata.abstract_plain = abstract
-
-    def _format_iso_datetime(self, date: datetime) -> str:
-        """Format a date in ISO 8601 format, normalized to UTC."""
-        dt = date.astimezone(UTC)
-        return dt.strftime("%Y-%m-%dT%H:%M:%SZ")
-
-    def _format_iso_date(self, date: datetime) -> str:
-        """Format a date in ISO 8601 date format, normalized to UTC."""
-        dt = date.astimezone(UTC)
-        return dt.strftime("%Y-%m-%d")
 
     @property
     def highwire_metadata_tags(self) -> str:
