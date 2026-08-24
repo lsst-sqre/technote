@@ -172,10 +172,19 @@ class Citation:
     """
 
     doi: str | None = None
-    """The DOI of the technote."""
+    """The DOI of the technote, in its bare form (``10.NNNN/suffix``)."""
 
     ads_bibcode: str | None = None
     """The ADS bibcode of the technote."""
+
+    @property
+    def doi_url(self) -> str | None:
+        """The DOI as a resolvable ``https://doi.org`` URL, if a DOI is
+        available.
+        """
+        if self.doi is None:
+            return None
+        return f"https://doi.org/{self.doi}"
 
 
 @dataclass(kw_only=True)
@@ -214,6 +223,9 @@ class TechnoteMetadata:
 
     source_repository: SourceRepository | None = None
     """The source code repository for the technote."""
+
+    organization: Organization | None = None
+    """The organization that publishes the technote series."""
 
     license_id: str | None = None
     """The SPDX license identifier for the technote."""

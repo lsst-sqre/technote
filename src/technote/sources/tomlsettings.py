@@ -28,7 +28,7 @@ from ..metadata.model import TechnoteState
 from ..metadata.orcid import validate_orcid_url
 from ..metadata.orcid import verify_checksum as verify_orcid_checksum
 from ..metadata.ror import validate_ror_url
-from ..metadata.spdx import Licenses
+from ..metadata.spdx import load_licenses
 from ..metadata.zenodo import ZenodoRole
 
 __all__ = [
@@ -49,10 +49,54 @@ __all__ = [
 
 WHITESPACE_PATTERN = re.compile(r"\s+")
 
+DOI_PATTERN = re.compile(r"^10\.\d{4,9}/\S+$")
+"""Pattern for a bare DOI (the ``10.NNNN/suffix`` form)."""
+
+DOI_PREFIXES = (
+    "https://doi.org/",
+    "http://doi.org/",
+    "https://dx.doi.org/",
+    "http://dx.doi.org/",
+    "doi:",
+)
+"""Prefixes that are stripped when normalizing a DOI to its bare form."""
+
 
 def collapse_whitespace(text: str) -> str:
     """Replace any whitespace character, or group, with a single space."""
     return WHITESPACE_PATTERN.sub(" ", text).strip()
+
+
+def normalize_doi(value: str) -> str:
+    """Normalize a DOI into its bare form, ``10.NNNN/suffix``.
+
+    Parameters
+    ----------
+    value
+        A DOI, either in its bare form or expressed as a ``doi.org`` URL or
+        with a ``doi:`` prefix.
+
+    Returns
+    -------
+    str
+        The bare DOI.
+
+    Raises
+    ------
+    ValueError
+        Raised if the value is not a syntactically-valid DOI.
+    """
+    doi = collapse_whitespace(value)
+    for prefix in DOI_PREFIXES:
+        if doi.lower().startswith(prefix):
+            doi = doi[len(prefix) :]
+            break
+    if not DOI_PATTERN.match(doi):
+        raise ValueError(
+            f"Not a DOI ({value}). A DOI looks like 10.5281/zenodo.10385500, "
+            "and may also be given as a https://doi.org/ URL."
+        )
+    return doi
 
 
 def normalize_datetime(v: Any) -> datetime | None:
@@ -308,7 +352,7 @@ class LicenseTable(BaseModel):
     def validate_spdx_id(cls, v: str) -> str:
         """Ensure that ``id`` is a SPDX license identifier."""
         if v is not None:
-            licenses = Licenses.load()
+            licenses = load_licenses()
             if v not in licenses:
                 raise ValueError(
                     f"License ID '{v}' is not a valid SPDX license identifier."
@@ -391,8 +435,11 @@ class TechnoteTable(BaseModel):
         description=(
             "The most-relevant DOI that identifies this technote. "
             "This can be a pre-registerered DOI (i.e. for Zenodo) so that the "
-            "DOI can be present in the released technote source."
+            "DOI can be present in the released technote source. The DOI can "
+            "be given either bare or as a https://doi.org/ URL; it is "
+            "normalized to its bare form."
         ),
+        examples=["10.5281/zenodo.10385500"],
     )
 
     title: str | None = Field(
@@ -441,6 +488,14 @@ class TechnoteTable(BaseModel):
     _normalize_dates = field_validator(
         "date_created", "date_updated", mode="before"
     )(normalize_datetime)
+
+    @field_validator("doi", mode="before")
+    @classmethod
+    def validate_doi(cls, v: str | None) -> str | None:
+        """Normalize ``doi`` into a bare DOI, accepting ``doi.org`` URLs."""
+        if v is None:
+            return None
+        return normalize_doi(v)
 
     @property
     def date_created_datetime(self) -> datetime | None:
