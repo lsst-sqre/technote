@@ -66,7 +66,7 @@ class HighwireMetadata(MetaTagFormatterBase):
             affil_tags = [
                 self._format_tag("author_institution", affiliation.name)
                 for affiliation in author.affiliations
-                if affiliation.name is not None
+                if affiliation.name
             ]
             author_tags.extend(affil_tags)
             if author.email is not None:

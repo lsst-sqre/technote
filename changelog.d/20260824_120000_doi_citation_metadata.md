@@ -18,6 +18,8 @@
 
 - The `citation_title` Highwire tag now carries the `data-highwire="true"` attribute, matching every other Highwire tag technote emits.
 
+- The `citation_author_institution` Highwire tag is no longer emitted with empty content when an author's affiliation is identified only by its `ror` (or `internal_id`). Previously such an affiliation produced `content=""`, which indexers like Google Scholar read as an empty institution.
+
 - The schema.org `publisher` no longer carries an empty `name` when the `[technote.organization]` table is identified only by its `ror` (or `internal_id`). The ROR is now published as the publisher's `@id` alone, and an organization with no name, ROR, or URL is omitted from the JSON-LD entirely.
 
 ### Other changes
