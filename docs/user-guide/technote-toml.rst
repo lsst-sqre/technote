@@ -133,6 +133,20 @@ doi
 The most-relevant DOI that identifies this technote.
 This can be a pre-registerered DOI (i.e. for Zenodo) so that the  DOI can be present in the released technote source.
 
+.. code-block:: toml
+
+   [technote]
+   doi = "10.5281/zenodo.10385500"
+
+The DOI can also be given as a ``https://doi.org`` URL or with a ``doi:`` prefix; it is normalized to the bare ``10.NNNN/suffix`` form.
+A value that is not a syntactically-valid DOI is a configuration error.
+
+When this field is set, the technote's HTML acts as a DOI landing page: the DOI is published in the ``citation_doi``, ``DC.identifier``, and schema.org JSON-LD metadata, and is available to templates through the ``technote.doi`` and ``technote.doi_url`` Jinja context attributes.
+
+.. seealso::
+
+   :doc:`metadata`
+
 .. _toml-technote-canonical-url:
 
 canonical_url

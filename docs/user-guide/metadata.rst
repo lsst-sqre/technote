@@ -4,7 +4,7 @@ Metadata published by technote
 
 Technote publishes metadata with HTML documents.
 This metadata can be used for a number of purposes, from search engine optimization, to inclusion in Google Scholar, unfurling in social media and message apps, and even for maintaining institutional documentation indices.
-Technote uses supports a number of metadata standards, including Highwire Press, Open Graph, microformats2, and custom element annotations with data attributes.
+Technote uses supports a number of metadata standards, including Highwire Press, Open Graph, Dublin Core, schema.org (as JSON-LD), microformats2, and custom element annotations with data attributes.
 This page describes the metadata that Technote publishes.
 
 Standard HTML metadata
@@ -29,7 +29,7 @@ Technote publishes the following ``meta`` tags:
 - ``citation_author_email``
 - ``citation_author_orcid``
 - ``citation_date``
-- ``citattion_doi``
+- ``citation_doi`` (from the :ref:`doi <toml-technote-doi>` field)
 - ``citation_technical_report_number``
 - ``citation_fulltext_html_url``
 
@@ -46,6 +46,41 @@ Technote publishes the following ``meta`` tags:
 - ``og:article:author``
 - ``og:article:published_time``
 - ``og:article:modified_time``
+
+Dublin Core metadata
+====================
+
+Dublin Core is a general-purpose bibliographic vocabulary that repository software and metadata harvesters understand.
+Technote publishes the following ``meta`` tags:
+
+- ``DC.title``
+- ``DC.creator`` (one per author)
+- ``DC.description`` (the abstract)
+- ``DC.identifier`` (the technote's DOI as a ``https://doi.org`` URL, falling back to the canonical URL when the technote has no DOI)
+- ``DC.date`` (the creation date, falling back to the updated date)
+- ``DC.publisher`` (from the :ref:`organization <toml-technote-organization>` field)
+- ``DC.type`` (always ``Text``)
+- ``DC.format`` (always ``text/html``)
+- ``DC.language`` (always ``en``)
+- ``DC.rights`` (the SPDX license identifier)
+
+schema.org metadata
+===================
+
+Technote publishes a `schema.org <https://schema.org>`__ description of the document as a JSON-LD block in the HTML head (a ``script`` element with ``type="application/ld+json"``).
+Search engines and DOI infrastructure use this structured data to understand the page.
+
+The technote is described as a `Report <https://schema.org/Report>`__ with these properties, when the corresponding metadata is available:
+
+- ``@id`` (the DOI as a ``https://doi.org`` URL, falling back to the canonical URL)
+- ``identifier`` (a ``PropertyValue`` carrying the DOI, following the DataCite-to-schema.org crosswalk)
+- ``name``, ``url``, ``abstract``, and ``description``
+- ``reportNumber`` (the technote's :ref:`id <toml-technote-id>`) and ``version``
+- ``datePublished`` and ``dateModified``
+- ``author`` (with ORCiD as ``@id``, email, and affiliations)
+- ``publisher`` (from the :ref:`organization <toml-technote-organization>` field, with its ROR as ``@id``)
+- ``license`` (the URL for the SPDX license identifier)
+- ``inLanguage`` (always ``en``)
 
 microformats2 metadata
 ======================
