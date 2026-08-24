@@ -45,6 +45,8 @@ def test_toml_parsing() -> None:
         "https://dx.doi.org/10.5281/zenodo.10385500",
         "http://dx.doi.org/10.5281/zenodo.10385500",
         "doi:10.5281/zenodo.10385500",
+        "doi: 10.5281/zenodo.10385500",
+        "https://doi.org/ 10.5281/zenodo.10385500",
         "  10.5281/zenodo.10385500  ",
     ],
 )
@@ -74,6 +76,13 @@ def test_toml_doi() -> None:
     toml_content = (
         '[technote]\ndoi = "https://doi.org/10.5281/zenodo.10385500"\n'
     )
+    technote_toml = TechnoteToml.parse_toml(toml_content)
+    assert technote_toml.technote.doi == "10.5281/zenodo.10385500"
+
+
+def test_toml_doi_with_prefix_space() -> None:
+    """Test a ``doi:`` prefix separated from the DOI by a space."""
+    toml_content = '[technote]\ndoi = "doi: 10.5281/zenodo.10385500"\n'
     technote_toml = TechnoteToml.parse_toml(toml_content)
     assert technote_toml.technote.doi == "10.5281/zenodo.10385500"
 

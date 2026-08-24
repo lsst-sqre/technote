@@ -74,7 +74,8 @@ def normalize_doi(value: str) -> str:
     ----------
     value
         A DOI, either in its bare form or expressed as a ``doi.org`` URL or
-        with a ``doi:`` prefix.
+        with a ``doi:`` prefix. Whitespace around the DOI, and between a
+        prefix and the DOI, is ignored.
 
     Returns
     -------
@@ -89,7 +90,7 @@ def normalize_doi(value: str) -> str:
     doi = collapse_whitespace(value)
     for prefix in DOI_PREFIXES:
         if doi.lower().startswith(prefix):
-            doi = doi[len(prefix) :]
+            doi = doi[len(prefix) :].strip()
             break
     if not DOI_PATTERN.match(doi):
         raise ValueError(
