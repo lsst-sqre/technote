@@ -45,10 +45,19 @@ __all__ = [
     "SphinxTable",
     "IntersphinxTable",
     "LinkcheckTable",
+    "LintTable",
 ]
 
 
 WHITESPACE_PATTERN = re.compile(r"\s+")
+
+LINT_RULE_CODE_PATTERN = re.compile(r"^[A-Z]+\d+$")
+"""Pattern for the codes of technote lint rules, such as ``TN105``.
+
+A code is an uppercase prefix that names the rule set (``TN`` for the
+generic technote rules, ``R`` for Rubin-specific rules, and so on) followed
+by a number, in the same way that ruff's rule codes carry a plugin prefix.
+"""
 
 
 def collapse_whitespace(text: str) -> str:
@@ -121,6 +130,45 @@ class LinkcheckTable(BaseModel):
         description="Regular expressions of URLs to skip checking links",
         default_factory=list,
     )
+
+
+class LintTable(BaseModel):
+    """The ``[technote.lint]`` table configures technote linting.
+
+    Technote itself does not run lint rules; the rules are implemented by
+    tools that build on technote (currently Documenteer's ``technote lint``
+    command). This table is owned by technote so that every tool reads the
+    same configuration from ``technote.toml``, and so that the schema does
+    not carry a specific tool's name.
+    """
+
+    ignore: list[str] = Field(
+        description=(
+            "Codes of lint rules to skip for this technote, such as "
+            '``"TN105"``. A code is an uppercase prefix naming the rule set '
+            "followed by a number."
+        ),
+        default_factory=list,
+        examples=[["TN105", "R101"]],
+    )
+
+    @field_validator("ignore")
+    @classmethod
+    def validate_rule_codes(cls, v: list[str]) -> list[str]:
+        """Ensure that each ignored rule code has the shape of a rule code:
+        an uppercase prefix followed by a number.
+
+        The rule codes themselves are not known to technote, so only the
+        shape is validated.
+        """
+        for code in v:
+            if not LINT_RULE_CODE_PATTERN.match(code):
+                raise ValueError(
+                    f"Not a lint rule code ({code!r}). A rule code is an "
+                    "uppercase prefix naming the rule set followed by a "
+                    'number, like "TN105" or "R101".'
+                )
+        return v
 
 
 class SphinxTable(BaseModel):
@@ -441,6 +489,11 @@ class TechnoteTable(BaseModel):
     )
 
     sphinx: SphinxTable = Field(default_factory=SphinxTable)
+
+    lint: LintTable = Field(
+        default_factory=LintTable,
+        description="Configuration for technote linting tools.",
+    )
 
     _normalize_dates = field_validator(
         "date_created", "date_updated", mode="before"
