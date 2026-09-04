@@ -86,11 +86,15 @@ class HighwireMetadata(MetaTagFormatterBase):
 
     @property
     def date(self) -> str | None:
-        """The ``citation_date`` metadata tag.
+        """The ``citation_publication_date`` metadata tag.
 
         The format for the date is ``YYYY/MM/DD``, in UTC. The updated
         date is used, but if that is not available, the created date is
         used.
+
+        Google Scholar's inclusion guidelines document this tag as
+        ``citation_publication_date``; ``citation_date`` is the older
+        spelling of the same tag.
         """
         # Use either the date_updated or date_created
         if (
@@ -104,10 +108,10 @@ class HighwireMetadata(MetaTagFormatterBase):
             dt = self._metadata.date_created
         else:
             raise RuntimeError(
-                "Cannot resolve a date source for citation_date"
+                "Cannot resolve a date source for citation_publication_date"
             )
 
-        return self._format_tag("date", format_slash_date(dt))
+        return self._format_tag("publication_date", format_slash_date(dt))
 
     @property
     def doi(self) -> str | None:

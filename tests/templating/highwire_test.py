@@ -83,9 +83,9 @@ def test_author_institution_without_name() -> None:
     assert "citation_author_institution" not in "\n".join(tags)
 
 
-def test_citation_date_is_utc_normalized() -> None:
-    """The citation_date is normalized to UTC, so it agrees with the date
-    that the Dublin Core tags report for the same metadata.
+def test_citation_publication_date_is_utc_normalized() -> None:
+    """The citation_publication_date is normalized to UTC, so it agrees with
+    the date that the Dublin Core tags report for the same metadata.
     """
     # 2023-09-19T23:00-05:00 is 2023-09-20 in UTC.
     date_created = datetime(
@@ -97,7 +97,7 @@ def test_citation_date_is_utc_normalized() -> None:
     dublincore_html = DublinCoreMetadata(metadata=metadata).as_html()
 
     assert highwire_date == (
-        '<meta name="citation_date" content="2023/09/20" '
+        '<meta name="citation_publication_date" content="2023/09/20" '
         'data-highwire="true">'
     )
     assert '<meta name="DC.date" content="2023-09-20" >' in dublincore_html
