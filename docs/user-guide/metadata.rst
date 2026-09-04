@@ -28,7 +28,7 @@ Technote publishes the following ``meta`` tags:
 - ``citation_author_institution``
 - ``citation_author_email``
 - ``citation_author_orcid``
-- ``citation_date``
+- ``citation_publication_date``
 - ``citation_doi`` (from the :ref:`doi <toml-technote-doi>` field)
 - ``citation_technical_report_number``
 - ``citation_fulltext_html_url``
