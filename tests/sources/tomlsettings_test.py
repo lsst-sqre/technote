@@ -76,3 +76,30 @@ def test_toml_non_string_doi() -> None:
     with pytest.raises(ValidationError, match="doi") as exc_info:
         TechnoteToml.parse_toml("[technote]\ndoi = 10.5281\n")
     assert "Not a DOI" in str(exc_info.value)
+
+
+def test_toml_lint_default() -> None:
+    """The lint table defaults to ignoring no rules."""
+    technote_toml = TechnoteToml.parse_toml(sample_toml)
+    assert technote_toml.technote.lint.ignore == []
+
+
+def test_toml_lint_ignore() -> None:
+    """Test that rule codes in ``[technote.lint] ignore`` are parsed."""
+    toml_content = (
+        sample_toml + '\n[technote.lint]\nignore = ["TN105", "R101"]\n'
+    )
+    technote_toml = TechnoteToml.parse_toml(toml_content)
+    assert technote_toml.technote.lint.ignore == ["TN105", "R101"]
+
+
+@pytest.mark.parametrize(
+    "code", ["tn105", "105", "TN", "TN-105", " TN105", "TN105a"]
+)
+def test_toml_lint_ignore_invalid_code(code: str) -> None:
+    """A code that isn't an uppercase prefix plus a number is a config
+    error.
+    """
+    toml_content = sample_toml + f'\n[technote.lint]\nignore = ["{code}"]\n'
+    with pytest.raises(ValidationError, match="Not a lint rule code"):
+        TechnoteToml.parse_toml(toml_content)

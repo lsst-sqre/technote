@@ -541,3 +541,29 @@ ignore
 |optional|
 
 An array of regular expressions for URLs to ignore when checking links.
+
+.. _toml-technote-lint:
+
+[technote.lint]
+===============
+
+|optional|
+
+Configuration for tools that lint technotes, such as the ``documenteer technote lint`` command.
+Technote itself does not run lint rules, but it owns this table so that every tool reads the same configuration from :file:`technote.toml`.
+
+.. code-block:: toml
+
+   [technote.lint]
+   ignore = ["TN105"]
+
+.. _toml-technote-lint-ignore:
+
+ignore
+------
+
+|optional|
+
+An array of lint rule codes to skip for this technote.
+A rule code is an uppercase prefix that names the rule set, followed by a number (for example, ``TN105`` for a generic technote rule or ``R101`` for a Rubin-specific rule in Documenteer).
+Technote validates only the shape of each code; the linting tool documents which rules exist.
