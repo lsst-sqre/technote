@@ -76,6 +76,9 @@ The title of the technote.
 Use this metadata field to override the title in the content.
 Generally this metadata *should not* be set in :file:`technote.toml` if the document title in content file is correct.
 
+When this field is not set, the title is resolved from the document's top-level heading once Sphinx has read the document.
+The resolved title is published in the HTML metadata and is available to every Sphinx builder, not just the HTML builder.
+
 .. _toml-technote-date-created:
 
 date_created
