@@ -2,6 +2,26 @@
 
 <!-- scriv-insert-here -->
 
+<a id='changelog-0.11.0'></a>
+## 0.11.0 (2026-09-04)
+
+### Backwards-incompatible changes
+
+- The Highwire date tag is now `citation_publication_date` instead of `citation_date`. This is the name documented in Google Scholar's inclusion guidelines, and it matches the tag Documenteer emits for user guides. Google Scholar and Zotero accept both names, so indexing is unaffected; only tooling that looks for `citation_date` by name needs updating. The value format (`YYYY/MM/DD`, in UTC) is unchanged.
+
+### New features
+
+- New `[technote.lint]` table in `technote.toml`. Its `ignore` array lists the codes of lint rules to skip for this technote, for tools such as Documenteer's `technote lint` command:
+
+  ```toml
+  [technote.lint]
+  ignore = ["TN105"]
+  ```
+
+  Technote doesn't run lint rules itself; it owns the table so that every tool reads the same configuration. Codes are validated only for shape: an uppercase prefix naming the rule set, followed by a number (such as `TN105` or `R101`). The table is available to Python code as `TechnoteTable.lint` (a `LintTable` model).
+
+- When `technote.toml` doesn't set a `title`, the title from the document's H1 heading is now resolved at the end of Sphinx's read phase, in the `env-updated` event, rather than only in the HTML builder's `html-page-context` event. `TechnoteMetadata.title` is therefore correct for every builder (such as `dummy` and `linkcheck`) and for tools that run a Sphinx read in-process to inspect a technote's metadata. A `title` in `technote.toml` still takes precedence, and HTML output is unchanged. The rule is also available as a new function, `technote.ext.metadata.resolve_title()`, which returns a document's H1 title from its doctree.
+
 <a id='changelog-0.10.0'></a>
 ## 0.10.0 (2026-08-24)
 
