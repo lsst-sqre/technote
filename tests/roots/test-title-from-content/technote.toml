@@ -1,0 +1,7 @@
+[technote]
+id = "TEST-000"
+series_id = "TEST"
+
+[[technote.authors]]
+name.given = "Jonathan"
+name.family = "Sick"

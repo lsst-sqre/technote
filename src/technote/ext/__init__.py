@@ -17,7 +17,10 @@ from .abstract import (
     visit_abstract_node_tex,
 )
 from .insertposttitle import insert_post_title
-from .metadata import process_html_page_context_for_metadata
+from .metadata import (
+    process_html_page_context_for_metadata,
+    set_title_from_environment,
+)
 from .pygmentscss import overwrite_pygments_css
 from .toc import process_html_page_context_for_toc
 from .wraptables import wrap_html_tables
@@ -38,6 +41,7 @@ def setup(app: Sphinx) -> dict[str, Any]:
     )
 
     # Metadata
+    app.connect("env-updated", set_title_from_environment)
     app.connect("html-page-context", process_html_page_context_for_metadata)
     app.connect("html-page-context", process_html_page_context_for_toc)
 
