@@ -2,12 +2,13 @@
 
 from __future__ import annotations
 
+import logging
 import os
 import subprocess
 from collections.abc import Sequence
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
-from typing import Any
+from typing import Any, NoReturn
 
 import pytest
 
@@ -19,6 +20,11 @@ from technote.metadata.builddate import (
 
 COMMIT_DATE = "2024-03-05T14:15:16+02:00"
 COMMIT_DATE_UTC = datetime(2024, 3, 5, 12, 15, 16, tzinfo=UTC)
+
+SPHINX_LOGGER = "sphinx.technote.metadata.builddate"
+"""Name of the standard library logger that backs the module's Sphinx
+logger, for capturing its warnings with ``caplog``.
+"""
 
 
 def git(*args: str, cwd: Path) -> None:
@@ -82,15 +88,27 @@ def test_git_head_committer_date_in_subdirectory(git_repo: Path) -> None:
     assert get_git_head_committer_date(subdir) == COMMIT_DATE_UTC
 
 
-def test_git_head_committer_date_outside_repo(no_repo: Path) -> None:
-    assert get_git_head_committer_date(no_repo) is None
+def test_git_head_committer_date_outside_repo(
+    no_repo: Path, caplog: pytest.LogCaptureFixture
+) -> None:
+    """A directory outside a repository is an ordinary authoring state, so
+    it falls back silently.
+    """
+    with caplog.at_level(logging.WARNING, logger=SPHINX_LOGGER):
+        assert get_git_head_committer_date(no_repo) is None
+    assert caplog.records == []
 
 
-def test_git_head_committer_date_empty_repo(tmp_path: Path) -> None:
+def test_git_head_committer_date_empty_repo(
+    tmp_path: Path, caplog: pytest.LogCaptureFixture
+) -> None:
+    """A repository without any commits yet falls back silently."""
     repo = tmp_path / "empty"
     repo.mkdir()
     git("init", "-q", cwd=repo)
-    assert get_git_head_committer_date(repo) is None
+    with caplog.at_level(logging.WARNING, logger=SPHINX_LOGGER):
+        assert get_git_head_committer_date(repo) is None
+    assert caplog.records == []
 
 
 def test_git_head_committer_date_no_git(
@@ -127,9 +145,11 @@ def test_git_head_committer_date_no_show_signature(
 
 
 def test_git_head_committer_date_unparsable_output(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    caplog: pytest.LogCaptureFixture,
 ) -> None:
-    """Unparsable output falls back rather than raising."""
+    """Unparsable output falls back, with a warning, rather than raising."""
 
     def fake_run(
         args: Sequence[str], **kwargs: Any
@@ -145,7 +165,101 @@ def test_git_head_committer_date_unparsable_output(
         )
 
     monkeypatch.setattr(subprocess, "run", fake_run)
-    assert get_git_head_committer_date(tmp_path) is None
+    with caplog.at_level(logging.WARNING, logger=SPHINX_LOGGER):
+        assert get_git_head_committer_date(tmp_path) is None
+    assert len(caplog.records) == 1
+    message = caplog.records[0].getMessage()
+    assert "date_updated" in message
+    assert "gpg:" in message
+    # The warning stays on one line so that it is readable in a build log.
+    assert "\n" not in message
+
+
+def test_git_head_committer_date_missing_git_warns(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    caplog: pytest.LogCaptureFixture,
+) -> None:
+    """A missing git binary is unexpected, so it warns."""
+
+    def fake_run(args: Sequence[str], **kwargs: Any) -> NoReturn:
+        raise FileNotFoundError(2, "No such file or directory", "git")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+    with caplog.at_level(logging.WARNING, logger=SPHINX_LOGGER):
+        assert get_git_head_committer_date(tmp_path) is None
+    assert len(caplog.records) == 1
+    record = caplog.records[0]
+    assert "date_updated" in record.getMessage()
+    # The type and subtype let a build opt out with suppress_warnings.
+    assert record.__dict__["type"] == "technote"
+    assert record.__dict__["subtype"] == "date_updated"
+
+
+def test_git_head_committer_date_timeout_warns(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    caplog: pytest.LogCaptureFixture,
+) -> None:
+    """A git invocation that times out warns."""
+
+    def fake_run(args: Sequence[str], **kwargs: Any) -> NoReturn:
+        raise subprocess.TimeoutExpired(cmd=list(args), timeout=10)
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+    with caplog.at_level(logging.WARNING, logger=SPHINX_LOGGER):
+        assert get_git_head_committer_date(tmp_path) is None
+    assert len(caplog.records) == 1
+    assert "date_updated" in caplog.records[0].getMessage()
+
+
+def test_git_head_committer_date_dubious_ownership_warns(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    caplog: pytest.LogCaptureFixture,
+) -> None:
+    """Git refusing the repository warns; CI would otherwise silently get
+    the build clock.
+    """
+
+    def fake_run(
+        args: Sequence[str], **kwargs: Any
+    ) -> subprocess.CompletedProcess[str]:
+        return subprocess.CompletedProcess(
+            args=list(args),
+            returncode=128,
+            stdout="",
+            stderr=(
+                "fatal: detected dubious ownership in repository at '/x'\n"
+            ),
+        )
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+    with caplog.at_level(logging.WARNING, logger=SPHINX_LOGGER):
+        assert get_git_head_committer_date(tmp_path) is None
+    assert len(caplog.records) == 1
+    assert "dubious ownership" in caplog.records[0].getMessage()
+
+
+def test_git_head_committer_date_empty_output_warns(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    caplog: pytest.LogCaptureFixture,
+) -> None:
+    """A successful git that prints nothing warns."""
+
+    def fake_run(
+        args: Sequence[str], **kwargs: Any
+    ) -> subprocess.CompletedProcess[str]:
+        return subprocess.CompletedProcess(
+            args=list(args), returncode=0, stdout="\n", stderr=""
+        )
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+    with caplog.at_level(logging.WARNING, logger=SPHINX_LOGGER):
+        assert get_git_head_committer_date(tmp_path) is None
+    assert len(caplog.records) == 1
+    assert "date_updated" in caplog.records[0].getMessage()
 
 
 def test_source_date_epoch(monkeypatch: pytest.MonkeyPatch) -> None:

@@ -132,9 +132,10 @@ class Factory:
 
         # A declared date_updated is authoritative. Otherwise the date
         # describes the publication event: the checked-out commit (or
-        # SOURCE_DATE_EPOCH), falling back to the build clock only outside
-        # a git repository. Sphinx runs conf.py from the source directory,
-        # so the working directory is the technote's source directory.
+        # SOURCE_DATE_EPOCH), falling back to the build clock only when the
+        # commit date cannot be read. Sphinx runs conf.py from the source
+        # directory, so the working directory is the technote's source
+        # directory.
         date_updated = resolve_date_updated(
             toml_settings.technote.date_updated_datetime, Path.cwd()
         )
