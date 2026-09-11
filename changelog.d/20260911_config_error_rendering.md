@@ -1,0 +1,4 @@
+### Bug fixes
+
+- A `technote.toml` that fails validation now reports what is wrong in the file's own vocabulary: each problem is addressed as a place in the file, like `[technote.lint] ignore` or `[[technote.authors]] author #1, field orcid`, followed by the validator's own sentence about it, and several problems are counted and numbered so they can be fixed in one pass. Previously the build stopped with `Syntax or validation issue in technote.toml` and the detail was only in the traceback Sphinx saves. The `ValidationError` is still chained to the `ConfigError`, so that traceback is unchanged. The format matches Documenteer's reporting for `documenteer.toml`.
+- A `technote.toml` that TOML itself cannot parse now raises a `ConfigError` naming the file and the line and column the parser stopped at, instead of escaping the build as a raw `TOMLDecodeError`.

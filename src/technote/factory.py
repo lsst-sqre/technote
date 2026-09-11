@@ -4,6 +4,7 @@ from __future__ import annotations
 
 __all__ = ["Factory"]
 
+import tomllib
 from pathlib import Path
 
 from pydantic import ValidationError
@@ -21,6 +22,7 @@ from .metadata.model import (
     TechnoteMetadata,
     TechnoteState,
 )
+from .sources.tomlerrors import format_validation_error
 from .sources.tomlsettings import TechnoteToml
 from .templating.context import TechnoteJinjaContext
 
@@ -44,9 +46,18 @@ class Factory:
         """Parse the content of a ``technote.toml`` file."""
         try:
             parsed_toml = TechnoteToml.parse_toml(toml_content)
+        except tomllib.TOMLDecodeError as e:
+            # The parser's own message carries the line and column it
+            # stopped at, which is the whole of what a syntax error is.
+            raise ConfigError(f"Syntax error in technote.toml: {e}") from e
         except ValidationError as e:
-            message = "Syntax or validation issue in technote.toml"
-            raise ConfigError(message) from e
+            # Chaining keeps the pydantic exception in the traceback Sphinx
+            # saves, so the model itself can still be debugged from it.
+            raise ConfigError(
+                format_validation_error(
+                    e, root=TechnoteToml, source="technote.toml"
+                )
+            ) from e
         self._toml = parsed_toml
         return self._toml
 

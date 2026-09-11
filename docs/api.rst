@@ -56,3 +56,6 @@ Python API reference
    :include-all-objects:
 
 .. automodapi:: technote.sources.tomlsettings
+
+.. automodapi:: technote.sources.tomlerrors
+   :include-all-objects:
