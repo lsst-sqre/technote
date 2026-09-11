@@ -127,6 +127,9 @@ In detail, the default is the first available of:
 2. The committer date of the checked-out git commit.
 3. The current time, when the commit date cannot be read.
 
+A derived ``date_updated`` is never earlier than :ref:`date_created <toml-technote-date-created>`; if it would be, ``date_created`` is used instead.
+This matters because a bare date in ``technote.toml`` (``YYYY-MM-DD``) is interpreted as midnight UTC, so a commit made earlier the same local day in a timezone ahead of UTC would otherwise report the technote as modified before it was created.
+
 A source directory that is not inside a git repository, or that is in a repository without any commits yet, falls back to the current time silently: those are ordinary states while a technote is being written.
 Any other failure to read the commit date — ``git`` is not installed, or git refuses the repository (for example the "dubious ownership" error it raises for a checkout owned by another user in a CI container) — also falls back to the current time, but emits a Sphinx warning first, so a build run with ``-W`` fails rather than quietly publishing a non-reproducible date.
 That warning can be silenced with ``suppress_warnings = ["technote.date_updated"]`` in ``conf.py``.

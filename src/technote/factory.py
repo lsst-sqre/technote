@@ -135,9 +135,14 @@ class Factory:
         # SOURCE_DATE_EPOCH), falling back to the build clock only when the
         # commit date cannot be read. Sphinx runs conf.py from the source
         # directory, so the working directory is the technote's source
-        # directory.
+        # directory. A derived date is clamped to date_created, which a bare
+        # date in technote.toml anchors to midnight UTC, so that a commit
+        # made earlier the same local day cannot date the technote as
+        # modified before it was created.
         date_updated = resolve_date_updated(
-            toml_settings.technote.date_updated_datetime, Path.cwd()
+            toml_settings.technote.date_updated_datetime,
+            Path.cwd(),
+            date_created=toml_settings.technote.date_created_datetime,
         )
 
         return TechnoteMetadata(

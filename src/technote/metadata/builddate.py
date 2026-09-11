@@ -171,7 +171,10 @@ def get_git_head_committer_date(source_dir: Path) -> datetime | None:
 
 
 def resolve_date_updated(
-    declared: datetime | None, source_dir: Path
+    declared: datetime | None,
+    source_dir: Path,
+    *,
+    date_created: datetime | None = None,
 ) -> datetime:
     """Resolve the ``date_updated`` for a technote build.
 
@@ -182,6 +185,10 @@ def resolve_date_updated(
         it is not declared.
     source_dir
         The technote's source directory, used to look up the git commit.
+    date_created
+        The ``date_created`` declared in ``technote.toml``, or `None` if it
+        is not declared. A derived ``date_updated`` is never earlier than
+        this date; a declared ``date_updated`` is left alone.
 
     Returns
     -------
@@ -196,11 +203,22 @@ def resolve_date_updated(
            has no commits yet, or reading the commit date failed. Only the
            last of those emits a Sphinx warning; see
            `get_git_head_committer_date`.
+
+        A derived date (2, 3 or 4) is clamped to ``date_created`` when it
+        would otherwise be earlier: a bare ``date_created`` in
+        ``technote.toml`` is anchored to midnight UTC, so a commit made
+        earlier the same local day in a timezone ahead of UTC precedes it,
+        and a technote must not report being modified before it was
+        created.
     """
     if declared is not None:
         return declared
     if (pinned := get_source_date_epoch()) is not None:
-        return pinned
-    if (commit_date := get_git_head_committer_date(source_dir)) is not None:
-        return commit_date
-    return datetime.now(tz=UTC)
+        derived = pinned
+    elif (commit_date := get_git_head_committer_date(source_dir)) is not None:
+        derived = commit_date
+    else:
+        derived = datetime.now(tz=UTC)
+    if date_created is not None and derived < date_created:
+        return date_created
+    return derived

@@ -21,13 +21,19 @@ from technote.metadata.builddate import (
 COMMIT_DATE = "2024-03-05T14:15:16+02:00"
 COMMIT_DATE_UTC = datetime(2024, 3, 5, 12, 15, 16, tzinfo=UTC)
 
+UTC_PLUS_12_COMMIT_DATE = "2026-09-12T09:00:00+12:00"
+"""A commit made on the morning of 2026-09-12 by an author in UTC+12."""
+
+UTC_PLUS_12_COMMIT_DATE_UTC = datetime(2026, 9, 11, 21, 0, 0, tzinfo=UTC)
+"""``UTC_PLUS_12_COMMIT_DATE`` in UTC: the previous day."""
+
 SPHINX_LOGGER = "sphinx.technote.metadata.builddate"
 """Name of the standard library logger that backs the module's Sphinx
 logger, for capturing its warnings with ``caplog``.
 """
 
 
-def git(*args: str, cwd: Path) -> None:
+def git(*args: str, cwd: Path, date: str = COMMIT_DATE) -> None:
     subprocess.run(
         ["git", *args],  # noqa: S603, S607
         cwd=cwd,
@@ -39,8 +45,8 @@ def git(*args: str, cwd: Path) -> None:
             "GIT_AUTHOR_EMAIL": "test@example.com",
             "GIT_COMMITTER_NAME": "Test",
             "GIT_COMMITTER_EMAIL": "test@example.com",
-            "GIT_AUTHOR_DATE": COMMIT_DATE,
-            "GIT_COMMITTER_DATE": COMMIT_DATE,
+            "GIT_AUTHOR_DATE": date,
+            "GIT_COMMITTER_DATE": date,
             "GIT_CONFIG_GLOBAL": os.devnull,
             "GIT_CONFIG_SYSTEM": os.devnull,
         },
@@ -56,6 +62,29 @@ def git_repo(tmp_path: Path) -> Path:
     (repo / "index.rst").write_text("Hello\n")
     git("add", "index.rst", cwd=repo)
     git("commit", "-q", "-m", "Initial", cwd=repo)
+    return repo
+
+
+@pytest.fixture
+def utc_plus_12_git_repo(tmp_path: Path) -> Path:
+    """Create a git repository with one commit made in UTC+12.
+
+    The commit is dated the morning of 2026-09-12 locally, which is
+    2026-09-11T21:00Z: the day before, in UTC.
+    """
+    repo = tmp_path / "utc-plus-12-repo"
+    repo.mkdir()
+    git("init", "-q", cwd=repo)
+    (repo / "index.rst").write_text("Hello\n")
+    git("add", "index.rst", cwd=repo, date=UTC_PLUS_12_COMMIT_DATE)
+    git(
+        "commit",
+        "-q",
+        "-m",
+        "Initial",
+        cwd=repo,
+        date=UTC_PLUS_12_COMMIT_DATE,
+    )
     return repo
 
 
@@ -325,4 +354,67 @@ def test_resolve_falls_back_to_now(no_repo: Path) -> None:
         before - timedelta(seconds=1)
         <= resolved
         <= after + timedelta(seconds=1)
+    )
+
+
+def test_resolve_clamps_git_commit_to_date_created(
+    utc_plus_12_git_repo: Path,
+) -> None:
+    """An author in UTC+12 who declares a bare date_created and commits that
+    same morning has a commit date that is the previous day in UTC. The
+    technote must not report being modified before it was created.
+    """
+    date_created = datetime(2026, 9, 12, tzinfo=UTC)
+    assert (
+        resolve_date_updated(None, utc_plus_12_git_repo)
+        == UTC_PLUS_12_COMMIT_DATE_UTC
+    )
+    assert date_created > UTC_PLUS_12_COMMIT_DATE_UTC
+    assert (
+        resolve_date_updated(
+            None, utc_plus_12_git_repo, date_created=date_created
+        )
+        == date_created
+    )
+
+
+def test_resolve_git_commit_after_date_created(git_repo: Path) -> None:
+    """A commit date that already follows date_created is not clamped."""
+    date_created = datetime(2024, 3, 1, tzinfo=UTC)
+    assert (
+        resolve_date_updated(None, git_repo, date_created=date_created)
+        == COMMIT_DATE_UTC
+    )
+
+
+def test_resolve_clamps_source_date_epoch_to_date_created(
+    git_repo: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("SOURCE_DATE_EPOCH", "1700000000")
+    date_created = datetime(2024, 1, 1, tzinfo=UTC)
+    assert (
+        resolve_date_updated(None, git_repo, date_created=date_created)
+        == date_created
+    )
+
+
+def test_resolve_source_date_epoch_after_date_created(
+    git_repo: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("SOURCE_DATE_EPOCH", "1700000000")
+    date_created = datetime(2023, 1, 1, tzinfo=UTC)
+    assert resolve_date_updated(
+        None, git_repo, date_created=date_created
+    ) == datetime(2023, 11, 14, 22, 13, 20, tzinfo=UTC)
+
+
+def test_resolve_declared_is_not_clamped(git_repo: Path) -> None:
+    """A declared date_updated is authoritative, even if it precedes
+    date_created.
+    """
+    declared = datetime(2015, 11, 23, 15, tzinfo=UTC)
+    date_created = datetime(2020, 1, 1, tzinfo=UTC)
+    assert (
+        resolve_date_updated(declared, git_repo, date_created=date_created)
+        == declared
     )
