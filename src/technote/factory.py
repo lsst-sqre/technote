@@ -4,12 +4,12 @@ from __future__ import annotations
 
 __all__ = ["Factory"]
 
-from datetime import UTC, datetime
 from pathlib import Path
 
 from pydantic import ValidationError
 from sphinx.errors import ConfigError
 
+from .metadata.builddate import resolve_date_updated
 from .metadata.model import (
     Citation,
     Link,
@@ -130,11 +130,20 @@ class Factory:
         else:
             license_id = None
 
-        # Default the "date_updated" to now (build time) if it is not
-        # hard-coded into the TOML file.
-        date_updated = toml_settings.technote.date_updated_datetime
-        if date_updated is None:
-            date_updated = datetime.now(tz=UTC)
+        # A declared date_updated is authoritative. Otherwise the date
+        # describes the publication event: the checked-out commit (or
+        # SOURCE_DATE_EPOCH), falling back to the build clock only when the
+        # commit date cannot be read. Sphinx runs conf.py from the source
+        # directory, so the working directory is the technote's source
+        # directory. A derived date is clamped to date_created, which a bare
+        # date in technote.toml anchors to midnight UTC, so that a commit
+        # made earlier the same local day cannot date the technote as
+        # modified before it was created.
+        date_updated = resolve_date_updated(
+            toml_settings.technote.date_updated_datetime,
+            Path.cwd(),
+            date_created=toml_settings.technote.date_created_datetime,
+        )
 
         return TechnoteMetadata(
             title=toml_settings.technote.title or "",

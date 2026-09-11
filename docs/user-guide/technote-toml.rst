@@ -106,7 +106,6 @@ date_updated
 |optional|
 
 Date and time when the technote was last updated.
-This should be set as an ISO8601 string.
 This should be set as an :rfc:`3339` (i.e., ISO8601) string.
 Either as a date (``YYYY-MM-DD``) or a date and time with a timezone (``YYYY-MM-DDTHH:MM:SSZ``).
 
@@ -116,6 +115,26 @@ TOML treats dates and date-times as native types, and therefore don't use quotes
 
    [technote]
    date_updated = 2023-01-01T00:00:00Z
+
+When ``date_updated`` is not set, Technote derives it from the publication event.
+For a technote published by CI, that event is the commit that was pushed, so the default is the committer date of the checked-out git commit (``git log -1 --format=%cI``).
+This is reproducible: rebuilding the same commit gives the same date.
+The same date is used everywhere the technote reports its updated date, including the sidebar, the Open Graph ``article:modified_time`` and Highwire ``citation_publication_date`` tags, and the schema.org ``dateModified`` property.
+
+In detail, the default is the first available of:
+
+1. The ``SOURCE_DATE_EPOCH`` environment variable (the `reproducible builds <https://reproducible-builds.org/docs/source-date-epoch/>`__ convention, which Sphinx also honours), as an integer number of seconds since the Unix epoch.
+2. The committer date of the checked-out git commit.
+3. The current time, when the commit date cannot be read.
+
+A derived ``date_updated`` is never earlier than :ref:`date_created <toml-technote-date-created>`; if it would be, ``date_created`` is used instead.
+This matters because a bare date in ``technote.toml`` (``YYYY-MM-DD``) is interpreted as midnight UTC, so a commit made earlier the same local day in a timezone ahead of UTC would otherwise report the technote as modified before it was created.
+
+A source directory that is not inside a git repository, or that is in a repository without any commits yet, falls back to the current time silently: those are ordinary states while a technote is being written.
+Any other failure to read the commit date — ``git`` is not installed, or git refuses the repository (for example the "dubious ownership" error it raises for a checkout owned by another user in a CI container) — also falls back to the current time, but emits a Sphinx warning first, so a build run with ``-W`` fails rather than quietly publishing a non-reproducible date.
+That warning can be silenced with ``suppress_warnings = ["technote.date_updated"]`` in ``conf.py``.
+
+Set ``date_updated`` explicitly to pin the date regardless of the commit being built.
 
 .. _toml-technote-version:
 

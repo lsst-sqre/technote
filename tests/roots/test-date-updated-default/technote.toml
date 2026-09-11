@@ -1,0 +1,7 @@
+[technote]
+id = "TEST-001"
+series_id = "TEST"
+title = "Default date_updated test document"
+date_created = "2023-09-19"
+canonical_url = "https://test-001.example.com/"
+github_url = "https://github.com/lsst-sqre/test-001"

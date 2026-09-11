@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import json
+import shutil
+from collections.abc import Callable
 from pathlib import Path
 from typing import IO, Any
 
@@ -10,7 +12,10 @@ import lxml.html
 import mf2py
 import pytest
 from sphinx.application import Sphinx
+from sphinx.testing.util import SphinxTestApp
 from sphinx.util import logging
+
+from tests.metadata.builddate_test import git
 
 
 @pytest.mark.sphinx("html", testroot="metadata-basic")
@@ -153,6 +158,112 @@ def test_metadata_without_canonical_url(
     doc = lxml.html.document_fromstring(html_source)
 
     assert doc.cssselect("link[rel='canonical']") == []
+
+
+@pytest.mark.sphinx("html", testroot="date-updated-default")
+def test_metadata_date_updated_default(
+    app: Sphinx, status: IO, warning: IO
+) -> None:
+    """Test that an undeclared ``date_updated`` is pinned to the publication
+    date rather than the build clock, and that every metadata surface agrees
+    on it.
+
+    The session-wide ``_pin_source_date_epoch`` fixture in ``conftest.py``
+    sets ``SOURCE_DATE_EPOCH``, so this exercises the first derived step of
+    the resolution order. ``test_metadata_date_updated_from_git`` covers the
+    git commit date behind it.
+    """
+    app.verbosity = 2
+    logging.setup(app, status, warning)
+    app.builder.build_all()
+
+    html_source = Path(app.outdir).joinpath("index.html").read_text()
+    doc = lxml.html.document_fromstring(html_source)
+
+    # SOURCE_DATE_EPOCH=1700000000 is 2023-11-14T22:13:20Z
+    assert_tag(doc, "citation_publication_date", "2023/11/14")
+    assert_og(doc, "article:published_time", "2023-09-19T00:00:00Z")
+    assert_og(doc, "article:modified_time", "2023-11-14T22:13:20Z")
+
+    json_ld_tags = doc.cssselect("script[type='application/ld+json']")
+    json_ld = json.loads(json_ld_tags[0].text_content())
+    assert json_ld["dateModified"] == "2023-11-14"
+
+    mf2_data = mf2py.Parser(doc=html_source).to_dict()
+    h_entries = [h for h in mf2_data["items"] if "h-entry" in h["type"]]
+    assert len(h_entries) == 1
+    assert h_entries[0]["properties"]["updated"][0] == "2023-11-14T22:13:20Z"
+
+
+GIT_COMMIT_DATE = "2024-03-05T14:15:16+02:00"
+"""Committer date of the test repository built by
+``test_metadata_date_updated_from_git``, in UTC+2.
+"""
+
+GIT_COMMIT_DATE_UTC = "2024-03-05T12:15:16Z"
+"""``GIT_COMMIT_DATE`` in UTC, which is how technote renders it.
+
+It follows the ``date_created`` of the ``date-updated-default`` test root
+(2023-09-19), so the clamp to ``date_created`` does not apply.
+"""
+
+
+def test_metadata_date_updated_from_git(
+    rootdir: Path,
+    tmp_path: Path,
+    make_app: Callable[..., SphinxTestApp],
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Test that an undeclared ``date_updated`` defaults to the committer date
+    of the checked-out commit.
+
+    This is the shipped default for a technote published by CI, so it is
+    exercised end to end: a real git repository, a real Sphinx build, and the
+    rendered HTML. Sphinx evaluates ``conf.py`` with the working directory set
+    to the configuration directory, which is the assumption that lets the
+    factory pass ``Path.cwd()`` as the technote's source directory.
+    """
+    # Take the git branch of the resolution order rather than the
+    # SOURCE_DATE_EPOCH pinned for the session in conftest.py.
+    monkeypatch.delenv("SOURCE_DATE_EPOCH")
+
+    srcdir = tmp_path / "technote"
+    shutil.copytree(rootdir / "test-date-updated-default", srcdir)
+    git("init", "-q", cwd=srcdir, date=GIT_COMMIT_DATE)
+    git("add", "-A", cwd=srcdir, date=GIT_COMMIT_DATE)
+    git(
+        "-c",
+        "commit.gpgsign=false",
+        "commit",
+        "-q",
+        "-m",
+        "Initial commit",
+        cwd=srcdir,
+        date=GIT_COMMIT_DATE,
+    )
+
+    app = make_app("html", srcdir=srcdir)
+    app.build()
+
+    # Failing to read the commit date of a repository that has one warns
+    # before falling back to the build clock, so a clean warning stream
+    # confirms that the git path succeeded.
+    assert "date_updated" not in app.warning.getvalue()
+
+    html_source = Path(app.outdir).joinpath("index.html").read_text()
+    doc = lxml.html.document_fromstring(html_source)
+
+    assert_tag(doc, "citation_publication_date", "2024/03/05")
+    assert_og(doc, "article:modified_time", GIT_COMMIT_DATE_UTC)
+
+    json_ld_tags = doc.cssselect("script[type='application/ld+json']")
+    json_ld = json.loads(json_ld_tags[0].text_content())
+    assert json_ld["dateModified"] == "2024-03-05"
+
+    mf2_data = mf2py.Parser(doc=html_source).to_dict()
+    h_entries = [h for h in mf2_data["items"] if "h-entry" in h["type"]]
+    assert len(h_entries) == 1
+    assert h_entries[0]["properties"]["updated"][0] == GIT_COMMIT_DATE_UTC
 
 
 def assert_tag(doc: Any, name: str, content: str, index: int = 0) -> None:
