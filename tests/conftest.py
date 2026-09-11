@@ -25,6 +25,34 @@ def rootdir() -> Path:
     return Path(__file__).parent.resolve() / "roots"
 
 
+@pytest.fixture(scope="session", autouse=True)
+def _pin_source_date_epoch() -> Iterator[None]:
+    """Pin ``SOURCE_DATE_EPOCH`` for the whole test session.
+
+    When ``technote.toml`` does not declare ``date_updated``, technote derives
+    it from the publication event: ``SOURCE_DATE_EPOCH`` if set, otherwise the
+    committer date of the checked-out commit, otherwise the build clock.
+    ``sphinx.testing`` copies each test root into a pytest temp directory that
+    has no ``.git``, so without a pin every Sphinx build in the suite would
+    shell out to ``git log``, be told it is not in a repository, and render the
+    build clock into the technote's metadata. Pinning the variable makes that
+    output deterministic and saves a subprocess per build.
+
+    The value is the same ``1700000000`` (2023-11-14T22:13:20Z) that
+    ``tests/metadata_test.py`` asserts on. Tests that need another branch of
+    the resolution order override the variable themselves with a
+    function-scoped ``monkeypatch``, which takes precedence over this fixture;
+    see ``tests/metadata/builddate_test.py``.
+    """
+    # monkeypatch is function-scoped, so use a MonkeyPatch instance directly.
+    mp = pytest.MonkeyPatch()
+    mp.setenv("SOURCE_DATE_EPOCH", "1700000000")
+    try:
+        yield
+    finally:
+        mp.undo()
+
+
 @pytest.fixture(autouse=True)
 def _reset_sphinxconf_module() -> Iterator[None]:
     """Evict ``technote.sphinxconf`` from the module cache around each test.
