@@ -4,8 +4,10 @@ from __future__ import annotations
 
 import os
 import subprocess
+from collections.abc import Sequence
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
+from typing import Any
 
 import pytest
 
@@ -98,6 +100,54 @@ def test_git_head_committer_date_no_git(
     assert get_git_head_committer_date(git_repo) is None
 
 
+def test_git_head_committer_date_no_show_signature(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """``git log`` must not print signature verification lines.
+
+    A user's ``log.showSignature = true`` would otherwise prefix the date
+    with ``gpg:`` lines on a signed commit.
+    """
+    recorded: list[str] = []
+
+    def fake_run(
+        args: Sequence[str], **kwargs: Any
+    ) -> subprocess.CompletedProcess[str]:
+        recorded.extend(args)
+        return subprocess.CompletedProcess(
+            args=list(args),
+            returncode=0,
+            stdout=f"{COMMIT_DATE}\n",
+            stderr="",
+        )
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+    assert get_git_head_committer_date(tmp_path) == COMMIT_DATE_UTC
+    assert "--no-show-signature" in recorded
+
+
+def test_git_head_committer_date_unparsable_output(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Unparsable output falls back rather than raising."""
+
+    def fake_run(
+        args: Sequence[str], **kwargs: Any
+    ) -> subprocess.CompletedProcess[str]:
+        return subprocess.CompletedProcess(
+            args=list(args),
+            returncode=0,
+            stdout=(
+                "gpg: Signature made Tue Mar  5 14:15:16 2024\n"
+                f"{COMMIT_DATE}\n"
+            ),
+            stderr="",
+        )
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+    assert get_git_head_committer_date(tmp_path) is None
+
+
 def test_source_date_epoch(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("SOURCE_DATE_EPOCH", "1700000000")
     assert get_source_date_epoch() == datetime(
@@ -107,6 +157,14 @@ def test_source_date_epoch(monkeypatch: pytest.MonkeyPatch) -> None:
 
 @pytest.mark.parametrize("value", ["", "  ", "not-a-number", "1.5"])
 def test_source_date_epoch_invalid(
+    monkeypatch: pytest.MonkeyPatch, value: str
+) -> None:
+    monkeypatch.setenv("SOURCE_DATE_EPOCH", value)
+    assert get_source_date_epoch() is None
+
+
+@pytest.mark.parametrize("value", ["99999999999999", "-99999999999999"])
+def test_source_date_epoch_out_of_range(
     monkeypatch: pytest.MonkeyPatch, value: str
 ) -> None:
     monkeypatch.setenv("SOURCE_DATE_EPOCH", value)

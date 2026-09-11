@@ -13,6 +13,8 @@ import subprocess
 from datetime import UTC, datetime
 from pathlib import Path
 
+from ..sources.tomlsettings import normalize_datetime
+
 __all__ = [
     "get_git_head_committer_date",
     "get_source_date_epoch",
@@ -30,17 +32,15 @@ def get_source_date_epoch() -> datetime | None:
     Returns
     -------
     datetime.datetime or None
-        The pinned timestamp, in UTC, or `None` if the variable is unset or
-        does not hold an integer.
+        The pinned timestamp, in UTC, or `None` if the variable is unset,
+        does not hold an integer, or holds a value that is out of range for
+        a `~datetime.datetime`.
     """
-    raw = os.environ.get("SOURCE_DATE_EPOCH")
-    if raw is None or not raw.strip():
-        return None
     try:
-        epoch = int(raw)
-    except ValueError:
+        epoch = int(os.environ["SOURCE_DATE_EPOCH"])
+        return datetime.fromtimestamp(epoch, tz=UTC)
+    except (KeyError, ValueError, OverflowError, OSError):
         return None
-    return datetime.fromtimestamp(epoch, tz=UTC)
 
 
 def get_git_head_committer_date(source_dir: Path) -> datetime | None:
@@ -63,17 +63,30 @@ def get_git_head_committer_date(source_dir: Path) -> datetime | None:
     -----
     The committer date of ``HEAD`` is available on a depth-1 checkout, so
     this works in CI without fetching history.
+
+    ``--no-show-signature`` is required because a user's git configuration
+    may set ``log.showSignature = true``. With that setting, ``git log`` on a
+    signed commit (every merge commit made through the GitHub UI is signed)
+    prints ``gpg:`` verification lines to stdout ahead of the date, which
+    would defeat the date parsing and silently fall back to the build clock.
     """
     try:
         result = subprocess.run(
-            ["git", "log", "-1", "--format=%cI"],  # noqa: S603, S607
+            [  # noqa: S603, S607
+                "git",
+                "log",
+                "-1",
+                "--no-show-signature",
+                "--format=%cI",
+            ],
             cwd=source_dir,
             capture_output=True,
-            text=True,
+            encoding="utf-8",
+            errors="replace",
             check=False,
             timeout=10,
         )
-    except (FileNotFoundError, OSError, subprocess.TimeoutExpired):
+    except (OSError, subprocess.TimeoutExpired):
         return None
     if result.returncode != 0:
         return None
@@ -81,12 +94,9 @@ def get_git_head_committer_date(source_dir: Path) -> datetime | None:
     if not raw:
         return None
     try:
-        dt = datetime.fromisoformat(raw)
+        return normalize_datetime(raw)
     except ValueError:
         return None
-    if dt.tzinfo is None:
-        dt = dt.replace(tzinfo=UTC)
-    return dt.astimezone(UTC)
 
 
 def resolve_date_updated(
