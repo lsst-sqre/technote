@@ -155,6 +155,45 @@ def test_metadata_without_canonical_url(
     assert doc.cssselect("link[rel='canonical']") == []
 
 
+@pytest.fixture
+def _pin_build_date(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Pin ``SOURCE_DATE_EPOCH`` before the Sphinx ``app`` fixture evaluates
+    ``conf.py`` (which is when technote resolves ``date_updated``).
+    """
+    monkeypatch.setenv("SOURCE_DATE_EPOCH", "1700000000")
+
+
+@pytest.mark.usefixtures("_pin_build_date")
+@pytest.mark.sphinx("html", testroot="date-updated-default")
+def test_metadata_date_updated_default(
+    app: Sphinx, status: IO, warning: IO
+) -> None:
+    """Test that an undeclared ``date_updated`` is pinned to the publication
+    date (here ``SOURCE_DATE_EPOCH``) rather than the build clock, and that
+    every metadata surface agrees on it.
+    """
+    app.verbosity = 2
+    logging.setup(app, status, warning)
+    app.builder.build_all()
+
+    html_source = Path(app.outdir).joinpath("index.html").read_text()
+    doc = lxml.html.document_fromstring(html_source)
+
+    # SOURCE_DATE_EPOCH=1700000000 is 2023-11-14T22:13:20Z
+    assert_tag(doc, "citation_publication_date", "2023/11/14")
+    assert_og(doc, "article:published_time", "2023-09-19T00:00:00Z")
+    assert_og(doc, "article:modified_time", "2023-11-14T22:13:20Z")
+
+    json_ld_tags = doc.cssselect("script[type='application/ld+json']")
+    json_ld = json.loads(json_ld_tags[0].text_content())
+    assert json_ld["dateModified"] == "2023-11-14"
+
+    mf2_data = mf2py.Parser(doc=html_source).to_dict()
+    h_entries = [h for h in mf2_data["items"] if "h-entry" in h["type"]]
+    assert len(h_entries) == 1
+    assert h_entries[0]["properties"]["updated"][0] == "2023-11-14T22:13:20Z"
+
+
 def assert_tag(doc: Any, name: str, content: str, index: int = 0) -> None:
     """Compare the content of a meta tag."""
     assert (

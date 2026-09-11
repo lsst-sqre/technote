@@ -106,7 +106,6 @@ date_updated
 |optional|
 
 Date and time when the technote was last updated.
-This should be set as an ISO8601 string.
 This should be set as an :rfc:`3339` (i.e., ISO8601) string.
 Either as a date (``YYYY-MM-DD``) or a date and time with a timezone (``YYYY-MM-DDTHH:MM:SSZ``).
 
@@ -116,6 +115,19 @@ TOML treats dates and date-times as native types, and therefore don't use quotes
 
    [technote]
    date_updated = 2023-01-01T00:00:00Z
+
+When ``date_updated`` is not set, Technote derives it from the publication event.
+For a technote published by CI, that event is the commit that was pushed, so the default is the committer date of the checked-out git commit (``git log -1 --format=%cI``).
+This is reproducible: rebuilding the same commit gives the same date.
+The same date is used everywhere the technote reports its updated date, including the sidebar, the Open Graph ``article:modified_time`` and Highwire ``citation_publication_date`` tags, and the schema.org ``dateModified`` property.
+
+In detail, the default is the first available of:
+
+1. The ``SOURCE_DATE_EPOCH`` environment variable (the `reproducible builds <https://reproducible-builds.org/docs/source-date-epoch/>`__ convention, which Sphinx also honours), as an integer number of seconds since the Unix epoch.
+2. The committer date of the checked-out git commit.
+3. The current time, only when the technote's source directory is not inside a git repository.
+
+Set ``date_updated`` explicitly to pin the date regardless of the commit being built.
 
 .. _toml-technote-version:
 
