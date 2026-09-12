@@ -2,9 +2,12 @@
 
 from __future__ import annotations
 
+import tomllib
 from datetime import UTC, datetime
 
 import pytest
+from pydantic import ValidationError
+from sphinx.errors import ConfigError
 
 from technote.factory import Factory
 
@@ -36,3 +39,42 @@ def test_load_metadata_clamps_date_updated(
 
     assert metadata.date_created == datetime(2026, 9, 12, tzinfo=UTC)
     assert metadata.date_updated == metadata.date_created
+
+
+def test_parse_toml_reports_a_validation_error() -> None:
+    """A technote.toml that does not validate stops the build with a report
+    in the file's own vocabulary, not with a sentence about the model.
+    """
+    with pytest.raises(ConfigError) as exc_info:
+        Factory().parse_toml('[technote]\ndoi = "10.71929"\n')
+
+    message = str(exc_info.value)
+    assert message.startswith("Configuration error in technote.toml:")
+    assert "[technote] doi" in message
+    assert "Not a DOI (10.71929)." in message
+    assert "Syntax or validation issue" not in message
+
+
+def test_parse_toml_chains_the_validation_error() -> None:
+    """The pydantic exception stays chained to the configuration error, so
+    the traceback Sphinx saves still has everything needed to debug the model
+    itself.
+    """
+    with pytest.raises(ConfigError) as exc_info:
+        Factory().parse_toml('[technote]\ndoi = "10.71929"\n')
+
+    assert isinstance(exc_info.value.__cause__, ValidationError)
+
+
+def test_parse_toml_reports_a_syntax_error() -> None:
+    """A file TOML itself cannot parse is reported as a configuration error
+    naming the file and the place the parser stopped, rather than escaping as
+    the parser's own exception.
+    """
+    with pytest.raises(ConfigError) as exc_info:
+        Factory().parse_toml("[technote\ntitle='x'\n")
+
+    message = str(exc_info.value)
+    assert "Syntax error in technote.toml" in message
+    assert "line 1" in message
+    assert isinstance(exc_info.value.__cause__, tomllib.TOMLDecodeError)

@@ -9,6 +9,17 @@ This page describes the schema for this file.
 
    If you are not familiar with TOML, see the `TOML documentation <https://toml.io/en/v1.0.0>`_.
 
+.. _toml-errors:
+
+Configuration errors
+====================
+
+A :file:`technote.toml` that does not validate stops the Sphinx build.
+The message names the file, then states each problem as an address in the file's own vocabulary — such as ``[technote.lint] ignore`` or ``[[technote.authors]] author #1, field orcid`` — followed by a sentence saying what is wrong there.
+When the file has more than one problem, all of them are reported together and numbered, so they can be fixed in one pass rather than one build each.
+Sphinx prints its own ``Configuration error!`` banner around that message, along with the path of a saved traceback and an invitation to report the problem to Sphinx's maintainers.
+That invitation can be ignored: the problem is in :file:`technote.toml`, and the message inside the banner says where.
+
 .. _toml-technote:
 
 [technote]
