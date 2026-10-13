@@ -14,6 +14,8 @@ Following metadata standards
 The name needs to be structured into given (often the first) and family (often the last) name components.
 This allows Technote to export your documents data to common formats like `CITATION.cff`_, Zenodo, and BibTeX.
 
+.. _CITATION.cff: https://citation-file-format.github.io/
+
 .. code-block:: toml
 
    [[technote.authors]]
