@@ -82,6 +82,8 @@ You can repeat the tables for each item:
 
 To learn all about the TOML syntax, see the `TOML specification website`__.
 
+__ https://toml.io/en/
+
 How the configuration system works with the Sphinx build
 ========================================================
 
