@@ -113,7 +113,7 @@ jobs:
           dir: 'docs/_build/html'
           token: ${{ secrets.DOCVERSE_TOKEN }}
           github-token: ${{ github.token }}
-          comment-on-pr: "true"
+          comment-on-pr: 'true'
         if: >
           github.event_name != 'pull_request' || startsWith(github.head_ref, 'tickets/')
 
