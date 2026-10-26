@@ -6,5 +6,5 @@
 # documenteer/conf/guide.py requires rubin-pydata-theme.css, a webpack build
 # artifact that is gitignored and so is absent from a source install, which
 # fails the docs build with a Sphinx ConfigError.
-documenteer[guide]>=2.4.1
+documenteer[guide]==2.5.0b4
 autodoc_pydantic

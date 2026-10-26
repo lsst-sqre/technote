@@ -40,6 +40,9 @@ jobs:
 
   docs:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
 
     steps:
       - uses: actions/checkout@v7
@@ -50,6 +53,8 @@ jobs:
           python-version: '3.12'
           tox-envs: 'demo,docs,docs-linkcheck'
           use-cache: false
+        env:
+          OOK_TOKEN: ${{ secrets.OOK_TOKEN }}
 
   test-packaging:
     name: Test packaging
